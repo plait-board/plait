@@ -11,5 +11,4 @@ export * from './transforms';
 export * from './utils';
 export * from './plugins';
 export * from './testing';
-export * from './services/context.service';
 export * from './utils/debug';

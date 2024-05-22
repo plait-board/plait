@@ -15,6 +15,7 @@ import { depthFirstRecursion, getRealScrollBarWidth } from '../utils';
 import { PlaitElement } from '../interfaces/element';
 import { setTheme } from './theme';
 import { FitViewportOptions } from '../interfaces/viewport';
+import { PlaitPointerType } from '../interfaces/pointer';
 
 function updateViewport(board: PlaitBoard, origination: Point, zoom?: number) {
     zoom = zoom ?? board.viewport.zoom;
@@ -125,7 +126,17 @@ function updateThemeColor(board: PlaitBoard, mode: ThemeColorMode) {
     });
 }
 
+const updatePointerType = <T extends string = PlaitPointerType>(board: PlaitBoard, pointer: T) => {
+    if (board.pointer === pointer) return;
+    const previousPointer = board.pointer;
+    board.pointer = pointer;
+    const boardContainer = PlaitBoard.getBoardContainer(board);
+    boardContainer.classList.remove(`pointer-${previousPointer}`);
+    boardContainer.classList.add(`pointer-${pointer}`);
+};
+
 export const BoardTransforms = {
+    updatePointerType,
     updateViewport,
     fitViewport,
     updateZoom,

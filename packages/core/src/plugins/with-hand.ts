@@ -46,8 +46,7 @@ export function withHandPointer<T extends PlaitBoard>(board: T) {
     board.keyDown = (event: KeyboardEvent) => {
         if (event.code === 'Space') {
             if (!PlaitBoard.isPointer(board, PlaitPointerType.hand)) {
-                // TODO
-                // BoardTransforms.updatePointerType(board, PlaitPointerType.hand);
+                BoardTransforms.updatePointerType(board, PlaitPointerType.hand);
             }
             event.preventDefault();
         }
@@ -56,8 +55,7 @@ export function withHandPointer<T extends PlaitBoard>(board: T) {
 
     board.keyUp = (event: KeyboardEvent) => {
         if (!board.options.readonly && event.code === 'Space') {
-            // TODO
-            // BoardTransforms.updatePointerType(board, PlaitPointerType.selection);
+            BoardTransforms.updatePointerType(board, PlaitPointerType.selection);
         }
         keyUp(event);
     };

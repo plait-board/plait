@@ -130,11 +130,10 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
         return this.svg.nativeElement;
     }
 
-    // TODO 改为操作 DOM
-    // @HostBinding('class')
-    // get hostClass() {
-    //     return `${HOST_CLASS_NAME} pointer-${this.board.pointer} theme-${this.board.theme.themeColorMode} ${this.getBrowserClassName()}`;
-    // }
+    @HostBinding('class')
+    get hostClass() {
+        return `${HOST_CLASS_NAME} theme-${this.board.theme.themeColorMode} ${this.getBrowserClassName()}`;
+    }
 
     getBrowserClassName() {
         if (IS_SAFARI) {
@@ -197,7 +196,6 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
         });
         this.roughSVG = roughSVG;
         this.initializePlugins();
-
         this.ngZone.runOutsideAngular(() => {
             this.initializeHookListener();
             this.viewportScrollListener();
@@ -240,6 +238,7 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
             });
         });
         this.initializeListRender();
+        this.elementRef.nativeElement.classList.add(`pointer-${this.board.pointer}`);
         this.hasInitialized = true;
     }
 
