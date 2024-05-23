@@ -1,15 +1,10 @@
 import { PlaitBoard, PlaitPluginElementContext, OnContextChanged } from '@plait/core';
-import { Subject } from 'rxjs';
 import { CommonElementFlavour, ImageGenerator } from '@plait/common';
 import { PlaitImage } from './interfaces/image';
 import { LineAutoCompleteGenerator } from './generators/line-auto-complete.generator';
 import { AngularBoard } from '@plait/angular';
 
 export class ImageComponent extends CommonElementFlavour<PlaitImage, PlaitBoard> implements OnContextChanged<PlaitImage, PlaitBoard> {
-    get activeGenerator() {
-        return this.imageGenerator.componentRef.instance.activeGenerator;
-    }
-
     imageGenerator!: ImageGenerator<PlaitImage>;
 
     lineAutoCompleteGenerator!: LineAutoCompleteGenerator;
@@ -55,15 +50,16 @@ export class ImageComponent extends CommonElementFlavour<PlaitImage, PlaitBoard>
     ) {
         if (value.element !== previous.element) {
             this.imageGenerator.updateImage(this.getElementG(), previous.element, value.element);
-            this.imageGenerator.componentRef.instance.isFocus = this.selected;
+            // this.imageGenerator.componentRef.instance.isFocus = this.selected;
+            this.imageGenerator.setFocus(this.element, this.selected);
             this.lineAutoCompleteGenerator.processDrawing(this.element, PlaitBoard.getElementActiveHost(this.board), {
                 selected: this.selected
             });
         } else {
             const hasSameSelected = value.selected === previous.selected;
-            const hasSameHandleState = this.activeGenerator.options.hasResizeHandle() === this.activeGenerator.hasResizeHandle;
+            const hasSameHandleState = this.imageGenerator.activeGenerator.options.hasResizeHandle() === this.imageGenerator.activeGenerator.hasResizeHandle;
             if (!hasSameSelected || !hasSameHandleState) {
-                this.imageGenerator.componentRef.instance.isFocus = this.selected;
+                this.imageGenerator.setFocus(this.element, this.selected);
                 this.lineAutoCompleteGenerator.processDrawing(this.element, PlaitBoard.getElementActiveHost(this.board), {
                     selected: this.selected
                 });

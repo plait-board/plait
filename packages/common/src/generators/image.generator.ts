@@ -1,17 +1,22 @@
 import {
+    ACTIVE_STROKE_WIDTH,
+    HydrationContext,
+    HydrationRef,
     PlaitBoard,
     PlaitElement,
     PlaitOptionsBoard,
     RectangleClient,
     createForeignObject,
     createG,
+    getSelectedElements,
+    isSelectionMoving,
     setAngleForG,
     updateForeignObject
 } from '@plait/core';
 import { Generator, GeneratorExtraData, GeneratorOptions } from './generator';
-import { ImageBaseComponent } from '../core/image-base.component';
-import { CommonImageItem, WithCommonPluginOptions } from '../utils';
+import { CommonImageItem, WithCommonPluginOptions, canResize, getElementOfFocusedImage } from '../utils';
 import { WithCommonPluginKey } from '../constants';
+import { ActiveGenerator } from './active.generator';
 
 export interface ImageGeneratorOptions<T> {
     getRectangle: (element: T) => RectangleClient;
@@ -27,7 +32,13 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
 
     foreignObject!: SVGForeignObjectElement;
 
-    componentRef!: ComponentRef<ImageBaseComponent>;
+    hydrationRef!: HydrationRef;
+
+    activeGenerator!: ActiveGenerator;
+
+    isFocus = false;
+
+    element!: T;
 
     constructor(public board: PlaitBoard, public options: ImageGeneratorOptions<T>) {
         super(board, options);
@@ -38,6 +49,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
     }
 
     draw(element: T): SVGGElement {
+        this.element = element;
         const g = createG();
         const foreignRectangle = this.options.getRectangle(element);
         this.foreignObject = createForeignObject(foreignRectangle.x, foreignRectangle.y, foreignRectangle.width, foreignRectangle.height);
@@ -47,26 +59,60 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
         if (!componentType) {
             throw new Error('Not implement ImageBaseComponent error.');
         }
-        this.componentRef = viewContainerRef.createComponent(componentType);
-        this.componentRef.instance.board = this.board;
-
-        this.componentRef.instance.imageItem = this.options.getImageItem(element);
-        this.componentRef.instance.element = element;
-        this.componentRef.instance.getRectangle = () => {
-            return this.options.getRectangle(element);
+        const context: HydrationContext = {
+            props: {
+                board: this.board,
+                imageItem: this.options.getImageItem(element),
+                element,
+                getRectangle: () => {
+                    return this.options.getRectangle(element);
+                }
+            },
+            foreignObject: this.foreignObject,
+            componentType
         };
-        this.componentRef.instance.cdr.markForCheck();
-        this.foreignObject.append(this.componentRef!.instance.nativeElement);
+        this.hydrationRef = this.board.renderHydration(context);
+
+        this.activeGenerator = new ActiveGenerator(this.board, {
+            getStrokeWidth: () => {
+                const selectedElements = getSelectedElements(this.board);
+                if (!(selectedElements.length === 1 && !isSelectionMoving(this.board))) {
+                    return ACTIVE_STROKE_WIDTH;
+                } else {
+                    return ACTIVE_STROKE_WIDTH;
+                }
+            },
+            getStrokeOpacity: () => {
+                const selectedElements = getSelectedElements(this.board);
+                if ((selectedElements.length === 1 && !isSelectionMoving(this.board)) || !selectedElements.length) {
+                    return 1;
+                } else {
+                    return 0.5;
+                }
+            },
+            getRectangle: () => {
+                return this.options.getRectangle(this.element);
+            },
+            hasResizeHandle: () => {
+                const isSelectedImageElement = canResize(this.board, this.element);
+                const isSelectedImage = !!getElementOfFocusedImage(this.board);
+                return isSelectedImage || isSelectedImageElement;
+            }
+        });
         return g;
     }
 
     updateImage(nodeG: SVGGElement, previous: T, current: T) {
-        if (previous !== current && this.componentRef) {
-            this.componentRef.instance.imageItem = this.options.getImageItem(current);
-            this.componentRef.instance.element = current;
-            this.componentRef!.instance.getRectangle = () => {
-                return this.options.getRectangle(current);
+        this.element = current;
+        if (previous !== current && this.hydrationRef) {
+            const props = {
+                imageItem: this.options.getImageItem(current),
+                element: current,
+                getRectangle: () => {
+                    return this.options.getRectangle(current);
+                }
             };
+            this.hydrationRef.update(props);
         }
         const currentForeignObject = this.options.getRectangle(current);
         updateForeignObject(
@@ -79,15 +125,22 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
         if (currentForeignObject && current.angle) {
             setAngleForG(this.g!, RectangleClient.getCenterPoint(currentForeignObject), current.angle);
         }
-        // solve image lose on move node
-        if (this.foreignObject.children.length === 0) {
-            this.foreignObject.append(this.componentRef!.instance.nativeElement);
-        }
-        this.componentRef?.instance.cdr.markForCheck();
+        const activeG = PlaitBoard.getElementActiveHost(this.board);
+        this.activeGenerator.processDrawing(current, activeG, { selected: this.isFocus });
+    }
+
+    setFocus(element: PlaitElement, isFocus: boolean) {
+        this.isFocus = isFocus;
+        const activeG = PlaitBoard.getElementActiveHost(this.board);
+        this.activeGenerator.processDrawing(element, activeG, { selected: isFocus });
+        const props = {
+            isFocus
+        };
+        this.hydrationRef.update(props);
     }
 
     destroy(): void {
         super.destroy();
-        this.componentRef?.destroy();
+        this.hydrationRef?.destroy();
     }
 }
