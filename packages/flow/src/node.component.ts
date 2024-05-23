@@ -6,6 +6,7 @@ import { updateRelatedEdgeHighlight } from './utils/edge/edge-render';
 import { NodeGenerator } from './generators/node.generator';
 import { NodeActiveGenerator } from './generators/node-active.generator';
 import { CommonElementFlavour } from '@plait/common';
+import { AngularBoard } from '@plait/angular';
 
 export class FlowNodeComponent<T extends FlowBaseData = FlowBaseData> extends CommonElementFlavour<FlowNode<T>>
     implements OnContextChanged<FlowNode, PlaitBoard> {
@@ -29,7 +30,7 @@ export class FlowNodeComponent<T extends FlowBaseData = FlowBaseData> extends Co
     initializeGenerator() {
         this.nodeGenerator = new NodeGenerator(this.board);
         this.nodeActiveGenerator = new NodeActiveGenerator(this.board);
-        this.textManage = new TextManage(this.board, PlaitBoard.getViewContainerRef(this.board), {
+        this.textManage = new TextManage(this.board, AngularBoard.getViewContainerRef(this.board), {
             getRectangle: () => {
                 const { x, y } = normalizePoint(this.element.points![0]);
                 const width = this.element.width;

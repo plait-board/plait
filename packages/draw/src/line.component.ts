@@ -1,6 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { PlaitBoard, PlaitPluginElementContext, OnContextChanged, getElementById, createDebugGenerator } from '@plait/core';
-import { Subject } from 'rxjs';
 import { LineText, PlaitGeometry, PlaitLine } from './interfaces';
 import { TextManage, TextManageRef } from '@plait/text';
 import { LineShapeGenerator } from './generators/line.generator';
@@ -10,6 +8,7 @@ import { GeometryThreshold } from './constants';
 import { CommonElementFlavour } from '@plait/common';
 import { getLinePoints, getLineTextRectangle } from './utils/line/line-basic';
 import { memorizeLatestText } from './utils/memorize';
+import { AngularBoard } from '@plait/angular';
 
 interface BoundedElements {
     source?: PlaitGeometry;
@@ -125,7 +124,7 @@ export class LineComponent extends CommonElementFlavour<PlaitLine, PlaitBoard> i
     }
 
     createTextManage(text: LineText, index: number) {
-        return new TextManage(this.board, PlaitBoard.getViewContainerRef(this.board), {
+        return new TextManage(this.board, AngularBoard.getViewContainerRef(this.board), {
             getRectangle: () => {
                 return getLineTextRectangle(this.board, this.element, index);
             },

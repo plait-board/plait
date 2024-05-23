@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, forwardRef } from '@angular/core';
 import {
-    OnBoardChange,
     PlaitBoard,
     PlaitElement,
-    PlaitIslandBaseComponent,
     PlaitPointerType,
     Transforms,
     getSelectedElements,
@@ -45,6 +43,7 @@ import {
     PlaitSwimlane
 } from '@plait/draw';
 import { MindLayoutType } from '@plait/layouts';
+import { OnBoardChange, PlaitIslandBaseComponent } from '@plait/angular';
 
 @Component({
     selector: 'app-setting-panel',

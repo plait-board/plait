@@ -2,7 +2,6 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import {
     BoardTransforms,
     PlaitBoard,
-    PlaitBoardChangeEvent,
     PlaitBoardOptions,
     PlaitElement,
     PlaitTheme,
@@ -30,7 +29,6 @@ import { AppSettingPanelComponent } from '../components/setting-panel/setting-pa
 import { AppMainToolbarComponent } from '../components/main-toolbar/main-toolbar.component';
 import { AppZoomToolbarComponent } from '../components/zoom-toolbar/zoom-toolbar.component';
 import { FormsModule } from '@angular/forms';
-import { PlaitBoardComponent } from '../../../packages/core/src/board/board.component';
 import { ActivatedRoute, Params } from '@angular/router';
 import { mockLineData, withLineRoute } from '../plugins/with-line-route';
 import { withCommonPlugin } from '../plugins/with-common';
@@ -38,6 +36,7 @@ import { AppMenuComponent } from '../components/menu/menu.component';
 import { NgIf } from '@angular/common';
 import { mockTurningPointData } from './mock-turning-point-data';
 import { withGroup } from '@plait/common';
+import { AngularBoardChangeEvent, PlaitBoardComponent } from '@plait/angular';
 
 const LOCAL_STORAGE_KEY = 'plait-board-data';
 
@@ -151,7 +150,7 @@ export class BasicEditorComponent implements OnInit {
         });
     }
 
-    change(event: PlaitBoardChangeEvent) {
+    change(event: AngularBoardChangeEvent) {
         this.setLocalData(JSON.stringify(event));
         this.selectedElements = getSelectedElements(this.board);
         this.showRemoveGroup = canRemoveGroup(this.board);

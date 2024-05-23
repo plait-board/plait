@@ -22,6 +22,7 @@ import { TextManage } from '@plait/text';
 import { isKeyHotkey } from 'is-hotkey';
 import { NgZone } from '@angular/core';
 import { getSnapResizingRef } from '../utils/snap-resizing';
+import { AngularBoard } from '@plait/angular';
 
 export interface FakeCreateTextRef {
     g: SVGGElement;
@@ -71,12 +72,12 @@ export const withGeometryCreateByDrag = (board: PlaitBoard) => {
                 );
                 temporaryElement = createTextElement(board, points);
                 if (!fakeCreateTextRef) {
-                    const textManage = new TextManage(board, PlaitBoard.getComponent(board).viewContainerRef, {
+                    const textManage = new TextManage(board, AngularBoard.getComponent(board).viewContainerRef, {
                         getRectangle: () => {
                             return getTextRectangle(temporaryElement!);
                         }
                     });
-                    PlaitBoard.getComponent(board)
+                    AngularBoard.getComponent(board)
                         .viewContainerRef.injector.get(NgZone)
                         .run(() => {
                             textManage.draw(temporaryElement!.text);

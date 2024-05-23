@@ -21,6 +21,7 @@ import { CommonElementFlavour, ImageGenerator, WithTextOptions, WithTextPluginKe
 import { NodeShapeGenerator } from './generators/node-shape.generator';
 import { getImageForeignRectangle } from './utils';
 import { ImageData } from './interfaces';
+import { AngularBoard } from '@plait/angular';
 
 export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMindBoard>
     implements OnContextChanged<MindElement, PlaitMindBoard> {
@@ -58,7 +59,7 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
 
     initializeGenerator() {
         this.nodeShapeGenerator = new NodeShapeGenerator(this.board);
-        this.nodeEmojisGenerator = new NodeEmojisGenerator(this.board, PlaitBoard.getViewContainerRef(this.board));
+        this.nodeEmojisGenerator = new NodeEmojisGenerator(this.board, AngularBoard.getViewContainerRef(this.board));
         this.activeGenerator = new NodeActiveGenerator(this.board);
         this.nodePlusGenerator = new NodePlusGenerator(this.board);
         this.collapseGenerator = new CollapseGenerator(this.board);
@@ -71,7 +72,7 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
             }
         });
         const plugins = (this.board.getPluginOptions<WithTextOptions>(WithTextPluginKey) || {}).textPlugins;
-        const textManage = new TextManage(this.board, PlaitBoard.getViewContainerRef(this.board), {
+        const textManage = new TextManage(this.board, AngularBoard.getViewContainerRef(this.board), {
             getRectangle: () => {
                 const rect = getTopicRectangleByNode(this.board, this.node);
                 return rect;
@@ -117,7 +118,7 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
         this.imageGenerator.processDrawing(
             this.element as MindElement<ImageData>,
             this.getElementG(),
-            PlaitBoard.getViewContainerRef(this.board)
+            AngularBoard.getViewContainerRef(this.board)
         );
         if (PlaitMind.isMind(this.context.parent)) {
             this.getElementG().classList.add('branch');
@@ -142,7 +143,7 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
             this.drawEmojis();
             this.drawExtend();
             if (!MindElement.hasImage(previous.element) && MindElement.hasImage(this.element)) {
-                this.imageGenerator.processDrawing(this.element, this.getElementG(), PlaitBoard.getViewContainerRef(this.board));
+                this.imageGenerator.processDrawing(this.element, this.getElementG(), AngularBoard.getViewContainerRef(this.board));
             }
             if (MindElement.hasImage(previous.element) && MindElement.hasImage(this.element)) {
                 this.imageGenerator.updateImage(

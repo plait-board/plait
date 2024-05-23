@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { CommonElementFlavour, ImageGenerator } from '@plait/common';
 import { PlaitImage } from './interfaces/image';
 import { LineAutoCompleteGenerator } from './generators/line-auto-complete.generator';
+import { AngularBoard } from '@plait/angular';
 
 export class ImageComponent extends CommonElementFlavour<PlaitImage, PlaitBoard> implements OnContextChanged<PlaitImage, PlaitBoard> {
     get activeGenerator() {
@@ -42,7 +43,7 @@ export class ImageComponent extends CommonElementFlavour<PlaitImage, PlaitBoard>
     initialize(): void {
         super.initialize();
         this.initializeGenerator();
-        this.imageGenerator.processDrawing(this.element, this.getElementG(), PlaitBoard.getViewContainerRef(this.board));
+        this.imageGenerator.processDrawing(this.element, this.getElementG(), AngularBoard.getViewContainerRef(this.board));
         this.lineAutoCompleteGenerator.processDrawing(this.element, PlaitBoard.getElementActiveHost(this.board), {
             selected: this.selected
         });

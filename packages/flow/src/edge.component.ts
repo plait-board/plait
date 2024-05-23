@@ -10,6 +10,7 @@ import { EdgeGenerator } from './generators/edge-generator';
 import { CommonElementFlavour } from '@plait/common';
 import { EdgeElementRef } from './core/edge-ref';
 import { EdgeLabelGenerator } from './generators/edge-label-generator';
+import { AngularBoard } from '@plait/angular';
 
 interface BoundedElements {
     source?: FlowNode;
@@ -31,13 +32,13 @@ export class FlowEdgeComponent<T extends FlowBaseData = FlowBaseData>
     }
 
     initializeGenerator() {
-        const textManage = new TextManage(this.board, PlaitBoard.getViewContainerRef(this.board), {
+        const textManage = new TextManage(this.board, AngularBoard.getViewContainerRef(this.board), {
             getRectangle: () => {
                 return EdgeLabelSpace.getLabelTextRectangle(this.board, this.element);
             }
         });
-        this.edgeGenerator = new EdgeGenerator(this.board, PlaitBoard.getViewContainerRef(this.board));
-        this.edgeLabelGenerator = new EdgeLabelGenerator(this.board, PlaitBoard.getViewContainerRef(this.board), textManage);
+        this.edgeGenerator = new EdgeGenerator(this.board, AngularBoard.getViewContainerRef(this.board));
+        this.edgeLabelGenerator = new EdgeLabelGenerator(this.board, AngularBoard.getViewContainerRef(this.board), textManage);
         this.getRef().addGenerator<EdgeGenerator>(EdgeGenerator.key, this.edgeGenerator);
         this.getRef().addGenerator<EdgeLabelGenerator>(EdgeLabelGenerator.key, this.edgeLabelGenerator);
     }

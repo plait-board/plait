@@ -2,6 +2,7 @@ import { PlaitBoard } from '@plait/core';
 import { PlaitRichtextComponent } from '../richtext/richtext.component';
 import { Element } from 'slate';
 import { AngularEditor } from 'slate-angular';
+import { AngularBoard } from '@plait/angular';
 
 export function measureDivSize(div: HTMLElement) {
     const boundaryBox = {
@@ -32,7 +33,7 @@ export const getTextSize = (
     maxWordCount?: number,
     styles?: { fontSize?: number; fontFamily?: string; width?: number }
 ) => {
-    const viewContainerRef = PlaitBoard.getComponent(board).viewContainerRef;
+    const viewContainerRef = AngularBoard.getViewContainerRef(board);
     const ref = viewContainerRef.createComponent(PlaitRichtextComponent);
     const value = typeof text === 'string' ? ({ children: [{ text }] } as Element) : text;
     ref.instance.value = value;
