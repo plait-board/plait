@@ -1,9 +1,7 @@
-import { Injectable } from '@angular/core';
-import { ImageEntry } from '@plait/core';
 import { Subject } from 'rxjs';
+import { ImageEntry } from './interfaces/element';
 
-@Injectable()
-export class PlaitContextService {
+export class PlaitBoardContext {
     private _stable = new Subject();
 
     private uploadingFiles: ImageEntry[] = [];

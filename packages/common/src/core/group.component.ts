@@ -12,7 +12,6 @@ import { GroupGenerator } from '../generators/group.generator';
 import { ActiveGenerator } from '../generators';
 import { CommonElementFlavour } from './element-flavour';
 import { Subscription } from 'rxjs';
-import { AngularBoard, PlaitContextService } from '@plait/angular';
 
 export class GroupComponent extends CommonElementFlavour<PlaitGroup, PlaitBoard> implements OnContextChanged<PlaitGroup, PlaitBoard> {
     onStableSubscription?: Subscription;
@@ -42,7 +41,7 @@ export class GroupComponent extends CommonElementFlavour<PlaitGroup, PlaitBoard>
     initialize(): void {
         super.initialize();
         this.initializeGenerator();
-        const contextService = AngularBoard.getViewContainerRef(this.board).injector.get(PlaitContextService);
+        const contextService = PlaitBoard.getBoardContext(this.board);
         this.onStableSubscription = contextService.onStable().subscribe(() => {
             const elementsInGroup = getElementsInGroup(this.board, this.element, false, true);
             const isPartialSelectGroup =

@@ -6,6 +6,7 @@ import { PlaitOperation } from './operation';
 import { Selection } from './selection';
 import { Viewport } from './viewport';
 import {
+    BOARD_TO_CONTEXT,
     BOARD_TO_ELEMENT_HOST,
     BOARD_TO_HOST,
     BOARD_TO_MOVING_POINT,
@@ -28,6 +29,7 @@ import { PlaitTheme, ThemeColor, ThemeColors } from './theme';
 import { distanceBetweenPointAndRectangle } from '../utils/math';
 import { ClipboardData, WritableClipboardContext, WritableClipboardOperationType } from '../utils';
 import { ElementFlavour } from '../core/element/element-flavour';
+import { PlaitBoardContext } from '../context';
 
 export interface PlaitBoard {
     viewport: Viewport;
@@ -161,6 +163,9 @@ export const PlaitBoard = {
     },
     getBoardContainer(board: PlaitBoard) {
         return BOARD_TO_ELEMENT_HOST.get(board)?.container as HTMLElement;
+    },
+    getBoardContext(board: PlaitBoard) {
+        return BOARD_TO_CONTEXT.get(board) as PlaitBoardContext;
     },
     getRectangle(board: PlaitBoard) {
         return getRectangleByElements(board, board.children, true);

@@ -1,14 +1,8 @@
-import { ChangeDetectorRef, Directive, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { ACTIVE_STROKE_WIDTH, PlaitBoard, PlaitElement, RectangleClient, getSelectedElements, isSelectionMoving } from '@plait/core';
 import { ActiveGenerator } from '../generators';
 import { CommonImageItem, canResize, getElementOfFocusedImage } from '../utils';
 
-@Directive({
-    host: {
-        class: 'plait-image-container'
-    }
-})
-export abstract class ImageBaseComponent implements OnInit, OnDestroy {
+export abstract class ImageBaseComponent {
     _imageItem!: CommonImageItem;
 
     _isFocus!: boolean;
@@ -17,10 +11,8 @@ export abstract class ImageBaseComponent implements OnInit, OnDestroy {
 
     activeGenerator!: ActiveGenerator;
 
-    @Input()
     element!: PlaitElement;
 
-    @Input()
     set imageItem(value: CommonImageItem) {
         this.afterImageItemChange(this._imageItem, value);
         this._imageItem = value;
@@ -31,10 +23,8 @@ export abstract class ImageBaseComponent implements OnInit, OnDestroy {
         return this._imageItem;
     }
 
-    @Input()
     board!: PlaitBoard;
 
-    @Input()
     set isFocus(value: boolean) {
         this._isFocus = value;
         this.drawFocus();
@@ -44,19 +34,13 @@ export abstract class ImageBaseComponent implements OnInit, OnDestroy {
         return this._isFocus;
     }
 
-    get nativeElement() {
-        return this.elementRef.nativeElement;
-    }
-
     abstract afterImageItemChange(previous: CommonImageItem, current: CommonImageItem): void;
 
-    @Input() getRectangle!: () => RectangleClient;
+    getRectangle!: () => RectangleClient;
 
-    @Input() hasResizeHandle!: () => boolean;
+    hasResizeHandle!: () => boolean;
 
-    constructor(protected elementRef: ElementRef<HTMLElement>, public cdr: ChangeDetectorRef) {}
-
-    ngOnInit(): void {
+    initialize(): void {
         this.activeGenerator = new ActiveGenerator(this.board, {
             getStrokeWidth: () => {
                 const selectedElements = getSelectedElements(this.board);
@@ -93,7 +77,7 @@ export abstract class ImageBaseComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnDestroy(): void {
+    destroy(): void {
         if (this.activeGenerator) {
             this.activeGenerator.destroy();
         }

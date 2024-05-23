@@ -1,6 +1,5 @@
 import { ComponentType, PlaitBoard, PlaitElement } from '@plait/core';
 import { ImageBaseComponent } from '../core/image-base.component';
-import { AngularBoard, PlaitContextService } from '@plait/angular';
 
 export interface CommonImageItem {
     url: string;
@@ -43,7 +42,7 @@ export const buildImage = async (
 
     let imageItem = null;
     const url = URL.createObjectURL(imageFile);
-    const context = AngularBoard.getComponent(board).viewContainerRef.injector.get(PlaitContextService);
+    const context = PlaitBoard.getBoardContext(board);
     context.setUploadingFile({ url, file: imageFile });
 
     imageItem = {

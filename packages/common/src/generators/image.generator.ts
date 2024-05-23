@@ -8,14 +8,10 @@ import {
     setAngleForG,
     updateForeignObject
 } from '@plait/core';
-import { Generator, GeneratorOptions } from './generator';
-import { ComponentRef, ViewContainerRef } from '@angular/core';
+import { Generator, GeneratorExtraData, GeneratorOptions } from './generator';
 import { ImageBaseComponent } from '../core/image-base.component';
 import { CommonImageItem, WithCommonPluginOptions } from '../utils';
 import { WithCommonPluginKey } from '../constants';
-export interface ShapeData {
-    viewContainerRef: ViewContainerRef;
-}
 
 export interface ImageGeneratorOptions<T> {
     getRectangle: (element: T) => RectangleClient;
@@ -24,7 +20,7 @@ export interface ImageGeneratorOptions<T> {
 
 export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Generator<
     T,
-    ViewContainerRef,
+    GeneratorExtraData,
     ImageGeneratorOptions<T> & GeneratorOptions
 > {
     static key = 'image-generator';
@@ -37,11 +33,11 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
         super(board, options);
     }
 
-    canDraw(element: T, data: ViewContainerRef): boolean {
+    canDraw(element: T): boolean {
         return !!this.options.getImageItem(element);
     }
 
-    draw(element: T, viewContainerRef: ViewContainerRef): SVGGElement {
+    draw(element: T): SVGGElement {
         const g = createG();
         const foreignRectangle = this.options.getRectangle(element);
         this.foreignObject = createForeignObject(foreignRectangle.x, foreignRectangle.y, foreignRectangle.width, foreignRectangle.height);

@@ -9,6 +9,7 @@ export * from './core/list-render';
 export * from './interfaces';
 export * from './transforms';
 export * from './utils';
+export * from './context';
 export * from './plugins';
 export * from './testing';
 export * from './utils/debug';

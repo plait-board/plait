@@ -27,6 +27,7 @@ import { filter, takeUntil, tap } from 'rxjs/operators';
 import { BoardComponentInterface } from './board.component.interface';
 import {
     BOARD_TO_AFTER_CHANGE,
+    BOARD_TO_CONTEXT,
     BOARD_TO_ELEMENT_HOST,
     BOARD_TO_HOST,
     BOARD_TO_MOVING_POINT,
@@ -41,6 +42,7 @@ import {
     IS_SAFARI,
     ListRender,
     PlaitBoard,
+    PlaitBoardContext,
     PlaitBoardOptions,
     PlaitChildrenContext,
     PlaitElement,
@@ -75,7 +77,6 @@ import {
     withViewport
 } from '@plait/core';
 import { AngularBoardChangeEvent } from '../interfaces/board';
-import { PlaitContextService } from '../services/context.service';
 import { PlaitIslandBaseComponent, hasOnBoardChange } from '../island/island-base.component';
 import { BOARD_TO_COMPONENT } from '../utils/weak-maps';
 
@@ -98,7 +99,7 @@ const ElementActiveHostClass = 'element-active-host';
         <ng-content></ng-content>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [PlaitContextService],
+    providers: [PlaitBoardContext],
     standalone: true
 })
 export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnChanges, AfterViewInit, AfterContentInit, OnDestroy {
@@ -177,8 +178,6 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
 
     listRender!: ListRender;
 
-    contextService = inject(PlaitContextService);
-
     constructor(
         public cdr: ChangeDetectorRef,
         public viewContainerRef: ViewContainerRef,
@@ -237,6 +236,8 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
                 this.plaitChange.emit(changeEvent);
             });
         });
+        const context = new PlaitBoardContext();
+        BOARD_TO_CONTEXT.set(this.board, context);
         this.initializeListRender();
         this.elementRef.nativeElement.classList.add(`pointer-${this.board.pointer}`);
         this.hasInitialized = true;
@@ -445,7 +446,7 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
 
     private updateListRender() {
         this.listRender.update(this.board.children, this.initializeChildrenContext());
-        this.contextService.nextStable();
+        PlaitBoard.getBoardContext(this.board).nextStable();
     }
 
     private initializeChildrenContext(): PlaitChildrenContext {
