@@ -70,7 +70,7 @@ export interface PlaitBoard {
     getRelatedFragment: (data: PlaitElement[], originData?: PlaitElement[]) => PlaitElement[];
     dblClick: (event: MouseEvent) => void;
     drawElement: (context: PlaitPluginElementContext) => ComponentType<ElementFlavour>;
-    renderHydration: (context: HydrationContext) => HydrationRef;
+    renderHydration: <T extends Object>(context: HydrationContext<T>) => HydrationRef<T>;
     isRectangleHit: (element: PlaitElement, range: Selection) => boolean;
     // When the element has no fill color, it is considered a hit only if it hits the border.
     isHit: (element: PlaitElement, point: Point) => boolean;

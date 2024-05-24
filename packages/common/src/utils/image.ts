@@ -9,6 +9,7 @@ export interface CommonImageItem {
 
 export interface WithCommonPluginOptions {
     imageComponentType?: ComponentType<ImageBaseComponent>;
+    textComponentType?: ComponentType<any>;
 }
 
 export const selectImage = (

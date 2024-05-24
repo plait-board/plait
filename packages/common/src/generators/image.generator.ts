@@ -17,6 +17,7 @@ import { Generator, GeneratorExtraData, GeneratorOptions } from './generator';
 import { CommonImageItem, WithCommonPluginOptions, canResize, getElementOfFocusedImage } from '../utils';
 import { WithCommonPluginKey } from '../constants';
 import { ActiveGenerator } from './active.generator';
+import { ImageProps } from '../core/image-props';
 
 export interface ImageGeneratorOptions<T> {
     getRectangle: (element: T) => RectangleClient;
@@ -32,7 +33,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
 
     foreignObject!: SVGForeignObjectElement;
 
-    hydrationRef!: HydrationRef;
+    hydrationRef!: HydrationRef<ImageProps>;
 
     activeGenerator!: ActiveGenerator;
 
@@ -59,7 +60,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
         if (!componentType) {
             throw new Error('Not implement ImageBaseComponent error.');
         }
-        const context: HydrationContext = {
+        const context: HydrationContext<ImageProps> = {
             props: {
                 board: this.board,
                 imageItem: this.options.getImageItem(element),
@@ -133,7 +134,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
         this.isFocus = isFocus;
         const activeG = PlaitBoard.getElementActiveHost(this.board);
         this.activeGenerator.processDrawing(element, activeG, { selected: isFocus });
-        const props = {
+        const props: Partial<ImageProps> = {
             isFocus
         };
         this.hydrationRef.update(props);
