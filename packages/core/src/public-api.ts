@@ -6,7 +6,7 @@ export * from './core/element/context-change';
 export * from './core/element/element-flavour';
 export * from './core/element/element-ref';
 export * from './core/list-render';
-export * from './core/hydration';
+export * from './core/component';
 export * from './interfaces';
 export * from './transforms';
 export * from './utils';

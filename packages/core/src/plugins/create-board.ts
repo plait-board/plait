@@ -11,7 +11,7 @@ import { ThemeColorMode } from '../interfaces/theme';
 import { CoreTransforms } from '../transforms/element';
 import { ClipboardData, WritableClipboardContext, WritableClipboardOperationType, drawEntireActiveRectangleG } from '../utils';
 import { Point, RectangleClient } from '../interfaces';
-import { HydrationContext } from '../core/hydration';
+import { ComponentContext } from '../core/component';
 
 export function createBoard(children: PlaitElement[], options?: PlaitBoardOptions): PlaitBoard {
     const board: PlaitBoard = {
@@ -112,7 +112,7 @@ export function createBoard(children: PlaitElement[], options?: PlaitBoardOption
         drawElement: (context: PlaitPluginElementContext) => {
             throw new Error(`can not resolve plugin element component type: ${context.element.type}`);
         },
-        renderHydration: <T>(context: HydrationContext<T>) => {
+        renderComponent: <T>(context: ComponentContext<T>) => {
             throw new Error(`can not resolve renderHydration`);
         },
         isWithinSelection: element => false,

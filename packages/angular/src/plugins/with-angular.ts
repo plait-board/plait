@@ -1,8 +1,8 @@
-import { HydrationContext, PlaitBoard } from "@plait/core";
+import { ComponentContext, PlaitBoard } from "@plait/core";
 import { AngularBoard } from "../interfaces/board";
 
 export const withAngular = (board: PlaitBoard) => {
-    board.renderHydration = <T extends Object>(context: HydrationContext<T>) => {
+    board.renderComponent = <T extends Object>(context: ComponentContext<T>) => {
         const viewContainerRef = AngularBoard.getViewContainerRef(board);
         const componentRef = viewContainerRef.createComponent<any>(context.componentType);
         for (const key in context.props) {

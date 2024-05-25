@@ -1,7 +1,7 @@
 import {
     ACTIVE_STROKE_WIDTH,
-    HydrationContext,
-    HydrationRef,
+    ComponentContext,
+    ComponentRef,
     PlaitBoard,
     PlaitElement,
     PlaitOptionsBoard,
@@ -33,7 +33,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
 
     foreignObject!: SVGForeignObjectElement;
 
-    hydrationRef!: HydrationRef<ImageProps>;
+    componentRef!: ComponentRef<ImageProps>;
 
     activeGenerator!: ActiveGenerator;
 
@@ -60,7 +60,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
         if (!componentType) {
             throw new Error('Not implement ImageBaseComponent error.');
         }
-        const context: HydrationContext<ImageProps> = {
+        const context: ComponentContext<ImageProps> = {
             props: {
                 board: this.board,
                 imageItem: this.options.getImageItem(element),
@@ -72,7 +72,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
             foreignObject: this.foreignObject,
             componentType
         };
-        this.hydrationRef = this.board.renderHydration(context);
+        this.componentRef = this.board.renderComponent(context);
 
         this.activeGenerator = new ActiveGenerator(this.board, {
             getStrokeWidth: () => {
@@ -105,7 +105,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
 
     updateImage(nodeG: SVGGElement, previous: T, current: T) {
         this.element = current;
-        if (previous !== current && this.hydrationRef) {
+        if (previous !== current && this.componentRef) {
             const props = {
                 imageItem: this.options.getImageItem(current),
                 element: current,
@@ -113,7 +113,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
                     return this.options.getRectangle(current);
                 }
             };
-            this.hydrationRef.update(props);
+            this.componentRef.update(props);
         }
         const currentForeignObject = this.options.getRectangle(current);
         updateForeignObject(
@@ -137,11 +137,11 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
         const props: Partial<ImageProps> = {
             isFocus
         };
-        this.hydrationRef.update(props);
+        this.componentRef.update(props);
     }
 
     destroy(): void {
         super.destroy();
-        this.hydrationRef?.destroy();
+        this.componentRef?.destroy();
     }
 }

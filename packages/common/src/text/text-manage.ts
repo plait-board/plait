@@ -1,6 +1,6 @@
 import {
-    HydrationContext,
-    HydrationRef,
+    ComponentContext,
+    ComponentRef,
     IS_TEXT_EDITABLE,
     MERGING,
     PlaitBoard,
@@ -36,7 +36,7 @@ export class TextManage {
 
     foreignObject!: SVGForeignObjectElement;
 
-    hydrationRef!: HydrationRef<TextProps>;
+    componentRef!: ComponentRef<TextProps>;
 
     #exitCallback?: (() => void) | null;
 
@@ -67,7 +67,7 @@ export class TextManage {
         this.g.classList.add('text');
         const componentType = (this.board as PlaitOptionsBoard).getPluginOptions<WithCommonPluginOptions>(WithCommonPluginKey)
             .textComponentType;
-        const context: HydrationContext<TextProps> = {
+        const context: ComponentContext<TextProps> = {
             props: {
                 board: this.board,
                 text,
@@ -90,7 +90,7 @@ export class TextManage {
             foreignObject: this.foreignObject,
             componentType
         };
-        this.hydrationRef = this.board.renderHydration(context);
+        this.componentRef = this.board.renderComponent(context);
     }
 
     updateRectangleWidth(width: number) {
@@ -111,7 +111,7 @@ export class TextManage {
         const props = {
             text: newText
         };
-        this.hydrationRef.update(props);
+        this.componentRef.update(props);
     }
 
     edit(callback?: () => void) {
@@ -120,7 +120,7 @@ export class TextManage {
         const props: Partial<TextProps> = {
             readonly: false
         };
-        this.hydrationRef.update(props);
+        this.componentRef.update(props);
         const mousedown$ = fromEvent<MouseEvent>(document, 'mousedown').subscribe((event: MouseEvent) => {
             const point = toViewBoxPoint(this.board, toHostPoint(this.board, event.x, event.y));
             const textRec = this.options.getRenderRectangle ? this.options.getRenderRectangle() : this.options.getRectangle();
@@ -143,7 +143,7 @@ export class TextManage {
             const props = {
                 readonly: true
             };
-            this.hydrationRef.update(props);
+            this.componentRef.update(props);
             this.#exitCallback = null;
             this.isEditing = false;
         };
@@ -153,6 +153,6 @@ export class TextManage {
 
     destroy() {
         this.g?.remove();
-        this.hydrationRef?.destroy();
+        this.componentRef?.destroy();
     }
 }
