@@ -2,9 +2,6 @@ import {
     BoardTransforms,
     PlaitBoard,
     PlaitPointerType,
-    Transforms,
-    addSelectedElement,
-    clearSelectedElement,
     createG,
     getSelectedElements,
     throttleRAF,
@@ -16,10 +13,9 @@ import { MindPointerType } from '../interfaces/pointer';
 import { getRectangleByElement, getTopicRectangleByElement } from '../utils';
 import { drawRoundRectangleByElement } from '../utils/draw/node-shape';
 import { NgZone } from '@angular/core';
-import { TextManage } from '@plait/text';
 import { createEmptyMind } from '../utils/node/create-node';
 import { MindElement } from '../interfaces';
-import { BoardCreationMode, isDndMode, isDrawingMode, setCreationMode } from '@plait/common';
+import { BoardCreationMode, TextManage, isDndMode, isDrawingMode, setCreationMode } from '@plait/common';
 import { MindTransforms } from '../transforms';
 import { AngularBoard } from '@plait/angular';
 
@@ -67,7 +63,7 @@ export const withCreateMind = (board: PlaitBoard) => {
                     const nodeG = drawRoundRectangleByElement(board, nodeRectangle, emptyMind);
                     const topicRectangle = getTopicRectangleByElement(newBoard, nodeRectangle, emptyMind);
                     if (!fakeCreateNodeRef) {
-                        const textManage = new TextManage(board, AngularBoard.getComponent(board).viewContainerRef, {
+                        const textManage = new TextManage(board, {
                             getRectangle: () => {
                                 return topicRectangle;
                             }

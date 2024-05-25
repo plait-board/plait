@@ -20,6 +20,7 @@ export class PlaitImageComponent extends ImageBaseComponent implements OnInit {
 
     ngOnInit(): void {
         super.initialize();
+        console.log(this.imageItem, 'imageItem');
     }
 
     afterImageItemChange() {

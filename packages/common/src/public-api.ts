@@ -13,3 +13,4 @@ export * from './core/image-base.component';
 export * from './core/element-ref';
 export * from './algorithms';
 export * from './types';
+export * from './text/text-manage';

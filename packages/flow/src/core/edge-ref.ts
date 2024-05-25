@@ -3,7 +3,6 @@ import { XYPosition } from '@plait/core';
 import { EdgeStableState, FlowEdge } from '../interfaces/edge';
 import { buildEdgePathPoints } from '../utils/edge/edge';
 import { PlaitFlowBoard } from '../interfaces';
-import { TextManage } from '@plait/text';
 
 export class EdgeElementRef extends PlaitCommonElementRef {
     private pathPoints: XYPosition[] = [];

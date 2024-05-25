@@ -35,7 +35,7 @@ export interface TextManageRef {
     operations?: BaseOperation[];
 }
 
-export class TextManage {
+export class TextManage2 {
     componentRef!: ComponentRef<PlaitRichtextComponent>;
 
     g!: SVGGElement;
@@ -78,7 +78,7 @@ export class TextManage {
 
     draw(value: Element) {
         this.componentRef = this.viewContainerRef.createComponent(PlaitRichtextComponent);
-        this.componentRef.instance.value = value;
+        // this.componentRef.instance.value = value;
         this.componentRef.instance.readonly = true;
         this.options.textPlugins && (this.componentRef.instance.textPlugins = this.options.textPlugins);
         const _rectangle = this.options.getRectangle();

@@ -26,7 +26,7 @@ import { Node, Transforms as SlateTransforms } from 'slate';
 import { AppColorPickerComponent } from '../color-picker/color-picker.component';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
-import { AlignTransform, PropertyTransforms, TextTransforms, getFirstTextEditor, getTextEditors } from '@plait/common';
+import { AlignTransform, PropertyTransforms } from '@plait/common';
 import {
     LineShape,
     LineMarkerType,
@@ -129,21 +129,21 @@ export class AppSettingPanelComponent extends PlaitIslandBaseComponent implement
             this.currentBranchColor = firstMindElement.branchColor || '';
             this.strokeWidth = firstMindElement.strokeWidth || 3;
             if (PlaitElement.hasMounted(firstMindElement)) {
-                this.currentMarks = PlaitMarkEditor.getMarks(getFirstTextEditor(firstMindElement));
-                this.align = firstMindElement.data.topic.align || Alignment.left;
+                // this.currentMarks = PlaitMarkEditor.getMarks(getFirstTextEditor(firstMindElement));
+                // this.align = firstMindElement.data.topic.align || Alignment.left;
             }
         }
 
         const selectedGeometryElements = getSelectedGeometryElements(this.board);
-        if (selectedGeometryElements.length) {
-            const firstGeometry = selectedGeometryElements[0];
-            if (isMultipleTextGeometry(firstGeometry)) {
-                this.align = firstGeometry.texts[0].text.align || Alignment.center;
-            } else {
-                this.align = (firstGeometry as PlaitGeometry).text.align || Alignment.center;
-            }
-            this.strokeWidth = firstGeometry.strokeWidth || 3;
-        }
+        // if (selectedGeometryElements.length) {
+        //     const firstGeometry = selectedGeometryElements[0];
+        //     if (isMultipleTextGeometry(firstGeometry)) {
+        //         this.align = firstGeometry.texts[0].text.align || Alignment.center;
+        //     } else {
+        //         this.align = (firstGeometry as PlaitGeometry).text.align || Alignment.center;
+        //     }
+        //     this.strokeWidth = firstGeometry.strokeWidth || 3;
+        // }
 
         const selectedImageElements = getSelectedImageElements(this.board);
         const selectedElements = [...selectedImageElements, ...selectedGeometryElements];
@@ -227,13 +227,13 @@ export class AppSettingPanelComponent extends PlaitIslandBaseComponent implement
     }
 
     textColorChange(value: string) {
-        const selectedElements = getSelectedElements(this.board);
-        if (selectedElements.length) {
-            selectedElements.forEach(element => {
-                const editors = getTextEditors(element);
-                editors.forEach(editor => PlaitMarkEditor.setColorMark(editor, value));
-            });
-        }
+        // const selectedElements = getSelectedElements(this.board);
+        // if (selectedElements.length) {
+        //     selectedElements.forEach(element => {
+        //         const editors = getTextEditors(element);
+        //         editors.forEach(editor => PlaitMarkEditor.setColorMark(editor, value));
+        //     });
+        // }
     }
 
     setAbstract(event: Event) {
@@ -249,60 +249,60 @@ export class AppSettingPanelComponent extends PlaitIslandBaseComponent implement
     }
 
     setTextMark(event: MouseEvent, attribute: string) {
-        event.preventDefault();
-        event.stopPropagation();
-        const selectedElements = getSelectedElements(this.board) as MindElement[];
-        if (selectedElements.length) {
-            selectedElements.forEach(element => {
-                const editors = getTextEditors(element);
-                editors.forEach(editor => PlaitMarkEditor.toggleMark(editor, attribute as MarkTypes));
-            });
-        }
+        // event.preventDefault();
+        // event.stopPropagation();
+        // const selectedElements = getSelectedElements(this.board) as MindElement[];
+        // if (selectedElements.length) {
+        //     selectedElements.forEach(element => {
+        //         const editors = getTextEditors(element);
+        //         editors.forEach(editor => PlaitMarkEditor.toggleMark(editor, attribute as MarkTypes));
+        //     });
+        // }
     }
 
     setLink(event: MouseEvent) {
         const selectedElements = getSelectedElements(this.board) as MindElement[];
         if (selectedElements.length) {
-            const editor = getFirstTextEditor(selectedElements[0]);
+            // const editor = getFirstTextEditor(selectedElements[0]);
 
-            if (!editor.selection) {
-                SlateTransforms.select(editor, [0]);
-            }
+            // if (!editor.selection) {
+            //     SlateTransforms.select(editor, [0]);
+            // }
 
-            if (LinkEditor.isLinkActive(editor)) {
-                LinkEditor.unwrapLink(editor);
-                return;
-            }
+            // if (LinkEditor.isLinkActive(editor)) {
+            //     LinkEditor.unwrapLink(editor);
+            //     return;
+            // }
 
-            const fragment = Node.fragment(editor, editor.selection!)[0];
-            const selectNode = Node.get(fragment, []);
-            const selectText = Node.string(selectNode);
+            // const fragment = Node.fragment(editor, editor.selection!)[0];
+            // const selectNode = Node.get(fragment, []);
+            // const selectText = Node.string(selectNode);
 
-            let name = selectText;
-            if (!name) {
-                name = window.prompt('输入链接文本名称') || '链接';
-            }
+            // let name = selectText;
+            // if (!name) {
+            //     name = window.prompt('输入链接文本名称') || '链接';
+            // }
 
-            const link = window.prompt('输入链接');
-            if (link) {
-                LinkEditor.wrapLink(editor, name!, link!);
-            }
+            // const link = window.prompt('输入链接');
+            // if (link) {
+            //     LinkEditor.wrapLink(editor, name!, link!);
+            // }
         }
     }
 
     setFontSize(event: Event) {
         const fontSize = (event.target as HTMLSelectElement).value as FontSizes;
-        TextTransforms.setFontSize(this.board, fontSize, (element: PlaitElement) => {
-            return MindElement.isMindElement(this.board, element) ? getDefaultMindElementFontSize(this.board, element) : undefined;
-        });
+        // TextTransforms.setFontSize(this.board, fontSize, (element: PlaitElement) => {
+        //     return MindElement.isMindElement(this.board, element) ? getDefaultMindElementFontSize(this.board, element) : undefined;
+        // });
     }
 
     setTextAlign(event: Alignment) {
-        const selectedElements = getSelectedElements(this.board) as MindElement[];
-        selectedElements.forEach(element => {
-            const editors = getTextEditors(element);
-            editors.forEach(editor => AlignEditor.setAlign(editor, event));
-        });
+        // const selectedElements = getSelectedElements(this.board) as MindElement[];
+        // selectedElements.forEach(element => {
+        //     const editors = getTextEditors(element);
+        //     editors.forEach(editor => AlignEditor.setAlign(editor, event));
+        // });
     }
 
     setAlign(event: Event) {

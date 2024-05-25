@@ -16,9 +16,9 @@ import {
     isDndMode,
     isDrawingMode,
     getDirectionFactorByDirectionComponent,
-    getUnitVectorByPointAndPoint
+    getUnitVectorByPointAndPoint,
+    TextManage
 } from '@plait/common';
-import { TextManage } from '@plait/text';
 import { isKeyHotkey } from 'is-hotkey';
 import { NgZone } from '@angular/core';
 import { getSnapResizingRef } from '../utils/snap-resizing';
@@ -72,7 +72,7 @@ export const withGeometryCreateByDrag = (board: PlaitBoard) => {
                 );
                 temporaryElement = createTextElement(board, points);
                 if (!fakeCreateTextRef) {
-                    const textManage = new TextManage(board, AngularBoard.getComponent(board).viewContainerRef, {
+                    const textManage = new TextManage(board, {
                         getRectangle: () => {
                             return getTextRectangle(temporaryElement!);
                         }

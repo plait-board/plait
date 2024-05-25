@@ -1,6 +1,6 @@
-import { ELEMENT_TO_TEXT_MANAGES, WithTextOptions, WithTextPluginKey } from '@plait/common';
+import { ELEMENT_TO_TEXT_MANAGES, TextManage, TextManageRef, WithTextOptions, WithTextPluginKey } from '@plait/common';
 import { PlaitBoard, PlaitElement, PlaitOptionsBoard, RectangleClient } from '@plait/core';
-import { TextPlugin, TextManageRef, TextManage, ParagraphElement } from '@plait/text';
+import { Element } from 'slate';
 import { getEngine } from '../engines';
 import { DrawShapes, EngineExtraData, PlaitCommonGeometry, PlaitGeometry } from '../interfaces';
 import { getTextRectangle, isMultipleTextGeometry } from '../utils';
@@ -8,7 +8,7 @@ import { ViewContainerRef } from '@angular/core';
 
 export interface PlaitDrawShapeText extends EngineExtraData {
     key: string;
-    text: ParagraphElement;
+    text: Element;
     textHeight: number;
     board?: PlaitBoard;
 }
@@ -65,9 +65,8 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
     }
 
     initialize() {
-        const textPlugins = ((this.board as PlaitOptionsBoard).getPluginOptions<WithTextOptions>(WithTextPluginKey) || {}).textPlugins;
         this.textManages = this.texts.map(text => {
-            const textManage = this.createTextManage(text, textPlugins);
+            const textManage = this.createTextManage(text);
             setTextManage(this.getTextKey(text), textManage);
             return textManage;
         });
@@ -117,7 +116,7 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
             if (drawShapeText.text) {
                 let textManage = getTextManage(this.getTextKey(drawShapeText));
                 if (!textManage) {
-                    textManage = this.createTextManage(drawShapeText, textPlugins);
+                    textManage = this.createTextManage(drawShapeText);
                     setTextManage(drawShapeText.key, textManage);
                     textManage.draw(drawShapeText.text);
                     elementG.append(textManage.g);
@@ -131,12 +130,12 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
         });
     }
 
-    private createTextManage(text: PlaitDrawShapeText, textPlugins: TextPlugin[] | undefined) {
-        const textManage = new TextManage(this.board, this.viewContainerRef, {
+    private createTextManage(text: PlaitDrawShapeText) {
+        const textManage = new TextManage(this.board, {
             getRectangle: () => {
                 return this.getRectangle(text);
             },
-            onValueChangeHandle: (textManageRef: TextManageRef) => {
+            onChange: (textManageRef: TextManageRef) => {
                 return this.onValueChangeHandle(textManageRef, text);
             },
             getMaxWidth: () => {
@@ -144,8 +143,7 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
             },
             getRenderRectangle: () => {
                 return this.options.getRenderRectangle ? this.options.getRenderRectangle(this.element, text) : this.getRectangle(text);
-            },
-            textPlugins
+            }
         });
         return textManage;
     }

@@ -1,13 +1,12 @@
 import { PlaitPluginElementContext, getElementById } from '@plait/core';
 import { PlaitBoard, OnContextChanged } from '@plait/core';
-import { TextManage } from '@plait/text';
 import { EdgeStableState, FlowEdge } from './interfaces/edge';
 import { FlowBaseData } from './interfaces/element';
 import { PlaitFlowBoard } from './interfaces';
 import { EdgeLabelSpace, renderEdge } from './utils';
 import { FlowNode } from './interfaces/node';
 import { EdgeGenerator } from './generators/edge-generator';
-import { CommonElementFlavour } from '@plait/common';
+import { CommonElementFlavour, TextManage } from '@plait/common';
 import { EdgeElementRef } from './core/edge-ref';
 import { EdgeLabelGenerator } from './generators/edge-label-generator';
 import { AngularBoard } from '@plait/angular';
@@ -32,7 +31,7 @@ export class FlowEdgeComponent<T extends FlowBaseData = FlowBaseData>
     }
 
     initializeGenerator() {
-        const textManage = new TextManage(this.board, AngularBoard.getViewContainerRef(this.board), {
+        const textManage = new TextManage(this.board, {
             getRectangle: () => {
                 return EdgeLabelSpace.getLabelTextRectangle(this.board, this.element);
             }

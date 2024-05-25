@@ -1,5 +1,5 @@
 import { createForeignObject, createG, updateForeignObject } from '@plait/core';
-import { Generator, GeneratorOptions } from '@plait/common';
+import { Generator, GeneratorOptions, TextManage } from '@plait/common';
 import { EdgeState, FlowEdge } from '../interfaces/edge';
 import { drawEdgeLabelShape } from '../draw/edge';
 import { EdgeLabelSpace } from '../utils/edge/label-space';
@@ -7,7 +7,6 @@ import { PlaitFlowBoard } from '../interfaces';
 import { ComponentRef, ViewContainerRef } from '@angular/core';
 import { FlowEdgeLabelIconBaseComponent } from '../core/edge-label-icon-base.component';
 import { LabelIconItem } from '../interfaces/icon';
-import { TextManage } from '@plait/text';
 
 export interface EdgeData {
     state: EdgeState;

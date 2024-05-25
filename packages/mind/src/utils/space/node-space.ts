@@ -8,7 +8,6 @@ import { PlaitMindBoard } from '../../plugins/with-mind.board';
 import { getEmojisWidthHeight } from './emoji';
 import { Element } from 'slate';
 import { getStrokeWidthByElement } from '../node-style/shape';
-import { getFirstTextEditor } from '@plait/common';
 import { getDefaultMindElementFontSize } from '../mind';
 
 const NodeDefaultSpace = {
@@ -95,11 +94,12 @@ export const NodeSpace = {
         }
     },
     getNodeTopicMinWidth(board: PlaitMindBoard, element: MindElement) {
+        // TODO
         const defaultFontSize = getDefaultMindElementFontSize(board, element);
-        const editor = getFirstTextEditor(element);
-        const marks = PlaitMarkEditor.getMarks(editor);
-        const fontSize = (marks[MarkTypes.fontSize] as number) || defaultFontSize;
-        return fontSize;
+        // const editor = getFirstTextEditor(element);
+        // const marks = PlaitMarkEditor.getMarks(editor);
+        // const fontSize = (marks[MarkTypes.fontSize] as number) || defaultFontSize;
+        return defaultFontSize;
     },
     getTextLeftSpace(board: PlaitMindBoard, element: MindElement) {
         const nodeAndText = getHorizontalSpaceBetweenNodeAndText(board, element);

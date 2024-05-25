@@ -36,7 +36,7 @@ export const getTextSize = (
     const viewContainerRef = AngularBoard.getViewContainerRef(board);
     const ref = viewContainerRef.createComponent(PlaitRichtextComponent);
     const value = typeof text === 'string' ? ({ children: [{ text }] } as Element) : text;
-    ref.instance.value = value;
+    // ref.instance.value = value;
     ref.instance.readonly = true;
     ref.changeDetectorRef.detectChanges();
     ref.instance.slateEditable.writeValue(ref.instance.children);

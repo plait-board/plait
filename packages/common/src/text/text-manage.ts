@@ -19,7 +19,7 @@ import { fromEvent, timer } from 'rxjs';
 import { WithCommonPluginOptions } from '../utils/image';
 import { WithCommonPluginKey } from '../constants/media';
 import { Element } from 'slate';
-import { TextProps } from '../core/text-props';
+import { TextProps, getSizeFnType } from '../core/text-props';
 
 export interface TextManageRef {
     newText?: Element;
@@ -28,6 +28,10 @@ export interface TextManageRef {
 }
 
 export class TextManage {
+    isEditing = false;
+
+    text!: Element;
+
     g!: SVGGElement;
 
     foreignObject!: SVGForeignObjectElement;
@@ -35,6 +39,10 @@ export class TextManage {
     hydrationRef!: HydrationRef<TextProps>;
 
     #exitCallback?: (() => void) | null;
+
+    getSize: getSizeFnType = () => {
+        throw new Error('Exception: can not resolve getSize');
+    };
 
     constructor(
         private board: PlaitBoard,
@@ -51,18 +59,20 @@ export class TextManage {
     }
 
     draw(text: Element) {
+        this.text = text;
         const _rectangle = this.options.getRectangle();
         this.g = createG();
         this.foreignObject = createForeignObject(_rectangle.x, _rectangle.y, _rectangle.width, _rectangle.height);
         this.g.append(this.foreignObject);
         this.g.classList.add('text');
         const componentType = (this.board as PlaitOptionsBoard).getPluginOptions<WithCommonPluginOptions>(WithCommonPluginKey)
-            .imageComponentType;
+            .textComponentType;
         const context: HydrationContext<TextProps> = {
             props: {
                 board: this.board,
                 text,
                 onChange: (data: { width: number; height: number; newText: Element }) => {
+                    this.text = data.newText;
                     this.options.onChange && this.options.onChange(data);
                     MERGING.set(this.board, true);
                 },
@@ -72,6 +82,9 @@ export class TextManage {
                 },
                 onExitEdit: () => {
                     this.#exitCallback && this.#exitCallback();
+                },
+                registerGetSize: (getSizeFn: getSizeFnType) => {
+                    this.getSize = getSizeFn;
                 }
             },
             foreignObject: this.foreignObject,
@@ -94,6 +107,7 @@ export class TextManage {
     }
 
     updateText(newText: Element) {
+        this.text = newText;
         const props = {
             text: newText
         };
@@ -101,6 +115,7 @@ export class TextManage {
     }
 
     edit(callback?: () => void) {
+        this.isEditing = true;
         IS_TEXT_EDITABLE.set(this.board, true);
         const props: Partial<TextProps> = {
             readonly: true
@@ -130,6 +145,7 @@ export class TextManage {
             };
             this.hydrationRef.update(props);
             this.#exitCallback = null;
+            this.isEditing = false;
         };
         this.#exitCallback = exitCallback;
         return exitCallback;

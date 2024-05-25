@@ -2,12 +2,14 @@ import { PlaitMindBoard } from '@plait/mind';
 import { PlaitBoard, PlaitOptionsBoard } from '@plait/core';
 import { WithCommonPluginKey, WithCommonPluginOptions } from '@plait/common';
 import { PlaitImageComponent } from '../editor/image/image.component';
+import { PlaitRichtextComponent } from '@plait/text';
 
 export const withCommonPlugin = (board: PlaitBoard) => {
     const newBoard = board as PlaitBoard & PlaitMindBoard;
 
     (board as PlaitOptionsBoard).setPluginOptions<WithCommonPluginOptions>(WithCommonPluginKey, {
-        imageComponentType: PlaitImageComponent
+        imageComponentType: PlaitImageComponent,
+        textComponentType: PlaitRichtextComponent
     });
 
     return newBoard;

@@ -62,11 +62,11 @@ export const withLineText = (board: PlaitBoard) => {
 function editHandle(board: PlaitBoard, element: PlaitLine, manageIndex: number, isFirstEdit: boolean = false) {
     const textManages = getTextManages(element);
     const textManage = textManages[manageIndex];
-    const originText = textManage.componentRef.instance.children;
-    textManage.edit((origin, descendant) => {
-        const text = Node.string(descendant[0]);
-        const shouldRemove = (isFirstEdit && originText === descendant) || !text;
-        if (shouldRemove) {
+    textManage.edit(() => {
+        const text = Node.string(textManage.text);
+        // TODO 
+        // const shouldRemove = (isFirstEdit && originText === descendant) || !text;
+        if (!text) {
             DrawTransforms.removeLineText(board, element, manageIndex);
         }
     });

@@ -41,12 +41,12 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit {
 
     @Input() textPlugins: TextPlugin[] = [];
 
-    @Input() set value(value: Element) {
-        this.children = [value];
+    @Input() set text(text: Element) {
+        this.children = [text];
         this.cdr.markForCheck();
     }
 
-    @Input() readonly = false;
+    @Input() readonly = true;
 
     @ViewChild('slateEditable')
     slateEditable!: SlateEditable;
@@ -58,6 +58,10 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit {
     onComposition: EventEmitter<CompositionEvent> = new EventEmitter();
 
     editor = withSelection(withLink(withMark(withSingleLine(withHistory(withAngular(createEditor(), CLIPBOARD_FORMAT_KEY))))));
+
+    nativeElement() {
+        return this.elementRef.nativeElement;
+    }
 
     constructor(public renderer2: Renderer2, private cdr: ChangeDetectorRef, public elementRef: ElementRef<HTMLElement>) {}
 

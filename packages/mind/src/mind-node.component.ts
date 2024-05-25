@@ -1,6 +1,5 @@
 import { createG, PlaitBoard, NODE_TO_INDEX, PlaitPluginElementContext, OnContextChanged, RectangleClient } from '@plait/core';
 import { isHorizontalLayout, AbstractNode, MindLayoutType } from '@plait/layouts';
-import { TextManageRef, TextManage } from '@plait/text';
 import { RoughSVG } from 'roughjs/bin/svg';
 import { MindElement, PlaitMind } from './interfaces/element';
 import { MindNode } from './interfaces/node';
@@ -17,7 +16,7 @@ import { NodeActiveGenerator } from './generators/node-active.generator';
 import { CollapseGenerator } from './generators/node-collapse.generator';
 import { NodeSpace } from './utils/space/node-space';
 import { NodeTopicThreshold } from './constants/node-topic-style';
-import { CommonElementFlavour, ImageGenerator, WithTextOptions, WithTextPluginKey } from '@plait/common';
+import { CommonElementFlavour, ImageGenerator, TextManage, TextManageRef, WithTextOptions, WithTextPluginKey } from '@plait/common';
 import { NodeShapeGenerator } from './generators/node-shape.generator';
 import { getImageForeignRectangle } from './utils';
 import { ImageData } from './interfaces';
@@ -72,21 +71,20 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
             }
         });
         const plugins = (this.board.getPluginOptions<WithTextOptions>(WithTextPluginKey) || {}).textPlugins;
-        const textManage = new TextManage(this.board, AngularBoard.getViewContainerRef(this.board), {
+        const textManage = new TextManage(this.board, {
             getRectangle: () => {
                 const rect = getTopicRectangleByNode(this.board, this.node);
                 return rect;
             },
-            onValueChangeHandle: (textManageRef: TextManageRef) => {
+            onChange: (textManageRef: TextManageRef) => {
                 const width = textManageRef.width;
                 const height = textManageRef.height;
-                if (textManageRef.newValue) {
-                    MindTransforms.setTopic(this.board, this.element, textManageRef.newValue as MindElement, width, height);
+                if (textManageRef.newText) {
+                    MindTransforms.setTopic(this.board, this.element, textManageRef.newText as MindElement, width, height);
                 } else {
                     MindTransforms.setTopicSize(this.board, this.element, width, height);
                 }
             },
-            textPlugins: plugins,
             getMaxWidth: () => {
                 if (this.element.manualWidth) {
                     return NodeSpace.getNodeDynamicWidth(this.board, this.element);

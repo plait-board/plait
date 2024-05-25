@@ -1,11 +1,10 @@
 import { PlaitBoard, PlaitPluginElementContext, OnContextChanged, getElementById, createDebugGenerator } from '@plait/core';
 import { LineText, PlaitGeometry, PlaitLine } from './interfaces';
-import { TextManage, TextManageRef } from '@plait/text';
 import { LineShapeGenerator } from './generators/line.generator';
 import { LineActiveGenerator } from './generators/line-active.generator';
 import { DrawTransforms } from './transforms';
 import { GeometryThreshold } from './constants';
-import { CommonElementFlavour } from '@plait/common';
+import { CommonElementFlavour, TextManage, TextManageRef } from '@plait/common';
 import { getLinePoints, getLineTextRectangle } from './utils/line/line-basic';
 import { memorizeLatestText } from './utils/memorize';
 import { AngularBoard } from '@plait/angular';
@@ -124,22 +123,23 @@ export class LineComponent extends CommonElementFlavour<PlaitLine, PlaitBoard> i
     }
 
     createTextManage(text: LineText, index: number) {
-        return new TextManage(this.board, AngularBoard.getViewContainerRef(this.board), {
+        return new TextManage(this.board, {
             getRectangle: () => {
                 return getLineTextRectangle(this.board, this.element, index);
             },
-            onValueChangeHandle: (textManageRef: TextManageRef) => {
+            onChange: (textManageRef: TextManageRef) => {
                 const height = textManageRef.height / this.board.viewport.zoom;
                 const width = textManageRef.width / this.board.viewport.zoom;
                 const texts = [...this.element.texts];
                 texts.splice(index, 1, {
-                    text: textManageRef.newValue ? textManageRef.newValue : this.element.texts[index].text,
+                    text: textManageRef.newText ? textManageRef.newText : this.element.texts[index].text,
                     position: this.element.texts[index].position,
                     width,
                     height
                 });
                 DrawTransforms.setLineTexts(this.board, this.element, texts);
-                textManageRef.operations && memorizeLatestText(this.element, textManageRef.operations);
+                // TODO MEMORIZE
+                // textManageRef.operations && memorizeLatestText(this.element, textManageRef.operations);
             },
             getMaxWidth: () => GeometryThreshold.defaultTextMaxWidth
         });
