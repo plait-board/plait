@@ -1,5 +1,7 @@
 import { WithPluginOptions } from '@plait/core';
-import { TextPlugin } from '@plait/text';
+import { Editor } from 'slate';
+
+export type TextPlugin = (editor: Editor) => Editor;
 
 export interface WithTextOptions extends WithPluginOptions {
     textPlugins?: TextPlugin[];

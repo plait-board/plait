@@ -1,6 +1,5 @@
-import { PlaitBoard, PlaitElement, getSelectedElements } from '@plait/core';
-import { CustomText, PlaitMarkEditor } from '@plait/text';
-import { Editor, Node } from 'slate';
+import { PlaitElement } from '@plait/core';
+import { Node } from 'slate';
 import { TextManage } from '../text/text-manage';
 
 export const getTextManages = (element: PlaitElement) => {

@@ -7,11 +7,10 @@ import {
     setAngleForG,
     degreesToRadians
 } from '@plait/core';
-import { ActiveGenerator, CommonElementFlavour, canResize } from '@plait/common';
+import { ActiveGenerator, CommonElementFlavour, TextManageRef, canResize } from '@plait/common';
 import { PlaitTable, PlaitTableCell, PlaitTableElement } from './interfaces/table';
 import { getTextManage, PlaitDrawShapeText, TextGenerator } from './generators/text.generator';
 import { TableGenerator } from './generators/table.generator';
-import { TextManageRef } from '@plait/text';
 import { DrawTransforms } from './transforms';
 import { getCellWithPoints } from './utils/table';
 import { getStrokeWidthByElement, memorizeLatestText } from './utils';
@@ -94,17 +93,18 @@ export class TableComponent<T extends PlaitTable> extends CommonElementFlavour<T
             onValueChangeHandle: (value: PlaitTable, textManageRef: TextManageRef, text: PlaitDrawShapeText) => {
                 const height = textManageRef.height / this.board.viewport.zoom;
                 const width = textManageRef.width / this.board.viewport.zoom;
-                if (textManageRef.newValue) {
+                if (textManageRef.newText) {
                     DrawTransforms.setTableText(
                         this.board,
                         value,
                         text.key,
-                        textManageRef.newValue,
+                        textManageRef.newText,
                         width,
                         height
                     );
                 }
-                textManageRef.operations && memorizeLatestText(value, textManageRef.operations);
+                // TODO
+                // textManageRef.operations && memorizeLatestText(value, textManageRef.operations);
             },
             getRenderRectangle: (value: PlaitTable, text: PlaitDrawShapeText) => {
                 const cell = getCellWithPoints(this.board, value, text.key);

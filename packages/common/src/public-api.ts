@@ -14,3 +14,5 @@ export * from './core/element-ref';
 export * from './algorithms';
 export * from './types';
 export * from './text/text-manage';
+export * from './core/text-props';
+export * from './core/image-props';

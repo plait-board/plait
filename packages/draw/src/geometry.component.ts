@@ -7,12 +7,10 @@ import {
     ACTIVE_STROKE_WIDTH,
     RectangleClient
 } from '@plait/core';
-import { Subject } from 'rxjs';
 import { PlaitCommonGeometry, PlaitGeometry, PlaitMultipleTextGeometry } from './interfaces/geometry';
 import { GeometryShapeGenerator } from './generators/geometry-shape.generator';
-import { TextManageRef } from '@plait/text';
 import { DrawTransforms } from './transforms';
-import { ActiveGenerator, CommonElementFlavour, canResize } from '@plait/common';
+import { ActiveGenerator, CommonElementFlavour, TextManageRef, canResize } from '@plait/common';
 import { LineAutoCompleteGenerator } from './generators/line-auto-complete.generator';
 import { getTextRectangle, isMultipleTextGeometry, memorizeLatestText } from './utils';
 import { PlaitDrawShapeText, TextGenerator } from './generators/text.generator';
@@ -127,20 +125,21 @@ export class GeometryComponent extends CommonElementFlavour<PlaitCommonGeometry,
         const onTextValueChangeHandle = (element: PlaitCommonGeometry, textManageRef: TextManageRef, text: PlaitDrawShapeText) => {
             const height = textManageRef.height / this.board.viewport.zoom;
             const width = textManageRef.width / this.board.viewport.zoom;
-            if (textManageRef.newValue) {
+            if (textManageRef.newText) {
                 if (isMultipleTextGeometry(element)) {
                     DrawTransforms.setDrawShapeText(this.board, element, {
                         key: text.key,
-                        text: textManageRef.newValue,
+                        text: textManageRef.newText,
                         textHeight: height
                     });
                 } else {
-                    DrawTransforms.setText(this.board, element as PlaitGeometry, textManageRef.newValue, width, height);
+                    DrawTransforms.setText(this.board, element as PlaitGeometry, textManageRef.newText, width, height);
                 }
             } else {
                 DrawTransforms.setTextSize(this.board, element as PlaitGeometry, width, height);
             }
-            textManageRef.operations && memorizeLatestText(element, textManageRef.operations);
+            // TODO
+            // textManageRef.operations && memorizeLatestText(element, textManageRef.operations);
         };
 
         if (isMultipleTextGeometry(this.element)) {

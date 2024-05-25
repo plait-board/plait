@@ -1,7 +1,7 @@
 <slate-editable
     #slateEditable
     [editor]="editor"
-    [readonly]="readonly"
+    [readonly]="_readonly"
     [(ngModel)]="children"
     (ngModelChange)="valueChange()"
     [keydown]="onKeydown"

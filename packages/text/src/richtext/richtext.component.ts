@@ -6,18 +6,20 @@ import {
     EventEmitter,
     HostBinding,
     Input,
+    OnChanges,
     OnInit,
     Output,
     Renderer2,
+    SimpleChanges,
     ViewChild
 } from '@angular/core';
 import { isKeyHotkey } from 'is-hotkey';
-import { Editor, Element, Text, Transforms, createEditor } from 'slate';
-import { SlateEditable, withAngular } from 'slate-angular';
+import { Element, Text, Transforms, createEditor } from 'slate';
+import { AngularEditor, SlateEditable, withAngular } from 'slate-angular';
 import { withHistory } from 'slate-history';
 import { CLIPBOARD_FORMAT_KEY } from '../constant';
 import { MarkTypes } from '../constant/mark';
-import { LinkElement, TextPlugin } from '../custom-types';
+import { LinkElement } from '../custom-types';
 import { PlaitLinkNodeComponent } from '../plugins/link/link.component';
 import { withLink } from '../plugins/link/with-link';
 import { withMark } from '../plugins/mark/with-marks';
@@ -27,6 +29,8 @@ import { withSelection } from '../plugins/with-selection';
 import { withSingleLine } from '../plugins/with-single';
 import { PlaitTextNodeComponent } from '../text-node/text.component';
 import { FormsModule } from '@angular/forms';
+import { TextData, TextPlugin } from '@plait/common';
+import { measureDivSize } from '../utils/text-size';
 
 @Component({
     selector: 'plait-richtext',
@@ -34,7 +38,9 @@ import { FormsModule } from '@angular/forms';
     standalone: true,
     imports: [SlateEditable, FormsModule]
 })
-export class PlaitRichtextComponent implements OnInit, AfterViewInit {
+export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges {
+    _readonly = true;
+
     @HostBinding('class') hostClass = 'plait-richtext-container';
 
     children: Element[] = [];
@@ -46,13 +52,15 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit {
         this.cdr.markForCheck();
     }
 
-    @Input() readonly = true;
+    @Input() set readonly(value: boolean) {
+        this._readonly = value;
+    };
 
     @ViewChild('slateEditable')
     slateEditable!: SlateEditable;
 
-    @Output()
-    onChange: EventEmitter<Editor> = new EventEmitter();
+    @Input()
+    onChange!: (data: TextData) => void;
 
     @Output()
     onComposition: EventEmitter<CompositionEvent> = new EventEmitter();
@@ -66,7 +74,25 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit {
     constructor(public renderer2: Renderer2, private cdr: ChangeDetectorRef, public elementRef: ElementRef<HTMLElement>) {}
 
     valueChange() {
-        this.onChange.emit(this.editor);
+        const { width, height } = this.getSize();
+        this.onChange({ newText: this.editor.children[0] as Element, width, height });
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
+    }
+
+    getSize() {
+        const editor = this.editor;
+        // TODO rotate
+        // const transformMatrix = this.g.getAttribute('transform');
+        // this.g.setAttribute('transform', '');
+        const paragraph = AngularEditor.toDOMNode(editor, editor.children[0]);
+        const { width, height } = measureDivSize(paragraph);
+        // if (transformMatrix) {
+        //     this.g.setAttribute('transform', transformMatrix);
+        // }
+        return { width, height };
     }
 
     ngOnInit(): void {

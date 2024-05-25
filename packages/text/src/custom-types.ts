@@ -29,4 +29,3 @@ export interface ParagraphElement extends BaseElement {
 
 export type CustomElement = ParagraphElement | LinkElement;
 
-export type TextPlugin = (editor: AngularEditor) => AngularEditor;

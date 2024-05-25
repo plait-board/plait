@@ -118,7 +118,7 @@ export class TextManage {
         this.isEditing = true;
         IS_TEXT_EDITABLE.set(this.board, true);
         const props: Partial<TextProps> = {
-            readonly: true
+            readonly: false
         };
         this.hydrationRef.update(props);
         const mousedown$ = fromEvent<MouseEvent>(document, 'mousedown').subscribe((event: MouseEvent) => {
@@ -141,7 +141,7 @@ export class TextManage {
             MERGING.set(this.board, false);
             callback && callback();
             const props = {
-                readonly: false
+                readonly: true
             };
             this.hydrationRef.update(props);
             this.#exitCallback = null;
