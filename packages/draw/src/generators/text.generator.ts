@@ -40,8 +40,6 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
 
     protected texts: PlaitDrawShapeText[];
 
-    protected viewContainerRef: ViewContainerRef;
-
     protected options: TextGeneratorOptions<T>;
 
     public textManages!: TextManage[];
@@ -54,13 +52,11 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
         board: PlaitBoard,
         element: T,
         texts: PlaitDrawShapeText[],
-        viewContainerRef: ViewContainerRef,
         options: TextGeneratorOptions<T>
     ) {
         this.board = board;
         this.texts = texts;
         this.element = element;
-        this.viewContainerRef = viewContainerRef;
         this.options = options;
     }
 

@@ -18,7 +18,6 @@ import { getEngine } from './engines';
 import { TableSymbols } from './interfaces';
 import { getHorizontalTextRectangle } from './engines/table/table';
 import { ShapeDefaultSpace } from './constants';
-import { AngularBoard } from '@plait/angular';
 
 export class TableComponent<T extends PlaitTable> extends CommonElementFlavour<T, PlaitBoard> implements OnContextChanged<T, PlaitBoard> {
     activeGenerator!: ActiveGenerator<T>;
@@ -89,7 +88,7 @@ export class TableComponent<T extends PlaitTable> extends CommonElementFlavour<T
 
     initializeTextManage() {
         const texts = this.getDrawShapeTexts(this.element.cells);
-        this.textGenerator = new TextGenerator(this.board, this.element, texts, AngularBoard.getViewContainerRef(this.board), {
+        this.textGenerator = new TextGenerator(this.board, this.element, texts, {
             onValueChangeHandle: (value: PlaitTable, textManageRef: TextManageRef, text: PlaitDrawShapeText) => {
                 const height = textManageRef.height / this.board.viewport.zoom;
                 const width = textManageRef.width / this.board.viewport.zoom;

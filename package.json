@@ -33,7 +33,8 @@
         "start:docs": "docgeni serve --port 4600",
         "ci:test": "ng test --watch=false --progress=false --browsers=ChromeHeadlessCI",
         "lint": "ng lint --fix",
-        "pretty": "pretty-quick --staged"
+        "pretty": "pretty-quick --staged",
+        "copy-files": "cp -r dist/* ../plait-board-template/node_modules/@plait"
     },
     "private": true,
     "repository": {

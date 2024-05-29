@@ -2,7 +2,6 @@ import { PlaitBoard, PlaitPluginElementContext, OnContextChanged } from '@plait/
 import { CommonElementFlavour, ImageGenerator } from '@plait/common';
 import { PlaitImage } from './interfaces/image';
 import { LineAutoCompleteGenerator } from './generators/line-auto-complete.generator';
-import { AngularBoard } from '@plait/angular';
 
 export class ImageComponent extends CommonElementFlavour<PlaitImage, PlaitBoard> implements OnContextChanged<PlaitImage, PlaitBoard> {
     imageGenerator!: ImageGenerator<PlaitImage>;
@@ -38,7 +37,7 @@ export class ImageComponent extends CommonElementFlavour<PlaitImage, PlaitBoard>
     initialize(): void {
         super.initialize();
         this.initializeGenerator();
-        this.imageGenerator.processDrawing(this.element, this.getElementG(), AngularBoard.getViewContainerRef(this.board));
+        this.imageGenerator.processDrawing(this.element, this.getElementG());
         this.lineAutoCompleteGenerator.processDrawing(this.element, PlaitBoard.getElementActiveHost(this.board), {
             selected: this.selected
         });

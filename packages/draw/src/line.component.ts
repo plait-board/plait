@@ -7,7 +7,6 @@ import { GeometryThreshold } from './constants';
 import { CommonElementFlavour, TextManage, TextManageRef } from '@plait/common';
 import { getLinePoints, getLineTextRectangle } from './utils/line/line-basic';
 import { memorizeLatestText } from './utils/memorize';
-import { AngularBoard } from '@plait/angular';
 
 interface BoundedElements {
     source?: PlaitGeometry;

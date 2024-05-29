@@ -18,7 +18,6 @@ import { SingleTextGenerator } from './generators/single-text.generator';
 import { PlaitText } from './interfaces';
 import { GeometryThreshold } from './constants';
 import { getEngine } from './engines';
-import { AngularBoard } from '@plait/angular';
 
 export class GeometryComponent extends CommonElementFlavour<PlaitCommonGeometry, PlaitBoard>
     implements OnContextChanged<PlaitCommonGeometry, PlaitBoard> {
@@ -147,7 +146,6 @@ export class GeometryComponent extends CommonElementFlavour<PlaitCommonGeometry,
                 this.board,
                 this.element as PlaitMultipleTextGeometry,
                 this.element.texts!,
-                AngularBoard.getViewContainerRef(this.board),
                 {
                     onValueChangeHandle: onTextValueChangeHandle
                 }
@@ -157,7 +155,6 @@ export class GeometryComponent extends CommonElementFlavour<PlaitCommonGeometry,
                 this.board,
                 this.element as PlaitGeometry,
                 this.element.text,
-                AngularBoard.getViewContainerRef(this.board),
                 {
                     onValueChangeHandle: onTextValueChangeHandle,
                     getMaxWidth: () => {

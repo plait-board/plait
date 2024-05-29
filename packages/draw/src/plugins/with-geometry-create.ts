@@ -22,7 +22,6 @@ import {
 import { isKeyHotkey } from 'is-hotkey';
 import { NgZone } from '@angular/core';
 import { getSnapResizingRef } from '../utils/snap-resizing';
-import { AngularBoard } from '@plait/angular';
 
 export interface FakeCreateTextRef {
     g: SVGGElement;
@@ -77,11 +76,10 @@ export const withGeometryCreateByDrag = (board: PlaitBoard) => {
                             return getTextRectangle(temporaryElement!);
                         }
                     });
-                    AngularBoard.getComponent(board)
-                        .viewContainerRef.injector.get(NgZone)
-                        .run(() => {
-                            textManage.draw(temporaryElement!.text);
-                        });
+
+                    // TODO
+                    textManage.draw(temporaryElement!.text);
+
                     fakeCreateTextRef = {
                         g: createG(),
                         textManage
