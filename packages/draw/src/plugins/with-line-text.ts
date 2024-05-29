@@ -9,8 +9,7 @@ import {
 } from '@plait/core';
 import { PlaitDrawElement, PlaitLine } from '../interfaces';
 import { Node } from 'slate';
-import { getRatioByPoint, getTextManages } from '@plait/common';
-import { buildText } from '@plait/text';
+import { buildText, getRatioByPoint, getTextManages } from '@plait/common';
 import { DrawTransforms } from '../transforms';
 import { getLinePoints } from '../utils/line/line-basic';
 import { getHitLineTextIndex } from '../utils/position/line';

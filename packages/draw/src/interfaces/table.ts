@@ -1,6 +1,6 @@
 import { PlaitElement, Point } from '@plait/core';
 import { EngineExtraData } from './engine';
-import { ParagraphElement } from '@plait/text';
+import { ParagraphElement } from '@plait/common';
 
 export interface PlaitTable extends PlaitElement {
     id: string;

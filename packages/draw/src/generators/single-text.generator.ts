@@ -1,9 +1,9 @@
 import { PlaitBoard, PlaitElement } from '@plait/core';
-import { ParagraphElement } from '@plait/text';
 import { PlaitCommonGeometry, PlaitGeometry } from '../interfaces';
 import { ViewContainerRef } from '@angular/core';
 import { PlaitDrawShapeText, TextGenerator, TextGeneratorOptions } from './text.generator';
 import { isMultipleTextGeometry } from '../utils';
+import { ParagraphElement } from '@plait/common';
 
 export class SingleTextGenerator<T extends PlaitElement = PlaitGeometry> extends TextGenerator<T> {
     get textManage() {

@@ -6,12 +6,12 @@ import {
     MultipleTextGeometryCommonTextKeys,
     PlaitCommonGeometry
 } from '../interfaces/geometry';
-import { Alignment, buildText } from '@plait/text';
 import { DefaultTextProperty, MultipleTextGeometryTextKeys } from '../constants';
 import { getEngine } from '../engines';
 import { getMemorizedLatestByPointer } from './memorize';
 import { PlaitDrawShapeText } from '../generators/text.generator';
 import { GeometryStyleOptions, getDefaultGeometryProperty } from './geometry';
+import { Alignment, buildText } from '@plait/common';
 
 export const isMultipleTextShape = (shape: GeometryShapes) => {
     return [UMLSymbols.package, UMLSymbols.combinedFragment].includes(shape as UMLSymbols);

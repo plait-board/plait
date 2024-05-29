@@ -29,8 +29,8 @@ import { withSelection } from '../plugins/with-selection';
 import { withSingleLine } from '../plugins/with-single';
 import { PlaitTextNodeComponent } from '../text-node/text.component';
 import { FormsModule } from '@angular/forms';
-import { TextData, TextPlugin } from '@plait/common';
 import { measureDivSize } from '../utils/text-size';
+import { TextData, TextPlugin } from '@plait/common';
 
 @Component({
     selector: 'plait-richtext',

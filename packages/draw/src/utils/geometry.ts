@@ -19,7 +19,6 @@ import {
     idCreator
 } from '@plait/core';
 import { GeometryShapes, BasicShapes, PlaitGeometry, FlowchartSymbols, UMLSymbols, PlaitCommonGeometry } from '../interfaces/geometry';
-import { Alignment, CustomText, DEFAULT_FONT_SIZE, buildText, getTextSize } from '@plait/text';
 import { Element } from 'slate';
 import {
     DefaultBasicShapeProperty,
@@ -33,7 +32,15 @@ import {
     getFlowchartPointers,
     getUMLPointers
 } from '../constants';
-import { ActiveGenerator, PlaitCommonElementRef, RESIZE_HANDLE_DIAMETER, getFirstTextManage } from '@plait/common';
+import {
+    ActiveGenerator,
+    Alignment,
+    CustomText,
+    PlaitCommonElementRef,
+    RESIZE_HANDLE_DIAMETER,
+    buildText,
+    getFirstTextManage
+} from '@plait/common';
 import { Options } from 'roughjs/bin/core';
 import { getEngine } from '../engines';
 import { getElementShape } from './shape';
@@ -303,8 +310,9 @@ export const getFlowchartDefaultFill = (theme: ThemeColorMode) => {
 };
 
 export const getTextShapeProperty = (board: PlaitBoard, text: string | Element = DefaultTextProperty.text, fontSize?: number | string) => {
-    fontSize = fontSize ? Number(fontSize) : DEFAULT_FONT_SIZE;
-    const textSize = getTextSize(board, text, Infinity, { fontSize });
+    // TODO DEFAULT_FONT_SIZE, getSize
+    fontSize = fontSize ? Number(fontSize) : 14;
+    const textSize = { width: 20, height: 20 };
     return {
         width: textSize.width + ShapeDefaultSpace.rectangleAndText * 2,
         height: textSize.height
