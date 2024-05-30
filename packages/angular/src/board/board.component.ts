@@ -80,6 +80,7 @@ import { AngularBoardChangeEvent } from '../interfaces/board';
 import { PlaitIslandBaseComponent, hasOnBoardChange } from '../island/island-base.component';
 import { BOARD_TO_COMPONENT } from '../utils/weak-maps';
 import { withAngular } from '../plugins/with-angular';
+import { withText } from '@plait/common';
 
 const ElementLowerHostClass = 'element-lower-host';
 const ElementHostClass = 'element-host';
@@ -277,7 +278,9 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
                 withHandPointer(
                     withHistory(
                         withSelection(
-                            withMoving(withBoard(withViewport(withOptions(withAngular(createBoard(this.plaitValue, this.plaitOptions))))))
+                            withMoving(
+                                withBoard(withViewport(withOptions(withAngular(withText(createBoard(this.plaitValue, this.plaitOptions))))))
+                            )
                         )
                     )
                 )

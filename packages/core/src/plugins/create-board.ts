@@ -113,7 +113,7 @@ export function createBoard(children: PlaitElement[], options?: PlaitBoardOption
             throw new Error(`can not resolve plugin element component type: ${context.element.type}`);
         },
         renderComponent: <T>(context: ComponentContext<T>) => {
-            throw new Error(`can not resolve renderHydration`);
+            throw new Error(`You need to provide a renderComponent method based on your framework.`);
         },
         isWithinSelection: element => false,
         isRectangleHit: element => false,

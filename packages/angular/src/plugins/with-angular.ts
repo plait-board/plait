@@ -1,35 +1,34 @@
-import { ComponentContext, PlaitBoard } from "@plait/core";
-import { AngularBoard } from "../interfaces/board";
+import { ComponentRef, PlaitBoard } from '@plait/core';
+import { AngularBoard } from '../interfaces/board';
+import { PlaitTextBoard } from '@plait/common';
+import { PlaitRichtextComponent } from '@plait/text';
 
-export const withAngular = (board: PlaitBoard) => {
-    board.renderComponent = <T extends Object>(context: ComponentContext<T>) => {
+export const withAngular = (board: PlaitBoard & PlaitTextBoard) => {
+    board.renderText = <TextProps>(container: Element | DocumentFragment, props: TextProps) => {
         const viewContainerRef = AngularBoard.getViewContainerRef(board);
-        const componentRef = viewContainerRef.createComponent<any>(context.componentType);
-        for (const key in context.props) {
-            if (context.props.hasOwnProperty(key)) {
-                const value = context.props[key];
-                componentRef.instance[key] = value;
-            }
+        const componentRef = viewContainerRef.createComponent(PlaitRichtextComponent);
+        for (const key in props) {
+            const value = props[key];
+            (componentRef.instance as TextProps)[key] = value;
         }
-        context.foreignObject.appendChild(componentRef.instance.nativeElement());
-        return {
+        container.appendChild(componentRef.instance.nativeElement());
+        const ref: ComponentRef<TextProps> = {
             destroy: () => {
                 componentRef.destroy();
             },
-            update: (props: any) => {
+            update: (props: Partial<TextProps>) => {
                 for (const key in props) {
-                    if (props.hasOwnProperty(key)) {
-                        const value = props[key];
-                        componentRef.instance[key] = value;
-                    }
+                    const value = props[key];
+                    (componentRef.instance as any)[key] = value;
                 }
                 // solve image lose on move node
-                if (context.foreignObject.children.length === 0) {
-                    context.foreignObject.append(componentRef.instance.nativeElement());
+                if (container.children.length === 0) {
+                    container.append(componentRef.instance.nativeElement());
                 }
                 componentRef.changeDetectorRef.detectChanges();
             }
         };
+        return ref;
     };
     return board;
 };

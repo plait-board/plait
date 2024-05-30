@@ -8,8 +8,7 @@ export const withCommonPlugin = (board: PlaitBoard) => {
     const newBoard = board as PlaitBoard & PlaitMindBoard;
 
     (board as PlaitOptionsBoard).setPluginOptions<WithCommonPluginOptions>(WithCommonPluginKey, {
-        imageComponentType: PlaitImageComponent,
-        textComponentType: PlaitRichtextComponent
+        imageComponentType: PlaitImageComponent
     });
 
     return newBoard;

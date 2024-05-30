@@ -8,8 +8,7 @@ export interface CommonImageItem {
 }
 
 export interface WithCommonPluginOptions {
-    imageComponentType?: ComponentType<ImageBaseComponent>;
-    textComponentType?: ComponentType<any>;
+    imageComponentType?: ComponentType<ImageBaseComponent> | any;
 }
 
 export const selectImage = (

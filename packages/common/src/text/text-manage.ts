@@ -20,6 +20,7 @@ import { WithCommonPluginOptions } from '../utils/image';
 import { WithCommonPluginKey } from '../constants/media';
 import { Element } from 'slate';
 import { TextProps, getSizeFnType } from '../core/text-props';
+import { PlaitTextBoard } from './with-text';
 
 export interface TextManageRef {
     newText?: Element;
@@ -65,10 +66,7 @@ export class TextManage {
         this.foreignObject = createForeignObject(_rectangle.x, _rectangle.y, _rectangle.width, _rectangle.height);
         this.g.append(this.foreignObject);
         this.g.classList.add('text');
-        const componentType = (this.board as PlaitOptionsBoard).getPluginOptions<WithCommonPluginOptions>(WithCommonPluginKey)
-            .textComponentType;
-        const context: ComponentContext<TextProps> = {
-            props: {
+        const props = {
                 board: this.board,
                 text,
                 onChange: (data: { width: number; height: number; newText: Element }) => {
@@ -86,11 +84,8 @@ export class TextManage {
                 registerGetSize: (getSizeFn: getSizeFnType) => {
                     this.getSize = getSizeFn;
                 }
-            },
-            foreignObject: this.foreignObject,
-            componentType
-        };
-        this.componentRef = this.board.renderComponent(context);
+            };
+        this.componentRef = (this.board as unknown as PlaitTextBoard).renderText(this.foreignObject, props)
     }
 
     updateRectangleWidth(width: number) {
