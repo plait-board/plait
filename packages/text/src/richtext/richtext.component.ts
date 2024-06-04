@@ -14,7 +14,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { isKeyHotkey } from 'is-hotkey';
-import { Element, Text, Transforms, createEditor } from 'slate';
+import { Editor, Element, Text, Transforms, createEditor } from 'slate';
 import { AngularEditor, SlateEditable, withAngular } from 'slate-angular';
 import { withHistory } from 'slate-history';
 import { CLIPBOARD_FORMAT_KEY } from '../constant';
@@ -62,6 +62,9 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
     @Input()
     onChange!: (data: TextData) => void;
 
+    @Input()
+    afterInit!: (editor: Editor) => void;
+
     @Output()
     onComposition: EventEmitter<CompositionEvent> = new EventEmitter();
 
@@ -101,7 +104,9 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
         });
     }
 
-    ngAfterViewInit(): void {}
+    ngAfterViewInit(): void {
+        this.afterInit(this.editor);
+    }
 
     renderElement = (element: Element) => {
         const render = ((this.editor as unknown) as PlaitTextEditor)?.renderElement;

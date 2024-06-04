@@ -16,9 +16,7 @@ import {
     updateForeignObjectWidth
 } from '@plait/core';
 import { fromEvent, timer } from 'rxjs';
-import { WithCommonPluginOptions } from '../utils/image';
-import { WithCommonPluginKey } from '../constants/media';
-import { Element } from 'slate';
+import { Editor, Element } from 'slate';
 import { TextProps, getSizeFnType } from '../core/text-props';
 import { PlaitTextBoard } from './with-text';
 
@@ -31,6 +29,8 @@ export interface TextManageRef {
 export class TextManage {
     isEditing = false;
 
+    editor!: Editor;
+
     text!: Element;
 
     g!: SVGGElement;
@@ -39,7 +39,7 @@ export class TextManage {
 
     componentRef!: ComponentRef<TextProps>;
 
-    #exitCallback?: (() => void) | null;
+    exitCallback?: (() => void) | null;
 
     getSize: getSizeFnType = () => {
         throw new Error('Exception: can not resolve getSize');
@@ -67,25 +67,28 @@ export class TextManage {
         this.g.append(this.foreignObject);
         this.g.classList.add('text');
         const props = {
-                board: this.board,
-                text,
-                onChange: (data: { width: number; height: number; newText: Element }) => {
-                    this.text = data.newText;
-                    this.options.onChange && this.options.onChange(data);
-                    MERGING.set(this.board, true);
-                },
-                onComposition: (data: { width: number; height: number }) => {
-                    this.options.onChange && this.options.onChange(data);
-                    MERGING.set(this.board, true);
-                },
-                onExitEdit: () => {
-                    this.#exitCallback && this.#exitCallback();
-                },
-                registerGetSize: (getSizeFn: getSizeFnType) => {
-                    this.getSize = getSizeFn;
-                }
-            };
-        this.componentRef = (this.board as unknown as PlaitTextBoard).renderText(this.foreignObject, props)
+            board: this.board,
+            text,
+            onChange: (data: { width: number; height: number; newText: Element }) => {
+                this.text = data.newText;
+                this.options.onChange && this.options.onChange(data);
+                MERGING.set(this.board, true);
+            },
+            afterInit: (editor: Editor) => {
+                this.editor = editor;
+            },
+            onComposition: (data: { width: number; height: number }) => {
+                this.options.onChange && this.options.onChange(data);
+                MERGING.set(this.board, true);
+            },
+            onExitEdit: () => {
+                this.exitCallback && this.exitCallback();
+            },
+            registerGetSize: (getSizeFn: getSizeFnType) => {
+                this.getSize = getSizeFn;
+            }
+        };
+        this.componentRef = ((this.board as unknown) as PlaitTextBoard).renderText(this.foreignObject, props);
     }
 
     updateRectangleWidth(width: number) {
@@ -115,6 +118,7 @@ export class TextManage {
         const props: Partial<TextProps> = {
             readonly: false
         };
+        // TODO: autofocus
         this.componentRef.update(props);
         const mousedown$ = fromEvent<MouseEvent>(document, 'mousedown').subscribe((event: MouseEvent) => {
             const point = toViewBoxPoint(this.board, toHostPoint(this.board, event.x, event.y));
@@ -139,10 +143,10 @@ export class TextManage {
                 readonly: true
             };
             this.componentRef.update(props);
-            this.#exitCallback = null;
+            this.exitCallback = null;
             this.isEditing = false;
         };
-        this.#exitCallback = exitCallback;
+        this.exitCallback = exitCallback;
         return exitCallback;
     }
 

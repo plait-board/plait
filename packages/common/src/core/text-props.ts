@@ -1,11 +1,12 @@
 import { PlaitBoard } from '@plait/core';
-import { Element } from 'slate';
+import { Editor, Element } from 'slate';
 
 export interface TextProps {
     board: PlaitBoard;
     text: Element;
     readonly?: boolean;
     onChange?: (data: TextData) => void;
+    afterInit?: (data: Editor) => void;
     onComposition?: (data: TextSizeData) => void;
     onExitEdit?: () => void;
     registerGetSize?: (getSizeFn: getSizeFnType) => void;
