@@ -19,6 +19,7 @@ import { fromEvent, timer } from 'rxjs';
 import { Editor, Element } from 'slate';
 import { TextProps, getSizeFnType } from '../core/text-props';
 import { PlaitTextBoard } from './with-text';
+import { measureElement } from './text-measure';
 
 export interface TextManageRef {
     newText?: Element;
@@ -71,7 +72,19 @@ export class TextManage {
             text,
             onChange: (data: { width: number; height: number; newText: Element }) => {
                 this.text = data.newText;
-                this.options.onChange && this.options.onChange(data);
+                const computedStyle = window.getComputedStyle(this.foreignObject.children[0]);
+                const fontFamily = computedStyle.fontFamily;
+                const fontSize = computedStyle.fontSize;
+                const { width, height } = measureElement(
+                    this.editor.children[0] as Element,
+                    {
+                        fontSize: parseFloat(fontSize),
+                        fontFamily,
+                        lineHeight: 20
+                    },
+                    this.options.getMaxWidth!()
+                );
+                this.options.onChange && this.options.onChange({ ...data, width, height });
                 MERGING.set(this.board, true);
             },
             afterInit: (editor: Editor) => {

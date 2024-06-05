@@ -18,7 +18,7 @@ import { Editor, Element, Text, Transforms, createEditor } from 'slate';
 import { AngularEditor, SlateEditable, withAngular } from 'slate-angular';
 import { withHistory } from 'slate-history';
 import { CLIPBOARD_FORMAT_KEY } from '../constant';
-import { MarkTypes } from '../constant/mark';
+import { DEFAULT_FONT_SIZE, MarkTypes } from '../constant/mark';
 import { LinkElement } from '../custom-types';
 import { PlaitLinkNodeComponent } from '../plugins/link/link.component';
 import { withLink } from '../plugins/link/with-link';
@@ -29,7 +29,7 @@ import { withSelection } from '../plugins/with-selection';
 import { withSingleLine } from '../plugins/with-single';
 import { PlaitTextNodeComponent } from '../text-node/text.component';
 import { FormsModule } from '@angular/forms';
-import { TextData, TextPlugin, measureDiv } from '@plait/common';
+import { TextData, TextPlugin, TextSizeData, measureDiv, measureElement } from '@plait/common';
 
 @Component({
     selector: 'plait-richtext',
@@ -53,7 +53,7 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
 
     @Input() set readonly(value: boolean) {
         this._readonly = value;
-    };
+    }
 
     @ViewChild('slateEditable')
     slateEditable!: SlateEditable;
@@ -64,8 +64,8 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
     @Input()
     afterInit!: (editor: Editor) => void;
 
-    @Output()
-    onComposition: EventEmitter<CompositionEvent> = new EventEmitter();
+    @Input()
+    onComposition!: (data: TextSizeData) => void;
 
     editor = withSelection(withLink(withMark(withSingleLine(withHistory(withAngular(createEditor(), CLIPBOARD_FORMAT_KEY))))));
 
@@ -90,7 +90,19 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
         // const transformMatrix = this.g.getAttribute('transform');
         // this.g.setAttribute('transform', '');
         const paragraph = AngularEditor.toDOMNode(editor, editor.children[0]);
-        const { width, height } = measureDiv(paragraph);
+        const computedStyle = window.getComputedStyle(paragraph);
+
+        const fontFamily = computedStyle.fontFamily;
+        const fontSize = computedStyle.fontSize;
+        const { width, height } = measureElement(
+            editor.children[0] as Element,
+            {
+                fontSize: parseFloat(fontSize),
+                fontFamily,
+                lineHeight: 20
+            },
+            500
+        );
         // if (transformMatrix) {
         //     this.g.setAttribute('transform', transformMatrix);
         // }
@@ -130,15 +142,15 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
     };
 
     compositionStart = (event: CompositionEvent) => {
-        this.onComposition.emit(event);
+        // this.onComposition.emit(event);
     };
 
     compositionUpdate = (event: CompositionEvent) => {
-        this.onComposition.emit(event);
+        // this.onComposition.emit(event);
     };
 
     compositionEnd = (event: CompositionEvent) => {
-        this.onComposition.emit(event);
+        // this.onComposition.emit(event);
     };
 
     onKeydown = (event: KeyboardEvent) => {
