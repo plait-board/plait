@@ -3,29 +3,7 @@ import { PlaitRichtextComponent } from '../richtext/richtext.component';
 import { Element } from 'slate';
 import { AngularEditor } from 'slate-angular';
 import { AngularBoard } from '@plait/angular';
-
-export function measureDivSize(div: HTMLElement) {
-    const boundaryBox = {
-        left: Number.MAX_VALUE,
-        top: Number.MAX_VALUE,
-        right: Number.NEGATIVE_INFINITY,
-        bottom: Number.NEGATIVE_INFINITY
-    };
-    for (let index = 0; index < div.childElementCount; index++) {
-        const element = div.children.item(index);
-        const nodeRectangle = element?.getBoundingClientRect();
-        if (nodeRectangle) {
-            boundaryBox.left = Math.min(boundaryBox.left, nodeRectangle.x);
-            boundaryBox.top = Math.min(boundaryBox.top, nodeRectangle.y);
-            boundaryBox.right = Math.max(boundaryBox.right, nodeRectangle.x + nodeRectangle.width);
-            boundaryBox.bottom = Math.max(boundaryBox.bottom, nodeRectangle.y + nodeRectangle.height);
-        }
-    }
-    const width = boundaryBox.right - boundaryBox.left;
-    // FIREFOX the height of inline span is less than the height of paragraph
-    const height = div.getBoundingClientRect().height;
-    return { width, height };
-}
+import { measureDiv } from '@plait/common';
 
 export const getTextSize = (
     board: PlaitBoard,
@@ -59,7 +37,7 @@ export const getTextSize = (
     }
     PlaitBoard.getBoardContainer(board).append(richtextContainer);
     const paragraph = AngularEditor.toDOMNode(ref.instance.editor, ref.instance.children[0]);
-    const { width, height } = measureDivSize(paragraph);
+    const { width, height } = measureDiv(paragraph);
     ref.destroy();
     richtextContainer.remove();
     return { width, height };

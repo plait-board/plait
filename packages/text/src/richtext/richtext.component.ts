@@ -29,8 +29,7 @@ import { withSelection } from '../plugins/with-selection';
 import { withSingleLine } from '../plugins/with-single';
 import { PlaitTextNodeComponent } from '../text-node/text.component';
 import { FormsModule } from '@angular/forms';
-import { measureDivSize } from '../utils/text-size';
-import { TextData, TextPlugin } from '@plait/common';
+import { TextData, TextPlugin, measureDiv } from '@plait/common';
 
 @Component({
     selector: 'plait-richtext',
@@ -91,7 +90,7 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
         // const transformMatrix = this.g.getAttribute('transform');
         // this.g.setAttribute('transform', '');
         const paragraph = AngularEditor.toDOMNode(editor, editor.children[0]);
-        const { width, height } = measureDivSize(paragraph);
+        const { width, height } = measureDiv(paragraph);
         // if (transformMatrix) {
         //     this.g.setAttribute('transform', transformMatrix);
         // }
