@@ -1,4 +1,3 @@
-import { DEFAULT_FONT_SIZE, MarkTypes, PlaitMarkEditor } from '@plait/text';
 import { BASE, WithMindPluginKey } from '../../constants/default';
 import { PlaitMind } from '../../interfaces/element';
 import { MindElement } from '../../interfaces/element';
@@ -9,6 +8,7 @@ import { getEmojisWidthHeight } from './emoji';
 import { Element } from 'slate';
 import { getStrokeWidthByElement } from '../node-style/shape';
 import { getDefaultMindElementFontSize } from '../mind';
+import { DEFAULT_FONT_SIZE, MarkTypes, PlaitMarkEditor } from '@plait/text-plugins';
 
 const NodeDefaultSpace = {
     horizontal: {

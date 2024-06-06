@@ -1,10 +1,10 @@
 import { FlowEdge } from '../../interfaces/edge';
 import { PlaitBoard, PlaitOptionsBoard, RectangleClient } from '@plait/core';
 import { EDGE_LABEL_FONTSIZE, EDGE_LABEL_ICON_PADDING, EDGE_LABEL_PADDING } from '../../constants/edge';
-import { TEXT_DEFAULT_HEIGHT } from '@plait/text';
 import { getEdgeTextXYPosition } from './text';
 import { FlowPluginOptions, FlowPluginKey } from '../../interfaces/flow';
 import { DEFAULT_FONT_FAMILY, measureElement } from '@plait/common';
+import { TEXT_DEFAULT_HEIGHT } from '@plait/text-plugins';
 
 function getLabelTextRectangle(board: PlaitBoard, edge: FlowEdge): RectangleClient {
     const { width: labelTextWidth } = measureElement(edge.data!.text!, {

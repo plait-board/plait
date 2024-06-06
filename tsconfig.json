@@ -27,6 +27,9 @@
       ],
       "@plait/common": [
         "dist/common"
+      ],
+      "@plait/text-plugins": [
+        "dist/text-plugins"
       ]
     },
     "outDir": "./dist/out-tsc",

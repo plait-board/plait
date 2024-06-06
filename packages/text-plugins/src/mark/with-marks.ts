@@ -1,13 +1,10 @@
 import { isKeyHotkey } from 'is-hotkey';
-import { MarkTypes } from '../../constant/mark';
 import { MarkEditor, PlaitMarkEditor } from './mark.editor';
 import { Editor, Range, Text, Transforms } from 'slate';
-import { AngularEditor } from 'slate-angular';
+import { HOTKEYS } from './types';
 
-export const withMark = <T extends AngularEditor & MarkEditor>(editor: T): T => {
+export const withMark = <T extends Editor & MarkEditor>(editor: T): T => {
     const e = editor;
-
-    const { onKeydown } = e;
 
     e.removeMark = (key: string, shouldChange = true) => {
         const { selection } = e;
@@ -62,22 +59,10 @@ export const withMark = <T extends AngularEditor & MarkEditor>(editor: T): T => 
         }
     };
 
-    e.onKeydown = (event: KeyboardEvent) => {
-        markShortcuts(editor, event);
-        onKeydown(event);
-    };
-
     return e;
 };
 
-const HOTKEYS = {
-    'mod+b': MarkTypes.bold,
-    'mod+i': MarkTypes.italic,
-    'mod+u': MarkTypes.underline,
-    'mod+shift+x': MarkTypes.strike
-};
-
-export const markShortcuts = (editor: AngularEditor, event: KeyboardEvent) => {
+export const markShortcuts = (editor: Editor, event: KeyboardEvent) => {
     for (const hotkey in HOTKEYS) {
         if (isKeyHotkey(hotkey, event)) {
             event.preventDefault();

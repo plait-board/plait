@@ -1,5 +1,4 @@
 import { PlaitBoard, Point, idCreator, isNullOrUndefined } from '@plait/core';
-import { TEXT_DEFAULT_HEIGHT } from '@plait/text';
 import { MindLayoutType } from '@plait/layouts';
 import { BranchShape, MindElement, MindElementShape } from '../../interfaces/element';
 import { ROOT_TOPIC_HEIGHT, ROOT_TOPIC_WIDTH } from '../../constants/node-topic-style';
@@ -7,6 +6,7 @@ import { Element } from 'slate';
 import { NodeSpace } from '../space';
 import { PlaitMindBoard } from '../../plugins/with-mind.board';
 import { buildText } from '@plait/common';
+import { TEXT_DEFAULT_HEIGHT } from '@plait/text-plugins';
 
 export const createEmptyMind = (board: PlaitBoard, point: Point) => {
     const element = createMindElement('思维导图', ROOT_TOPIC_WIDTH, ROOT_TOPIC_HEIGHT, { layout: MindLayoutType.right });

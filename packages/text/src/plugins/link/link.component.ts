@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LinkElement } from '@plait/common';
 import { BaseElementComponent, SlateChildren } from 'slate-angular';
-import { LinkElement } from '../../custom-types';
 
 @Component({
     selector: 'a[plaitLink]',

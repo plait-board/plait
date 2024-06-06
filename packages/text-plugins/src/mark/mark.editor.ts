@@ -1,28 +1,13 @@
 import { Editor, Text, Node, Element, Transforms, NodeEntry, Location } from 'slate';
-import { DEFAULT_FONT_SIZE, DEFAULT_TEXT_COLOR, MarkProps, MarkTypes } from '../../constant/mark';
-import { AngularEditor } from 'slate-angular';
-
-export enum FontSizes {
-    'fontSize12' = '12',
-    'fontSize13' = '13',
-    'fontSize14' = '14',
-    'fontSize15' = '15',
-    'fontSize16' = '16',
-    'fontSize18' = '18',
-    'fontSize20' = '20',
-    'fontSize24' = '24',
-    'fontSize28' = '28',
-    'fontSize32' = '32',
-    'fontSize40' = '40',
-    'fontSize48' = '48'
-}
+import { FontSizes, MarkProps, MarkTypes } from './types';
+import { DEFAULT_FONT_SIZE, DEFAULT_TEXT_COLOR } from './constant';
 
 export interface MarkEditor extends Editor {
     removeMark: (key: string, shouldChange?: boolean) => void;
 }
 
 export const PlaitMarkEditor = {
-    getMarks(editor: AngularEditor) {
+    getMarks(editor: Editor) {
         const marks: any = {};
         let at: Location = [];
         if (editor.selection) {
@@ -58,7 +43,7 @@ export const PlaitMarkEditor = {
         }
         return marks;
     },
-    isMarkActive(editor: AngularEditor, format: MarkTypes) {
+    isMarkActive(editor: Editor, format: MarkTypes) {
         if (!editor?.selection) {
             return;
         }
@@ -69,7 +54,7 @@ export const PlaitMarkEditor = {
         const marks = PlaitMarkEditor.getMarks(editor);
         return marks && marks[format] ? true : false;
     },
-    toggleMark(editor: AngularEditor, format: MarkTypes) {
+    toggleMark(editor: Editor, format: MarkTypes) {
         setSelection(editor);
         const isActive = PlaitMarkEditor.isMarkActive(editor, format);
         if (isActive) {
@@ -78,7 +63,7 @@ export const PlaitMarkEditor = {
             Editor.addMark(editor, format, true);
         }
     },
-    setFontSizeMark(editor: AngularEditor, size: FontSizes, defaultSize: number = DEFAULT_FONT_SIZE) {
+    setFontSizeMark(editor: Editor, size: FontSizes, defaultSize: number = DEFAULT_FONT_SIZE) {
         setSelection(editor);
         // set paragraph text fontSize
         if (Number(size) === defaultSize) {
@@ -88,7 +73,7 @@ export const PlaitMarkEditor = {
             Editor.addMark(editor, MarkTypes.fontSize, Number(size));
         }
     },
-    setColorMark(editor: AngularEditor, color: string, defaultTextColor: string = DEFAULT_TEXT_COLOR) {
+    setColorMark(editor: Editor, color: string, defaultTextColor: string = DEFAULT_TEXT_COLOR) {
         setSelection(editor);
 
         if (color === defaultTextColor) {
@@ -99,8 +84,8 @@ export const PlaitMarkEditor = {
     }
 };
 
-export function setSelection(editor: AngularEditor) {
-    if (AngularEditor.isReadonly(editor)) {
+export function setSelection(editor: Editor) {
+    if (!editor.selection) {
         Transforms.select(editor, [0]);
     }
 }

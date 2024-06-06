@@ -15,19 +15,17 @@ import { isKeyHotkey } from 'is-hotkey';
 import { Editor, Element, Text, Transforms, createEditor } from 'slate';
 import { SlateEditable, withAngular } from 'slate-angular';
 import { withHistory } from 'slate-history';
-import { CLIPBOARD_FORMAT_KEY } from '../constant';
-import { MarkTypes } from '../constant/mark';
-import { LinkElement } from '../custom-types';
 import { PlaitLinkNodeComponent } from '../plugins/link/link.component';
-import { withLink } from '../plugins/link/with-link';
-import { withMark } from '../plugins/mark/with-marks';
+import { withMarkHotkey } from '../plugins/mark-hotkey/with-mark-hotkey';
 import { ParagraphElementComponent } from '../plugins/paragraph/paragraph.component';
 import { PlaitTextEditor } from '../plugins/text.editor';
 import { withSelection } from '../plugins/with-selection';
 import { withSingleLine } from '../plugins/with-single';
 import { PlaitTextNodeComponent } from '../text-node/text.component';
 import { FormsModule } from '@angular/forms';
-import { TextData, TextPlugin } from '@plait/common';
+import { LinkElement, TextData, TextPlugin } from '@plait/common';
+import { CLIPBOARD_FORMAT_KEY, MarkTypes } from '@plait/text-plugins';
+import { withPasteLink } from '../plugins/link/with-link-insert';
 
 @Component({
     selector: 'plait-richtext',
@@ -65,7 +63,7 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
     @Input()
     onComposition!: (event: CompositionEvent) => void;
 
-    editor = withSelection(withLink(withMark(withSingleLine(withHistory(withAngular(createEditor(), CLIPBOARD_FORMAT_KEY))))));
+    editor = withSelection(withPasteLink(withMarkHotkey(withSingleLine(withHistory(withAngular(createEditor(), CLIPBOARD_FORMAT_KEY))))));
 
     nativeElement() {
         return this.elementRef.nativeElement;

@@ -1,5 +1,5 @@
-import { CLIPBOARD_FORMAT_KEY } from '../constant';
 import { Element, Node } from 'slate';
+import { CLIPBOARD_FORMAT_KEY } from '../constant';
 
 export const getTextFromClipboard = (data: DataTransfer | null) => {
     let plaitTextData = data?.getData(`application/${CLIPBOARD_FORMAT_KEY}`);

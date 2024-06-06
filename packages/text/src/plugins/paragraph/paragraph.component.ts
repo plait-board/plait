@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { ParagraphElement } from '@plait/common';
 import { BaseElementComponent, SlateChildren } from 'slate-angular';
-import { ParagraphElement } from '../../custom-types';
 
 @Component({
     selector: 'div[plaitTextParagraphElement]',

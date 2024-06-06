@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, Renderer2 } from '@angular/core';
+import { CustomText } from '@plait/common';
+import { MarkTypes } from '@plait/text-plugins';
 import { BaseTextComponent, SlateLeaves } from 'slate-angular';
-import { MarkTypes } from '../constant/mark';
-import { CustomText } from '../custom-types';
 
 @Component({
     selector: 'span[plaitText]',

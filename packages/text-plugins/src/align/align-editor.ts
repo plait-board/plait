@@ -1,5 +1,5 @@
+import { Alignment, ParagraphElement } from '@plait/common';
 import { Editor, Transforms, Node } from 'slate';
-import { Alignment, ParagraphElement } from '../../custom-types';
 
 export const AlignEditor = {
     isActive(editor: Editor, alignment: Alignment) {

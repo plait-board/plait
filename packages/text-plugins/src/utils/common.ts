@@ -1,6 +1,3 @@
-import { Element } from 'slate';
-import { Alignment, CustomText, ParagraphElement } from '../custom-types';
-
 export const isUrl = (string: string) => {
     const protocolAndDomainRE = /^(?:\w+:)?\/\/(\S+)$/;
     const localhostDomainRE = /^localhost[\:?\d]*(?:[^\:?\d]\S*)?$/;

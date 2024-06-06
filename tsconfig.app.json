@@ -23,6 +23,9 @@
       "@plait/text": [
         "packages/text/src/public-api",
       ],
+      "@plait/text-plugins": [
+        "packages/text-plugins/src/public-api",
+      ],
       "@plait/draw": [
         "packages/draw/src/public-api",
       ],

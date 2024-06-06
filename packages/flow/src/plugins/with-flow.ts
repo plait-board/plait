@@ -18,8 +18,8 @@ import { withEdgeCreate } from './with-edge-create';
 import { isHitNode } from '../utils/node/is-hit-node';
 import { withHandleBlink } from './with-handle-blink';
 import { FlowPluginOptions, FlowPluginKey } from '../interfaces/flow';
-import { TEXT_DEFAULT_HEIGHT } from '@plait/text';
 import { withHovering } from './with-hovering';
+import { TEXT_DEFAULT_HEIGHT } from '@plait/text-plugins';
 
 export const withFlow: PlaitPlugin = (board: PlaitBoard) => {
     const { drawElement, isRectangleHit, isHit, isMovable, getRectangle } = board;

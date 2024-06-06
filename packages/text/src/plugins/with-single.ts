@@ -1,5 +1,5 @@
+import { CLIPBOARD_FORMAT_KEY } from '@plait/text-plugins';
 import { AngularEditor } from 'slate-angular';
-import { CLIPBOARD_FORMAT_KEY } from '../constant';
 
 export const withSingleLine = <T extends AngularEditor>(editor: T) => {
     const e = editor as T;

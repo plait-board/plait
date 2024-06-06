@@ -1,9 +1,8 @@
+import { CustomElement, LinkElement } from '@plait/common';
 import { Editor, Transforms, Range, Element, BaseRange, Location, Node } from 'slate';
-import { AngularEditor } from 'slate-angular';
-import { CustomElement, LinkElement } from '../../custom-types';
 
 export const LinkEditor = {
-    wrapLink(editor: AngularEditor, text: string, url: string) {
+    wrapLink(editor: Editor, text: string, url: string) {
         if (LinkEditor.isLinkActive(editor)) {
             LinkEditor.unwrapLink(editor);
         }
@@ -16,7 +15,7 @@ export const LinkEditor = {
         };
         if (isCollapsed || Node.string(editor) === '') {
             Transforms.insertNodes(editor, link);
-        } else if (AngularEditor.isReadonly(editor)) {
+        } else if (!selection) {
             const at = { anchor: Editor.start(editor, [0]), focus: Editor.end(editor, [0]) };
             Transforms.wrapNodes(editor, link, { split: true, at });
         } else {
@@ -24,28 +23,26 @@ export const LinkEditor = {
             Transforms.collapse(editor, { edge: 'end' });
         }
     },
-    unwrapLink(editor: AngularEditor, at?: Location) {
+    unwrapLink(editor: Editor, at?: Location) {
         if (!at) {
             at = editor.selection as BaseRange;
-            if (AngularEditor.isReadonly(editor) && editor.children && editor.children.length > 0) {
+            if (!at && editor.children && editor.children.length > 0) {
                 at = { anchor: Editor.start(editor, [0]), focus: Editor.end(editor, [0]) };
             }
         }
-
         Transforms.unwrapNodes<CustomElement>(editor, { at, match: n => Element.isElement(n) && (n as LinkElement).type === 'link' });
     },
-    isLinkActive(editor: AngularEditor) {
+    isLinkActive(editor: Editor) {
         let at = editor.selection as BaseRange;
-        if (AngularEditor.isReadonly(editor) && editor.children && editor.children.length > 0) {
+        if (!at && editor.children && editor.children.length > 0) {
             at = { anchor: Editor.start(editor, [0]), focus: Editor.end(editor, [0]) };
         }
         const [link] = Editor.nodes<CustomElement>(editor, { match: n => Element.isElement(n) && (n as LinkElement).type === 'link', at });
-
         return !!link;
     },
-    getLinkElement(editor: AngularEditor) {
+    getLinkElement(editor: Editor) {
         let at = editor.selection as BaseRange;
-        if (AngularEditor.isReadonly(editor) && editor.children && editor.children.length > 0) {
+        if (!at && editor.children && editor.children.length > 0) {
             at = { anchor: Editor.start(editor, [0]), focus: Editor.end(editor, [0]) };
         }
         const [link] = Editor.nodes<CustomElement>(editor, { match: n => Element.isElement(n) && (n as LinkElement).type === 'link', at });
