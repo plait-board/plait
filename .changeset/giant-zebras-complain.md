@@ -2,4 +2,4 @@
 '@plait/draw': patch
 ---
 
-fix text edit error
+support table theme

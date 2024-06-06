@@ -1,6 +1,7 @@
 import { PlaitBoard, PlaitElement, getSelectedElements } from '@plait/core';
-import { PlaitDrawElement, PlaitGeometry, PlaitLine } from '../interfaces';
+import { PlaitDrawElement, PlaitGeometry, PlaitLine, PlaitSwimlane } from '../interfaces';
 import { PlaitImage } from '../interfaces/image';
+import { PlaitTable, PlaitTableElement } from '../interfaces/table';
 
 export const getSelectedDrawElements = (board: PlaitBoard, elements?: PlaitElement[]) => {
     const selectedElements = elements?.length ? elements : getSelectedElements(board);
@@ -26,3 +27,9 @@ export const isSingleSelectSwimlane = (board: PlaitBoard) => {
     const selectedElements = getSelectedElements(board);
     return selectedElements && selectedElements.length === 1 && PlaitDrawElement.isSwimlane(selectedElements[0]);
 };
+
+export const getSelectedSwimlane = (board: PlaitBoard): PlaitSwimlane => {
+    const selectedElements = getSelectedElements(board);
+    return selectedElements.find(item => PlaitDrawElement.isSwimlane(item)) as PlaitSwimlane;
+};
+

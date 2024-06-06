@@ -33,7 +33,7 @@ const normalizePoints = (board: PlaitBoard, element: PlaitGeometry, width: numbe
                 RectangleClient.getRectangleByPoints(points),
                 RectangleClient.getCenterPoint(RectangleClient.getRectangleByPoints(element.points)),
                 RectangleClient.getCenterPoint(RectangleClient.getRectangleByPoints(points)),
-                element.angle
+                element.angle!
             );
         }
     }
@@ -61,7 +61,7 @@ export const setTextSize = (board: PlaitBoard, element: PlaitGeometry, textWidth
         };
         const isPointsEqual =
             Point.isEquals(element.points[0], newElement.points[0]) && Point.isEquals(element.points[1], newElement.points[1]);
-        const isTextHeightEqual = Math.round(textHeight) === Math.round(element.textHeight);
+        const isTextHeightEqual = Math.round(textHeight) === Math.round(element.textHeight!);
         if (!isPointsEqual || !isTextHeightEqual) {
             const path = board.children.findIndex(child => child === element);
             Transforms.setNode(board, newElement, [path]);

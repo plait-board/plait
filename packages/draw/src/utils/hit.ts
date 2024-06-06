@@ -25,7 +25,7 @@ import { isMultipleTextGeometry } from './multi-text-geometry';
 
 export const isTextExceedingBounds = (geometry: PlaitGeometry) => {
     const client = RectangleClient.getRectangleByPoints(geometry.points);
-    if (geometry.textHeight > client.height) {
+    if (geometry.textHeight && geometry.textHeight > client.height) {
         return true;
     }
     return false;
@@ -159,7 +159,7 @@ export const isInsideOfShape = (board: PlaitBoard, element: PlaitShapeElement, p
 export const isHitElementInside = (board: PlaitBoard, element: PlaitElement, point: Point) => {
     const rectangle = board.getRectangle(element);
     point = rotateAntiPointsByElement(point, element) || point;
-    if (PlaitDrawElement.isGeometry(element)) {
+    if (PlaitDrawElement.isGeometry(element) && !PlaitDrawElement.isGeometryByTable(element)) {
         const engine = getEngine(getElementShape(element));
         const isHitInside = engine.isInsidePoint(rectangle!, point);
         if (isHitInside) {

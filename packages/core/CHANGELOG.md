@@ -1,5 +1,31 @@
 # plait
 
+## 0.60.0
+
+### Patch Changes
+
+-   [#893](https://github.com/worktile/plait/pull/893) [`97b3c3eae`](https://github.com/worktile/plait/commit/97b3c3eae5352eae66a5b1f4ef3f0365a11678be) Thanks [@huanhuanwa](https://github.com/huanhuanwa)! - fix get gap snap line error
+
+*   [#894](https://github.com/worktile/plait/pull/894) [`ac1861f77`](https://github.com/worktile/plait/commit/ac1861f77b132d909b30c38dea6fd1dcf0c17519) Thanks [@huanhuanwa](https://github.com/huanhuanwa)! - restore before judge
+
+-   [#902](https://github.com/worktile/plait/pull/902) [`22d2431ff`](https://github.com/worktile/plait/commit/22d2431fff54a84177c815c61c8bbe5bb28ae123) Thanks [@huanhuanwa](https://github.com/huanhuanwa)! - set user-select to text paragraph instead of event.preventDefault
+
+## 0.59.0
+
+## 0.58.0
+
+### Minor Changes
+
+-   [#880](https://github.com/worktile/plait/pull/880) [`c228b0b4`](https://github.com/worktile/plait/commit/c228b0b4213f8d5a6c915650c62d87c8a4bed523) Thanks [@pubuzhixing8](https://github.com/pubuzhixing8)! - support element-flavour to replace plugin element (angular based-component)
+
+*   [#885](https://github.com/worktile/plait/pull/885) [`f0c9db08`](https://github.com/worktile/plait/commit/f0c9db08c5da256ee9dc4610c0432f23b62d7be5) Thanks [@huanhuanwa](https://github.com/huanhuanwa)! - add angle to PlaitElement
+
+### Patch Changes
+
+-   [#887](https://github.com/worktile/plait/pull/887) [`4192c487`](https://github.com/worktile/plait/commit/4192c487c02bbf682b55a4f8d5434073585e2983) Thanks [@huanhuanwa](https://github.com/huanhuanwa)! - add isHitElement and isHitSelectedRectangle function
+
+    fix rotate error
+
 ## 0.57.0
 
 ### Minor Changes

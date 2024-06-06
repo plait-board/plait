@@ -6,7 +6,7 @@ import { LineAutoCompleteGenerator } from './generators/line-auto-complete.gener
 export class ImageComponent extends CommonElementFlavour<PlaitImage, PlaitBoard> implements OnContextChanged<PlaitImage, PlaitBoard> {
     imageGenerator!: ImageGenerator<PlaitImage>;
 
-    lineAutoCompleteGenerator!: LineAutoCompleteGenerator;
+    lineAutoCompleteGenerator!: LineAutoCompleteGenerator<PlaitImage>;
 
     constructor() {
         super();

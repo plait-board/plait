@@ -12,13 +12,14 @@ import {
     getSelectedElements
 } from '@plait/core';
 import { getSelectedDrawElements } from '../utils/selected';
-import { PlaitDrawElement, PlaitGeometry, PlaitLine, PlaitShapeElement } from '../interfaces';
+import { PlaitDrawElement, PlaitGeometry, PlaitLine, PlaitShapeElement, PlaitSwimlane } from '../interfaces';
 import { buildClipboardData, insertClipboardData } from '../utils/clipboard';
 import { DrawTransforms } from '../transforms';
 import { getLines } from '../utils/line/line-basic';
 import { PlaitImage } from '../interfaces/image';
 import { acceptImageTypes, buildImage, getElementOfFocusedImage, getElementsText } from '@plait/common';
 import { DEFAULT_IMAGE_WIDTH } from '../constants';
+import { PlaitTable } from '../interfaces/table';
 
 export const withDrawFragment = (baseBoard: PlaitBoard) => {
     const board = baseBoard as PlaitBoard;
@@ -30,16 +31,22 @@ export const withDrawFragment = (baseBoard: PlaitBoard) => {
             const geometryElements = drawElements.filter(value => PlaitDrawElement.isGeometry(value)) as PlaitGeometry[];
             const lineElements = drawElements.filter(value => PlaitDrawElement.isLine(value)) as PlaitLine[];
             const imageElements = drawElements.filter(value => PlaitDrawElement.isImage(value)) as PlaitImage[];
+            const tableElements = drawElements.filter(value => PlaitDrawElement.isTable(value)) as PlaitTable[];
+            const swimlaneElements = drawElements.filter(value => PlaitDrawElement.isSwimlane(value)) as PlaitSwimlane[];
 
             const boundLineElements = [
                 ...getBoundedLineElements(board, geometryElements),
-                ...getBoundedLineElements(board, imageElements)
+                ...getBoundedLineElements(board, imageElements),
+                ...getBoundedLineElements(board, tableElements),
+                ...getBoundedLineElements(board, swimlaneElements)
             ].filter(line => !lineElements.includes(line));
             data.push(
                 ...[
                     ...geometryElements,
                     ...lineElements,
                     ...imageElements,
+                    ...tableElements,
+                    ...swimlaneElements,
                     ...boundLineElements.filter(line => !lineElements.includes(line))
                 ]
             );

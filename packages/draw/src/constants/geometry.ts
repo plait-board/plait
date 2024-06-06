@@ -137,6 +137,30 @@ export const DefaultPackageProperty = {
     ]
 };
 
+export const DefaultActivationProperty = {
+    width: 18,
+    height: 80
+};
+
+export const DefaultObjectProperty = {
+    width: 120,
+    height: 60
+};
+
+export const DefaultComponentBoxProperty = {
+    width: 200,
+    height: 150
+};
+
+export const DefaultDeletionProperty = {
+    width: 40,
+    height: 40
+};
+
+export const DefaultPortProperty = {
+    width: 20,
+    height: 20
+};
 export const DefaultCombinedFragmentProperty = {
     width: 400,
     height: 280,
@@ -149,6 +173,34 @@ export const DefaultCombinedFragmentProperty = {
         {
             key: MultipleTextGeometryCommonTextKeys.content,
             text: '[Condition]',
+            align: Alignment.left
+        }
+    ]
+};
+
+export const DefaultClassProperty = {
+    width: 230,
+    height: 180,
+    texts: [
+        { text: 'Class', align: Alignment.center },
+        {
+            text: '+ attribute1:type  defaultValue\n+ attribute2:type\n- attribute3:type',
+            align: Alignment.left
+        },
+        {
+            text: '+ operation1(params):returnType\n- operation2(params)\n- operation3()',
+            align: Alignment.left
+        }
+    ]
+};
+
+export const DefaultInterfaceProperty = {
+    width: 230,
+    height: 140,
+    texts: [
+        { text: '<<interface>>\nInterface', align: Alignment.center },
+        {
+            text: '+ operation1(params):returnType\n- operation2(params)\n- operation3()',
             align: Alignment.left
         }
     ]
@@ -194,8 +246,21 @@ export const DefaultUMLPropertyMap = {
     [UMLSymbols.actor]: DefaultActorProperty,
     [UMLSymbols.useCase]: DefaultDocumentProperty,
     [UMLSymbols.container]: DefaultContainerProperty,
+    [UMLSymbols.note]: DefaultObjectProperty,
     [UMLSymbols.package]: DefaultPackageProperty,
-    [UMLSymbols.combinedFragment]: DefaultCombinedFragmentProperty
+    [UMLSymbols.combinedFragment]: DefaultCombinedFragmentProperty,
+    [UMLSymbols.class]: DefaultClassProperty,
+    [UMLSymbols.interface]: DefaultInterfaceProperty,
+    [UMLSymbols.activation]: DefaultActivationProperty,
+    [UMLSymbols.object]: DefaultObjectProperty,
+    [UMLSymbols.deletion]: DefaultDeletionProperty,
+    [UMLSymbols.activityClass]: DefaultObjectProperty,
+    [UMLSymbols.simpleClass]: DefaultObjectProperty,
+    [UMLSymbols.component]: DefaultMultiDocumentProperty,
+    [UMLSymbols.template]: DefaultMultiDocumentProperty,
+    [UMLSymbols.componentBox]: DefaultComponentBoxProperty,
+    [UMLSymbols.port]: DefaultPortProperty,
+    [UMLSymbols.branchMerge]: DefaultDeletionProperty
 };
 
 export const MultipleTextGeometryTextKeys: { [key in GeometryShapes]?: string[] } = {
@@ -208,3 +273,14 @@ export const LINE_HIT_GEOMETRY_BUFFER = 10;
 export const LINE_SNAPPING_BUFFER = 6;
 
 export const LINE_SNAPPING_CONNECTOR_BUFFER = 8;
+
+export const GEOMETRY_WITHOUT_TEXT = [
+    FlowchartSymbols.or,
+    FlowchartSymbols.summingJunction,
+    UMLSymbols.activation,
+    UMLSymbols.deletion,
+    UMLSymbols.port,
+    UMLSymbols.branchMerge
+] as GeometryShapes[];
+
+export const GEOMETRY_WITH_MULTIPLE_TEXT = [UMLSymbols.package, UMLSymbols.combinedFragment];

@@ -1,18 +1,15 @@
 import { ChangeDetectorRef, Component, ElementRef, Renderer2 } from '@angular/core';
 import { CustomText } from '@plait/common';
 import { MarkTypes } from '@plait/text-plugins';
-import { BaseTextComponent, SlateLeaves } from 'slate-angular';
+import { BaseTextComponent } from 'slate-angular';
 
 @Component({
     selector: 'span[plaitText]',
-    template: `
-        <slate-leaves [context]="context" [viewContext]="viewContext"></slate-leaves>
-    `,
+    template: ``,
     host: {
         'data-slate-node': 'text'
     },
-    standalone: true,
-    imports: [SlateLeaves]
+    standalone: true
 })
 export class PlaitTextNodeComponent extends BaseTextComponent<CustomText> {
     constructor(public elementRef: ElementRef, public renderer2: Renderer2, cdr: ChangeDetectorRef) {

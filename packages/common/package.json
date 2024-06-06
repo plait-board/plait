@@ -1,6 +1,6 @@
 {
     "name": "@plait/common",
-    "version": "0.57.0",
+    "version": "0.60.0",
     "peerDependencies": {
     },
     "dependencies": {

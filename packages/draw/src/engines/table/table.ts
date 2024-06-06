@@ -1,4 +1,4 @@
-import { PlaitBoard, RectangleClient, Point, createG, drawLine } from '@plait/core';
+import { PlaitBoard, RectangleClient, Point, createG, drawLine, setStrokeLinecap, drawRectangle, ACTIVE_STROKE_WIDTH } from '@plait/core';
 import { Options } from 'roughjs/bin/core';
 import { getCellsWithPoints, getCellWithPoints } from '../../utils/table';
 import { ShapeEngine } from '../../interfaces';
@@ -6,6 +6,7 @@ import { PlaitDrawShapeText } from '../../generators/text.generator';
 import { PlaitTable, PlaitTableCellWithPoints, PlaitTableDrawOptions, PlaitTableElement } from '../../interfaces/table';
 import { getStrokeWidthByElement } from '../../utils';
 import { ShapeDefaultSpace } from '../../constants';
+import { getNearestPointBetweenPointAndRoundRectangle, getRoundRectangleRadius } from '../basic-shapes/round-rectangle';
 
 export const TableEngine: ShapeEngine<PlaitTable, PlaitTableDrawOptions, PlaitDrawShapeText> = {
     draw(board: PlaitBoard, rectangle: RectangleClient, roughOptions: Options, options?: PlaitTableDrawOptions) {
@@ -19,10 +20,21 @@ export const TableEngine: ShapeEngine<PlaitTable, PlaitTableDrawOptions, PlaitDr
         pointCells.forEach(cell => {
             const rectangle = RectangleClient.getRectangleByPoints(cell.points!);
             const { x, y, width, height } = rectangle;
+            const cellRectangle = drawRectangle(
+                board,
+                {
+                    x: x + ACTIVE_STROKE_WIDTH,
+                    y: y + ACTIVE_STROKE_WIDTH,
+                    width: width - ACTIVE_STROKE_WIDTH * 2,
+                    height: height - ACTIVE_STROKE_WIDTH * 2
+                },
+                { fill: cell.fill, fillStyle: 'solid', strokeWidth: 0 }
+            );
             const cellRightBorder = drawLine(rs, [x + width, y], [x + width, y + height], roughOptions);
             const cellBottomBorder = drawLine(rs, [x, y + height], [x + width, y + height], roughOptions);
-            g.append(cellRightBorder, cellBottomBorder);
+            g.append(cellRectangle, cellRightBorder, cellBottomBorder);
         });
+        setStrokeLinecap(g, 'round');
         return g;
     },
     isInsidePoint(rectangle: RectangleClient, point: Point) {
@@ -33,7 +45,7 @@ export const TableEngine: ShapeEngine<PlaitTable, PlaitTableDrawOptions, PlaitDr
         return RectangleClient.getCornerPoints(rectangle);
     },
     getNearestPoint(rectangle: RectangleClient, point: Point) {
-        return [0, 0];
+        return getNearestPointBetweenPointAndRoundRectangle(point, rectangle, getRoundRectangleRadius(rectangle));
     },
     getConnectorPoints(rectangle: RectangleClient) {
         return RectangleClient.getEdgeCenterPoints(rectangle);
