@@ -20,6 +20,7 @@ import { Editor, Element } from 'slate';
 import { TextProps, getSizeFnType } from '../core/text-props';
 import { PlaitTextBoard } from './with-text';
 import { measureElement } from './text-measure';
+import { getLineHeightByFontSize } from './utils';
 
 export interface TextManageRef {
     newText?: Element;
@@ -74,13 +75,13 @@ export class TextManage {
                 this.text = data.newText;
                 const computedStyle = window.getComputedStyle(this.foreignObject.children[0]);
                 const fontFamily = computedStyle.fontFamily;
-                const fontSize = computedStyle.fontSize;
+                const fontSize = parseFloat(computedStyle.fontSize);
                 const { width, height } = measureElement(
                     this.editor.children[0] as Element,
                     {
-                        fontSize: parseFloat(fontSize),
+                        fontSize: fontSize,
                         fontFamily,
-                        lineHeight: 20
+                        lineHeight: getLineHeightByFontSize(fontSize)
                     },
                     this.options.getMaxWidth!()
                 );

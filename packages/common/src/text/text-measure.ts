@@ -35,32 +35,45 @@ export function measureElement(
 ) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    const texts = Node.texts(element);
-    let width = 0;
-    let currentLineWidth = 0;
-    let height = options.lineHeight;
-    // let lineMaxWidth = 0;
-    for (const textEntry of texts) {
+    const textEntries = Node.texts(element);
+    const lines: CustomText[][] = [[]];
+    for (const textEntry of textEntries) {
         const [text] = textEntry;
-        const font = getFont(text, options);
-        ctx.font = font;
         const textString = Node.string(text);
         const textArray = textString.split('\n');
-        textArray.forEach((segmentText: string, index: number) => {
-            const textMetrics = ctx.measureText(segmentText);
-            currentLineWidth += textMetrics.width;
-            if (currentLineWidth > containerMaxWidth) {
-                
-            }
-            // if (lineMaxWidth > containerMaxWidth) {
-            //     width = containerMaxWidth;
-            // }
-            if (index > 0) {
-                height += options.lineHeight;
-                width = 0;
+        textArray.forEach((segmentTextString: string, index: number) => {
+            const segmentText = { ...text, text: segmentTextString };
+            if (index === 0) {
+                const currentLine = lines[lines.length - 1];
+                currentLine.push(segmentText);
+            } else {
+                const newLine: CustomText[] = [];
+                newLine.push(segmentText);
+                lines.push(newLine);
             }
         });
     }
+    let width = 0;
+    let height = 0;
+    lines.forEach((lineTexts: CustomText[], index: number) => {
+        let lineWidth = 0;
+        lineTexts.forEach((text: CustomText) => {
+            const font = getFont(text, { fontFamily: options.fontFamily, fontSize: options.fontSize });
+            ctx.font = font;
+            const textMetrics = ctx.measureText(text.text);
+            lineWidth += textMetrics.width;
+        });
+        if (lineWidth <= containerMaxWidth) {
+            if (lineWidth > width) {
+                width = lineWidth;
+            }
+            height += options.lineHeight;
+        } else {
+            width = containerMaxWidth;
+            const lineWrapNumber = Math.ceil(lineWidth / containerMaxWidth);
+            height += options.lineHeight * lineWrapNumber;
+        }
+    });
     return { width, height };
 }
 
