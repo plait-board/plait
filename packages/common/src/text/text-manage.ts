@@ -152,8 +152,7 @@ export class TextManage {
             target,
             {
                 fontSize: fontSize,
-                fontFamily,
-                lineHeight: getLineHeightByFontSize(fontSize)
+                fontFamily
             },
             this.options.getMaxWidth!()
         );

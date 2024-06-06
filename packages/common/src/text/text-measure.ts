@@ -1,12 +1,12 @@
 import { Node } from 'slate';
 import { CustomText, ParagraphElement } from './types';
+import { getLineHeightByFontSize } from './utils';
 
 export function measureElement(
     element: ParagraphElement,
     options: {
         fontSize: number;
         fontFamily: string;
-        lineHeight: number;
     },
     containerMaxWidth: number = 10000
 ) {
@@ -34,21 +34,28 @@ export function measureElement(
     let height = 0;
     lines.forEach((lineTexts: CustomText[], index: number) => {
         let lineWidth = 0;
+        let maxLineHeight = getLineHeightByFontSize(options.fontSize);
         lineTexts.forEach((text: CustomText) => {
             const font = getFont(text, { fontFamily: options.fontFamily, fontSize: options.fontSize });
             ctx.font = font;
             const textMetrics = ctx.measureText(text.text);
             lineWidth += textMetrics.width;
+            if (text['font-size']) {
+                const lineHeight = getLineHeightByFontSize(parseFloat(text['font-size']));
+                if (lineHeight > maxLineHeight) {
+                    maxLineHeight = lineHeight;
+                }
+            }
         });
         if (lineWidth <= containerMaxWidth) {
             if (lineWidth > width) {
                 width = lineWidth;
             }
-            height += options.lineHeight;
+            height += maxLineHeight;
         } else {
             width = containerMaxWidth;
             const lineWrapNumber = Math.ceil(lineWidth / containerMaxWidth);
-            height += options.lineHeight * lineWrapNumber;
+            height += maxLineHeight * lineWrapNumber;
         }
     });
     return { width, height };

@@ -9,8 +9,7 @@ import { TEXT_DEFAULT_HEIGHT } from '@plait/text-plugins';
 function getLabelTextRectangle(board: PlaitBoard, edge: FlowEdge): RectangleClient {
     const { width: labelTextWidth } = measureElement(edge.data!.text!, {
         fontSize: EDGE_LABEL_FONTSIZE,
-        fontFamily: DEFAULT_FONT_FAMILY,
-        lineHeight: 20
+        fontFamily: DEFAULT_FONT_FAMILY
     });
 
     const { edgeLabelOptions } = (board as PlaitOptionsBoard).getPluginOptions<FlowPluginOptions>(FlowPluginKey.flowOptions);

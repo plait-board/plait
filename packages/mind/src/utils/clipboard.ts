@@ -143,7 +143,7 @@ export const getTopicSize = (isRoot: boolean, isBranch: boolean, topic: Paragrap
     const maxWidth = fontSize * TOPIC_DEFAULT_MAX_WORD_COUNT;
     return measureElement(
         topic,
-        { fontSize, fontFamily, lineHeight: getLineHeightByFontSize(fontSize) },
+        { fontSize, fontFamily },
         manualWidth ? manualWidth : maxWidth
     );
 };
