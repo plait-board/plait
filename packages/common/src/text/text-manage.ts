@@ -16,7 +16,7 @@ import {
     updateForeignObjectWidth
 } from '@plait/core';
 import { fromEvent, timer } from 'rxjs';
-import { Editor, Element } from 'slate';
+import { Editor, Element, NodeEntry, Range, Text, Transforms, Node } from 'slate';
 import { TextProps } from '../core/text-props';
 import { PlaitTextBoard } from './with-text';
 import { measureElement } from './text-measure';
@@ -73,8 +73,12 @@ export class TextManage {
                 this.editor = editor;
             },
             onComposition: (event: CompositionEvent) => {
-                // this.options.onChange && this.options.onChange(data);
-                // MERGING.set(this.board, true);
+                const fakeRoot = buildCompositionData(this.editor, event.data);
+                if (fakeRoot) {
+                    const sizeData = this.getSize(fakeRoot.children[0]);
+                    this.options.onChange && this.options.onChange(sizeData);
+                    MERGING.set(this.board, true);
+                }
             },
             onExitEdit: () => {
                 this.exitCallback && this.exitCallback();
@@ -141,12 +145,13 @@ export class TextManage {
         return exitCallback;
     }
 
-    getSize = () => {
+    getSize = (element?: Element) => {
         const computedStyle = window.getComputedStyle(this.foreignObject.children[0]);
         const fontFamily = computedStyle.fontFamily;
         const fontSize = parseFloat(computedStyle.fontSize);
+        const target = element || (this.editor.children[0] as Element);
         return measureElement(
-            this.editor.children[0] as Element,
+            target,
             {
                 fontSize: fontSize,
                 fontFamily,
@@ -158,10 +163,24 @@ export class TextManage {
 
     getText = () => {
         return this.editor.children[0];
-    }
+    };
 
     destroy() {
         this.g?.remove();
         this.componentRef?.destroy();
     }
 }
+
+export const buildCompositionData = (editor: Editor, data: string) => {
+    if (editor.selection && Range.isCollapsed(editor.selection)) {
+        const [textNode, textPath] = Editor.node(editor, editor.selection) as NodeEntry<Text>;
+        const offset = editor.selection.anchor.offset;
+        const clonedElement = JSON.parse(JSON.stringify(editor.children[0]));
+        const root = { children: [clonedElement] };
+        const newTextString = textNode.text.slice(0, offset + 1) + data + textNode.text.slice(offset + 1);
+        const clonedTextNode = Node.get(root, textPath) as Text;
+        clonedTextNode.text = newTextString;
+        return root;
+    }
+    return null;
+};

@@ -4,7 +4,6 @@
 export * from './custom-types';
 export * from './richtext/richtext.component';
 export * from './constant';
-export * from './utils/text-size';
 export * from './plugins/mark/mark.editor';
 export * from './plugins/link/link-editor';
 export * from './plugins/align/align-editor';
