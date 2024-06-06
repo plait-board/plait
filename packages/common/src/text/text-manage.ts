@@ -17,7 +17,7 @@ import {
 } from '@plait/core';
 import { fromEvent, timer } from 'rxjs';
 import { Editor, Element } from 'slate';
-import { TextProps, getSizeFnType } from '../core/text-props';
+import { TextProps } from '../core/text-props';
 import { PlaitTextBoard } from './with-text';
 import { measureElement } from './text-measure';
 import { getLineHeightByFontSize } from './utils';
@@ -33,8 +33,6 @@ export class TextManage {
 
     editor!: Editor;
 
-    text!: Element;
-
     g!: SVGGElement;
 
     foreignObject!: SVGForeignObjectElement;
@@ -42,10 +40,6 @@ export class TextManage {
     componentRef!: ComponentRef<TextProps>;
 
     exitCallback?: (() => void) | null;
-
-    getSize: getSizeFnType = () => {
-        throw new Error('Exception: can not resolve getSize');
-    };
 
     constructor(
         private board: PlaitBoard,
@@ -62,7 +56,6 @@ export class TextManage {
     }
 
     draw(text: Element) {
-        this.text = text;
         const _rectangle = this.options.getRectangle();
         this.g = createG();
         this.foreignObject = createForeignObject(_rectangle.x, _rectangle.y, _rectangle.width, _rectangle.height);
@@ -71,35 +64,20 @@ export class TextManage {
         const props = {
             board: this.board,
             text,
-            onChange: (data: { width: number; height: number; newText: Element }) => {
-                this.text = data.newText;
-                const computedStyle = window.getComputedStyle(this.foreignObject.children[0]);
-                const fontFamily = computedStyle.fontFamily;
-                const fontSize = parseFloat(computedStyle.fontSize);
-                const { width, height } = measureElement(
-                    this.editor.children[0] as Element,
-                    {
-                        fontSize: fontSize,
-                        fontFamily,
-                        lineHeight: getLineHeightByFontSize(fontSize)
-                    },
-                    this.options.getMaxWidth!()
-                );
+            onChange: (data: { newText: Element }) => {
+                const { width, height } = this.getSize();
                 this.options.onChange && this.options.onChange({ ...data, width, height });
                 MERGING.set(this.board, true);
             },
             afterInit: (editor: Editor) => {
                 this.editor = editor;
             },
-            onComposition: (data: { width: number; height: number }) => {
-                this.options.onChange && this.options.onChange(data);
-                MERGING.set(this.board, true);
+            onComposition: (event: CompositionEvent) => {
+                // this.options.onChange && this.options.onChange(data);
+                // MERGING.set(this.board, true);
             },
             onExitEdit: () => {
                 this.exitCallback && this.exitCallback();
-            },
-            registerGetSize: (getSizeFn: getSizeFnType) => {
-                this.getSize = getSizeFn;
             }
         };
         this.componentRef = ((this.board as unknown) as PlaitTextBoard).renderText(this.foreignObject, props);
@@ -119,7 +97,6 @@ export class TextManage {
     }
 
     updateText(newText: Element) {
-        this.text = newText;
         const props = {
             text: newText
         };
@@ -162,6 +139,25 @@ export class TextManage {
         };
         this.exitCallback = exitCallback;
         return exitCallback;
+    }
+
+    getSize = () => {
+        const computedStyle = window.getComputedStyle(this.foreignObject.children[0]);
+        const fontFamily = computedStyle.fontFamily;
+        const fontSize = parseFloat(computedStyle.fontSize);
+        return measureElement(
+            this.editor.children[0] as Element,
+            {
+                fontSize: fontSize,
+                fontFamily,
+                lineHeight: getLineHeightByFontSize(fontSize)
+            },
+            this.options.getMaxWidth!()
+        );
+    };
+
+    getText = () => {
+        return this.editor.children[0];
     }
 
     destroy() {

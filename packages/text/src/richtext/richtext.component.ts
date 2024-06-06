@@ -3,22 +3,20 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
-    EventEmitter,
     HostBinding,
     Input,
     OnChanges,
     OnInit,
-    Output,
     Renderer2,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
 import { isKeyHotkey } from 'is-hotkey';
 import { Editor, Element, Text, Transforms, createEditor } from 'slate';
-import { AngularEditor, SlateEditable, withAngular } from 'slate-angular';
+import { SlateEditable, withAngular } from 'slate-angular';
 import { withHistory } from 'slate-history';
 import { CLIPBOARD_FORMAT_KEY } from '../constant';
-import { DEFAULT_FONT_SIZE, MarkTypes } from '../constant/mark';
+import { MarkTypes } from '../constant/mark';
 import { LinkElement } from '../custom-types';
 import { PlaitLinkNodeComponent } from '../plugins/link/link.component';
 import { withLink } from '../plugins/link/with-link';
@@ -29,7 +27,7 @@ import { withSelection } from '../plugins/with-selection';
 import { withSingleLine } from '../plugins/with-single';
 import { PlaitTextNodeComponent } from '../text-node/text.component';
 import { FormsModule } from '@angular/forms';
-import { TextData, TextPlugin, TextSizeData, measureDiv, measureElement } from '@plait/common';
+import { TextData, TextPlugin } from '@plait/common';
 
 @Component({
     selector: 'plait-richtext',
@@ -65,7 +63,7 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
     afterInit!: (editor: Editor) => void;
 
     @Input()
-    onComposition!: (data: TextSizeData) => void;
+    onComposition!: (event: CompositionEvent) => void;
 
     editor = withSelection(withLink(withMark(withSingleLine(withHistory(withAngular(createEditor(), CLIPBOARD_FORMAT_KEY))))));
 
@@ -76,37 +74,11 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
     constructor(public renderer2: Renderer2, private cdr: ChangeDetectorRef, public elementRef: ElementRef<HTMLElement>) {}
 
     valueChange() {
-        const { width, height } = this.getSize();
-        this.onChange({ newText: this.editor.children[0] as Element, width, height });
+        this.onChange({ newText: this.editor.children[0] as Element });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         console.log(changes);
-    }
-
-    getSize() {
-        const editor = this.editor;
-        // TODO rotate
-        // const transformMatrix = this.g.getAttribute('transform');
-        // this.g.setAttribute('transform', '');
-        const paragraph = AngularEditor.toDOMNode(editor, editor.children[0]);
-        const computedStyle = window.getComputedStyle(paragraph);
-
-        const fontFamily = computedStyle.fontFamily;
-        const fontSize = computedStyle.fontSize;
-        const { width, height } = measureElement(
-            editor.children[0] as Element,
-            {
-                fontSize: parseFloat(fontSize),
-                fontFamily,
-                lineHeight: 20
-            },
-            500
-        );
-        // if (transformMatrix) {
-        //     this.g.setAttribute('transform', transformMatrix);
-        // }
-        return { width, height };
     }
 
     ngOnInit(): void {
@@ -142,15 +114,15 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
     };
 
     compositionStart = (event: CompositionEvent) => {
-        // this.onComposition.emit(event);
+        this.onComposition(event);
     };
 
     compositionUpdate = (event: CompositionEvent) => {
-        // this.onComposition.emit(event);
+        this.onComposition(event);
     };
 
     compositionEnd = (event: CompositionEvent) => {
-        // this.onComposition.emit(event);
+        this.onComposition(event);
     };
 
     onKeydown = (event: KeyboardEvent) => {

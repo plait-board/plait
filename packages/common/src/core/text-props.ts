@@ -7,13 +7,8 @@ export interface TextProps {
     readonly?: boolean;
     onChange?: (data: TextData) => void;
     afterInit?: (data: Editor) => void;
-    onComposition?: (data: TextSizeData) => void;
+    onComposition?: (data: CompositionEvent) => void;
     onExitEdit?: () => void;
-    registerGetSize?: (getSizeFn: getSizeFnType) => void;
 }
 
-export type getSizeFnType = () => TextSizeData;
-
-export type TextData = { newText: Element } & TextSizeData;
-
-export type TextSizeData = { width: number; height: number };
+export type TextData = { newText: Element };

@@ -14,6 +14,7 @@ import { DrawTransforms } from '../transforms';
 import { getLinePoints } from '../utils/line/line-basic';
 import { getHitLineTextIndex } from '../utils/position/line';
 import { isHitLineText } from '../utils/hit';
+import { LINE_TEXT } from '../constants/line';
 
 export const withLineText = (board: PlaitBoard) => {
     const { dblClick } = board;
@@ -36,7 +37,7 @@ export const withLineText = (board: PlaitBoard) => {
                 } else {
                     const ratio = getRatioByPoint(points, point);
                     texts.push({
-                        text: buildText('文本'),
+                        text: buildText(LINE_TEXT),
                         position: ratio,
                         width: 28,
                         height: 20
@@ -62,10 +63,9 @@ function editHandle(board: PlaitBoard, element: PlaitLine, manageIndex: number, 
     const textManages = getTextManages(element);
     const textManage = textManages[manageIndex];
     textManage.edit(() => {
-        const text = Node.string(textManage.text);
-        // TODO 
-        // const shouldRemove = (isFirstEdit && originText === descendant) || !text;
-        if (!text) {
+        const text = Node.string(textManage.getText());
+        const shouldRemove = !text || (isFirstEdit && text === LINE_TEXT);
+        if (shouldRemove) {
             DrawTransforms.removeLineText(board, element, manageIndex);
         }
     });

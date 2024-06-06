@@ -63,7 +63,7 @@ export const getElementsText = (elements: PlaitElement[]) => {
                 if (textManages.length) {
                     return textManages
                         .map(textManage => {
-                            const textsEntry = Node.texts(textManage.text);
+                            const textsEntry = Node.texts(textManage.getText());
                             return Array.from(textsEntry).reduce((total, text) => (total += text[0].text), '');
                         })
                         .join(' ');
