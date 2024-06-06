@@ -34,8 +34,6 @@ import { withPasteLink } from '../plugins/link/with-link-insert';
     imports: [SlateEditable, FormsModule]
 })
 export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges {
-    _readonly = true;
-
     @HostBinding('class') hostClass = 'plait-richtext-container';
 
     children: Element[] = [];
@@ -47,9 +45,7 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
         this.cdr.markForCheck();
     }
 
-    @Input() set readonly(value: boolean) {
-        this._readonly = value;
-    }
+    @Input() readonly = true;
 
     @ViewChild('slateEditable')
     slateEditable!: SlateEditable;

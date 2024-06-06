@@ -1,10 +1,8 @@
 import {
-    ComponentContext,
     ComponentRef,
     IS_TEXT_EDITABLE,
     MERGING,
     PlaitBoard,
-    PlaitOptionsBoard,
     Point,
     RectangleClient,
     createForeignObject,
@@ -16,7 +14,7 @@ import {
     updateForeignObjectWidth
 } from '@plait/core';
 import { fromEvent, timer } from 'rxjs';
-import { Editor, Element, NodeEntry, Range, Text, Transforms, Node } from 'slate';
+import { Editor, Element, NodeEntry, Range, Text, Node } from 'slate';
 import { TextProps } from '../core/text-props';
 import { PlaitTextBoard } from './with-text';
 import { measureElement } from './text-measure';
