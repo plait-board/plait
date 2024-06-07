@@ -35,12 +35,14 @@ export function measureElement(
     lines.forEach((lineTexts: CustomText[], index: number) => {
         let lineWidth = 0;
         let maxLineHeight = getLineHeightByFontSize(options.fontSize);
-        lineTexts.forEach((text: CustomText) => {
+        lineTexts.forEach((text: CustomText, index: number) => {
             const font = getFont(text, { fontFamily: options.fontFamily, fontSize: options.fontSize });
             ctx.font = font;
             const textMetrics = ctx.measureText(text.text);
             lineWidth += textMetrics.width;
-            if (text['font-size']) {
+            const isLast = index === lineTexts.length - 1;
+            // skip when text is empty and is not last text of line
+            if (text['font-size'] && (isLast || text.text !== '')) {
                 const lineHeight = getLineHeightByFontSize(parseFloat(text['font-size']));
                 if (lineHeight > maxLineHeight) {
                     maxLineHeight = lineHeight;
