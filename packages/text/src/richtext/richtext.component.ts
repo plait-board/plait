@@ -23,15 +23,16 @@ import { withSelection } from '../plugins/with-selection';
 import { withSingleLine } from '../plugins/with-single';
 import { PlaitTextNodeComponent } from '../text-node/text.component';
 import { FormsModule } from '@angular/forms';
-import { LinkElement, TextData, TextPlugin } from '@plait/common';
+import { LinkElement, TextChangeData, TextPlugin } from '@plait/common';
 import { CLIPBOARD_FORMAT_KEY, MarkTypes } from '@plait/text-plugins';
 import { withPasteLink } from '../plugins/link/with-link-insert';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'plait-richtext',
     templateUrl: './richtext.component.html',
     standalone: true,
-    imports: [SlateEditable, FormsModule]
+    imports: [SlateEditable, FormsModule, CommonModule]
 })
 export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges {
     @HostBinding('class') hostClass = 'plait-richtext-container';
@@ -51,7 +52,7 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
     slateEditable!: SlateEditable;
 
     @Input()
-    onChange!: (data: TextData) => void;
+    onChange!: (data: TextChangeData) => void;
 
     @Input()
     afterInit!: (editor: Editor) => void;
@@ -68,7 +69,7 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
     constructor(public renderer2: Renderer2, private cdr: ChangeDetectorRef, public elementRef: ElementRef<HTMLElement>) {}
 
     valueChange() {
-        this.onChange({ newText: this.editor.children[0] as Element });
+        this.onChange({ newText: this.editor.children[0] as Element, operations: this.editor.operations });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
