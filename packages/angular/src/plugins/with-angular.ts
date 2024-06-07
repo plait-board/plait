@@ -1,24 +1,27 @@
 import { ComponentRef, PlaitBoard } from '@plait/core';
 import { AngularBoard } from '../interfaces/board';
-import { PlaitTextBoard } from '@plait/common';
+import { PlaitTextBoard, TextProps } from '@plait/common';
 import { PlaitRichtextComponent } from '@plait/text';
+import { AngularEditor } from 'slate-angular';
 
 export const withAngular = (board: PlaitBoard & PlaitTextBoard) => {
-    board.renderText = <TextProps>(container: Element | DocumentFragment, props: TextProps) => {
+    board.renderText = (container: Element | DocumentFragment, props: TextProps) => {
         const viewContainerRef = AngularBoard.getViewContainerRef(board);
         const componentRef = viewContainerRef.createComponent(PlaitRichtextComponent);
         for (const key in props) {
-            const value = props[key];
-            (componentRef.instance as TextProps)[key] = value;
+            const value = props[key as keyof TextProps];
+            (componentRef.instance as any)[key as keyof TextProps] = value as any;
         }
         container.appendChild(componentRef.instance.nativeElement());
+        componentRef.changeDetectorRef.detectChanges();
         const ref: ComponentRef<TextProps> = {
             destroy: () => {
                 componentRef.destroy();
             },
             update: (props: Partial<TextProps>) => {
+                const beforeReadonly = componentRef.instance.readonly;
                 for (const key in props) {
-                    const value = props[key];
+                    const value = props[key as keyof TextProps];
                     (componentRef.instance as any)[key] = value;
                 }
                 // solve image lose on move node
@@ -26,6 +29,11 @@ export const withAngular = (board: PlaitBoard & PlaitTextBoard) => {
                     container.append(componentRef.instance.nativeElement());
                 }
                 componentRef.changeDetectorRef.detectChanges();
+                if (beforeReadonly === true && props.readonly === false) {
+                    AngularEditor.focus(componentRef.instance.editor);
+                } else if (beforeReadonly === false && props.readonly === true) {
+                    AngularEditor.blur(componentRef.instance.editor);
+                }
             }
         };
         return ref;

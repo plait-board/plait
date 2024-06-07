@@ -14,11 +14,10 @@ import {
     updateForeignObjectWidth
 } from '@plait/core';
 import { fromEvent, timer } from 'rxjs';
-import { Editor, Element, NodeEntry, Range, Text, Node } from 'slate';
+import { Editor, Element, NodeEntry, Range, Text, Node, Transforms } from 'slate';
 import { TextProps } from '../core/text-props';
 import { PlaitTextBoard } from './with-text';
 import { measureElement } from './text-measure';
-import { getLineHeightByFontSize } from './utils';
 
 export interface TextManageRef {
     newText?: Element;
@@ -111,8 +110,8 @@ export class TextManage {
         const props: Partial<TextProps> = {
             readonly: false
         };
-        // TODO: autofocus
         this.componentRef.update(props);
+        Transforms.select(this.editor, [0]);
         const mousedown$ = fromEvent<MouseEvent>(document, 'mousedown').subscribe((event: MouseEvent) => {
             const point = toViewBoxPoint(this.board, toHostPoint(this.board, event.x, event.y));
             const textRec = this.options.getRenderRectangle ? this.options.getRenderRectangle() : this.options.getRectangle();
