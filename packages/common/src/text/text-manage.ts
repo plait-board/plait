@@ -117,7 +117,6 @@ export class TextManage {
             const textRec = this.options.getRenderRectangle ? this.options.getRenderRectangle() : this.options.getRectangle();
             const clickInText = RectangleClient.isHit(RectangleClient.getRectangleByPoints([point, point]), textRec);
             const isAttached = (event.target as HTMLElement).closest('.plait-board-attached');
-
             if (!clickInText && !isAttached) {
                 // handle composition input state, like: Chinese IME Composition Input
                 timer(0).subscribe(() => {
@@ -125,9 +124,21 @@ export class TextManage {
                 });
             }
         });
+        const keydown$ = fromEvent<KeyboardEvent>(document, 'keydown').subscribe((event: KeyboardEvent) => {
+            if (event.isComposing) {
+                return;
+            }
+            if (event.key === 'Escape' || (event.key === 'Enter' && !event.shiftKey) || event.key === 'Tab') {
+                event.preventDefault();
+                event.stopPropagation();
+                exitCallback();
+                return;
+            }
+        });
         const exitCallback = () => {
             this.updateRectangle();
             mousedown$.unsubscribe();
+            keydown$.unsubscribe();
             IS_TEXT_EDITABLE.set(this.board, false);
             MERGING.set(this.board, false);
             callback && callback();
