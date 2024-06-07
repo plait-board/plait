@@ -139,7 +139,8 @@ export class LineComponent extends CommonElementFlavour<PlaitLine, PlaitBoard> i
                 DrawTransforms.setLineTexts(this.board, this.element, texts);
                 textManageChangeData.operations && memorizeLatestText(this.element, textManageChangeData.operations);
             },
-            getMaxWidth: () => GeometryThreshold.defaultTextMaxWidth
+            getMaxWidth: () => GeometryThreshold.defaultTextMaxWidth,
+            textPlugins: []
         });
     }
 

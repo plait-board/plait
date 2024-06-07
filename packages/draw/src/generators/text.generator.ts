@@ -1,4 +1,12 @@
-import { ELEMENT_TO_TEXT_MANAGES, ParagraphElement, TextManage, TextManageChangeData, WithTextOptions, WithTextPluginKey } from '@plait/common';
+import {
+    ELEMENT_TO_TEXT_MANAGES,
+    ParagraphElement,
+    TextManage,
+    TextManageChangeData,
+    TextPlugin,
+    WithTextPluginKey,
+    WithTextPluginOptions
+} from '@plait/common';
 import { PlaitBoard, PlaitElement, PlaitOptionsBoard, RectangleClient } from '@plait/core';
 import { getEngine } from '../engines';
 import { DrawShapes, EngineExtraData, PlaitGeometry } from '../interfaces';
@@ -54,9 +62,11 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
     }
 
     initialize() {
+        const textPlugins = ((this.board as PlaitOptionsBoard).getPluginOptions<WithTextPluginOptions>(WithTextPluginKey) || {})
+            .textPlugins;
         this.textManages = this.texts.map(text => {
             // TODO textPlugins
-            const textManage = this.createTextManage(text);
+            const textManage = this.createTextManage(text, textPlugins);
             setTextManage(getTextKey(this.element, text), textManage);
             return textManage;
         });
@@ -79,7 +89,8 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
         this.element = element;
         ELEMENT_TO_TEXT_MANAGES.set(this.element, this.textManages);
         const centerPoint = RectangleClient.getCenterPoint(this.board.getRectangle(this.element)!);
-        const textPlugins = ((this.board as PlaitOptionsBoard).getPluginOptions<WithTextOptions>(WithTextPluginKey) || {}).textPlugins;
+        const textPlugins = ((this.board as PlaitOptionsBoard).getPluginOptions<WithTextPluginOptions>(WithTextPluginKey) || {})
+            .textPlugins;
         const removedTexts = previousDrawShapeTexts.filter(value => {
             return !currentDrawShapeTexts.find(item => item.key === value.key);
         });
@@ -98,7 +109,7 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
             if (drawShapeText.text) {
                 let textManage = getTextManage(getTextKey(this.element, drawShapeText));
                 if (!textManage) {
-                    textManage = this.createTextManage(drawShapeText);
+                    textManage = this.createTextManage(drawShapeText, textPlugins);
                     setTextManage(drawShapeText.key, textManage);
                     textManage.draw(drawShapeText.text);
                     elementG.append(textManage.g);
@@ -112,20 +123,21 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
         });
     }
 
-    private createTextManage(text: PlaitDrawShapeText) {
+    private createTextManage(text: PlaitDrawShapeText, textPlugins?: TextPlugin[]) {
         const textManage = new TextManage(this.board, {
             getRectangle: () => {
                 return this.getRectangle(text);
             },
             onChange: (data: TextManageChangeData) => {
-                return this.options.onChange(this.element, data, text);;
+                return this.options.onChange(this.element, data, text);
             },
             getMaxWidth: () => {
                 return this.getMaxWidth(text);
             },
             getRenderRectangle: () => {
                 return this.options.getRenderRectangle ? this.options.getRenderRectangle(this.element, text) : this.getRectangle(text);
-            }
+            },
+            textPlugins
         });
         return textManage;
     }

@@ -34,7 +34,8 @@ export class FlowNodeComponent<T extends FlowBaseData = FlowBaseData> extends Co
                 const width = this.element.width;
                 const height = this.element.height;
                 return { x, y, width, height };
-            }
+            },
+            textPlugins: []
         });
         this.getRef().addGenerator<NodeActiveGenerator>(NodeActiveGenerator.key, this.nodeActiveGenerator);
     }

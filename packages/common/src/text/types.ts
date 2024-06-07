@@ -1,4 +1,4 @@
-import { BaseElement } from 'slate';
+import { BaseElement, Editor } from 'slate';
 
 export enum Alignment {
     left = 'left',
@@ -28,3 +28,4 @@ export interface ParagraphElement extends BaseElement {
 
 export type CustomElement = ParagraphElement | LinkElement;
 
+export type TextPlugin = (editor: Editor) => Editor;

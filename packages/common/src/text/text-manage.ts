@@ -18,6 +18,7 @@ import { Editor, Element, NodeEntry, Range, Text, Node, Transforms, Operation } 
 import { TextChangeData, TextProps } from '../core/text-props';
 import { PlaitTextBoard } from './with-text';
 import { measureElement } from './text-measure';
+import { TextPlugin } from './types';
 
 export interface TextManageChangeData {
     newText?: Element;
@@ -46,6 +47,7 @@ export class TextManage {
             onChange?: (data: TextManageChangeData) => void;
             getRenderRectangle?: () => RectangleClient;
             getMaxWidth?: () => number;
+            textPlugins?: TextPlugin[];
         }
     ) {
         if (!this.options.getMaxWidth) {
@@ -62,6 +64,7 @@ export class TextManage {
         const props: TextProps = {
             board: this.board,
             text,
+            textPlugins: this.options.textPlugins,
             onChange: (data: TextChangeData) => {
                 if (data.operations.some(op => !Operation.isSelectionOperation(op))) {
                     const { width, height } = this.getSize();

@@ -39,7 +39,7 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
 
     children: Element[] = [];
 
-    @Input() textPlugins: TextPlugin[] = [];
+    @Input() textPlugins?: TextPlugin[];
 
     @Input() set text(text: Element) {
         this.children = [text];
@@ -77,9 +77,11 @@ export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges 
     }
 
     ngOnInit(): void {
-        this.textPlugins.forEach(plugin => {
-            plugin(this.editor);
-        });
+        if (this.textPlugins) {
+            this.textPlugins.forEach(plugin => {
+                plugin(this.editor);
+            });
+        }
     }
 
     ngAfterViewInit(): void {

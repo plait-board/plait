@@ -16,7 +16,14 @@ import { NodeActiveGenerator } from './generators/node-active.generator';
 import { CollapseGenerator } from './generators/node-collapse.generator';
 import { NodeSpace } from './utils/space/node-space';
 import { NodeTopicThreshold } from './constants/node-topic-style';
-import { CommonElementFlavour, ImageGenerator, TextManage, TextManageChangeData, WithTextOptions, WithTextPluginKey } from '@plait/common';
+import {
+    CommonElementFlavour,
+    ImageGenerator,
+    TextManage,
+    TextManageChangeData,
+    WithTextPluginKey,
+    WithTextPluginOptions
+} from '@plait/common';
 import { NodeShapeGenerator } from './generators/node-shape.generator';
 import { getImageForeignRectangle } from './utils';
 import { ImageData } from './interfaces';
@@ -70,7 +77,7 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
                 return element.data.image;
             }
         });
-        const plugins = (this.board.getPluginOptions<WithTextOptions>(WithTextPluginKey) || {}).textPlugins;
+        const plugins = (this.board.getPluginOptions<WithTextPluginOptions>(WithTextPluginKey) || {}).textPlugins;
         const textManage = new TextManage(this.board, {
             getRectangle: () => {
                 const rect = getTopicRectangleByNode(this.board, this.node);
@@ -91,7 +98,8 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
                 } else {
                     return Math.max(NodeSpace.getNodeDynamicWidth(this.board, this.element), NodeTopicThreshold.defaultTextMaxWidth);
                 }
-            }
+            },
+            textPlugins: plugins || []
         });
         this.initializeTextManages([textManage]);
         this.getRef().addGenerator(NodeActiveGenerator.key, this.activeGenerator);

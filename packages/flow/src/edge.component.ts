@@ -34,7 +34,8 @@ export class FlowEdgeComponent<T extends FlowBaseData = FlowBaseData>
         const textManage = new TextManage(this.board, {
             getRectangle: () => {
                 return EdgeLabelSpace.getLabelTextRectangle(this.board, this.element);
-            }
+            },
+            textPlugins: []
         });
         this.edgeGenerator = new EdgeGenerator(this.board, AngularBoard.getViewContainerRef(this.board));
         this.edgeLabelGenerator = new EdgeLabelGenerator(this.board, AngularBoard.getViewContainerRef(this.board), textManage);
