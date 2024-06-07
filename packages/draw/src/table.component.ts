@@ -7,7 +7,7 @@ import {
     setAngleForG,
     degreesToRadians
 } from '@plait/core';
-import { ActiveGenerator, CommonElementFlavour, TextManageRef, canResize } from '@plait/common';
+import { ActiveGenerator, CommonElementFlavour, TextManageChangeData, canResize } from '@plait/common';
 import { PlaitTable, PlaitTableBoard, PlaitTableCell, PlaitTableElement } from './interfaces/table';
 import { getTextManage, PlaitDrawShapeText, TextGenerator } from './generators/text.generator';
 import { TableGenerator } from './generators/table.generator';
@@ -115,14 +115,13 @@ export class TableComponent<T extends PlaitTable> extends CommonElementFlavour<T
     initializeTextManage() {
         const texts = this.getDrawShapeTexts(this.element.cells);
         this.textGenerator = new TextGenerator(this.board, this.element, texts, {
-            onValueChangeHandle: (value: PlaitTable, textManageRef: TextManageRef, text: PlaitDrawShapeText) => {
-                const height = textManageRef.height / this.board.viewport.zoom;
-                const width = textManageRef.width / this.board.viewport.zoom;
-                if (textManageRef.newText) {
-                    DrawTransforms.setTableText(this.board, value, text.key, textManageRef.newText, width, height);
+            onChange: (value: PlaitTable, data: TextManageChangeData, text: PlaitDrawShapeText) => {
+                const height = data.height / this.board.viewport.zoom;
+                const width = data.width / this.board.viewport.zoom;
+                if (data.newText) {
+                    DrawTransforms.setTableText(this.board, value, text.key, data.newText, width, height);
                 }
-                // TODO
-                // textManageRef.operations && memorizeLatestText(value, textManageRef.operations);
+                data.operations && memorizeLatestText(value, data.operations);
             },
             getRenderRectangle: (value: PlaitTable, text: PlaitDrawShapeText) => {
                 const cell = getCellWithPoints(this.board, value, text.key);

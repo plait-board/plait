@@ -4,7 +4,7 @@ import { LineShapeGenerator } from './generators/line.generator';
 import { LineActiveGenerator } from './generators/line-active.generator';
 import { DrawTransforms } from './transforms';
 import { GeometryThreshold } from './constants';
-import { CommonElementFlavour, TextManage, TextManageRef } from '@plait/common';
+import { CommonElementFlavour, TextManage, TextManageChangeData } from '@plait/common';
 import { getLinePoints, getLineTextRectangle } from './utils/line/line-basic';
 import { memorizeLatestText } from './utils/memorize';
 
@@ -126,19 +126,18 @@ export class LineComponent extends CommonElementFlavour<PlaitLine, PlaitBoard> i
             getRectangle: () => {
                 return getLineTextRectangle(this.board, this.element, index);
             },
-            onChange: (textManageRef: TextManageRef) => {
-                const height = textManageRef.height / this.board.viewport.zoom;
-                const width = textManageRef.width / this.board.viewport.zoom;
+            onChange: (textManageChangeData: TextManageChangeData) => {
+                const height = textManageChangeData.height / this.board.viewport.zoom;
+                const width = textManageChangeData.width / this.board.viewport.zoom;
                 const texts = [...this.element.texts];
                 texts.splice(index, 1, {
-                    text: textManageRef.newText ? textManageRef.newText : this.element.texts[index].text,
+                    text: textManageChangeData.newText ? textManageChangeData.newText : this.element.texts[index].text,
                     position: this.element.texts[index].position,
                     width,
                     height
                 });
                 DrawTransforms.setLineTexts(this.board, this.element, texts);
-                // TODO MEMORIZE
-                // textManageRef.operations && memorizeLatestText(this.element, textManageRef.operations);
+                textManageChangeData.operations && memorizeLatestText(this.element, textManageChangeData.operations);
             },
             getMaxWidth: () => GeometryThreshold.defaultTextMaxWidth
         });

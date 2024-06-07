@@ -16,7 +16,7 @@ import { NodeActiveGenerator } from './generators/node-active.generator';
 import { CollapseGenerator } from './generators/node-collapse.generator';
 import { NodeSpace } from './utils/space/node-space';
 import { NodeTopicThreshold } from './constants/node-topic-style';
-import { CommonElementFlavour, ImageGenerator, TextManage, TextManageRef, WithTextOptions, WithTextPluginKey } from '@plait/common';
+import { CommonElementFlavour, ImageGenerator, TextManage, TextManageChangeData, WithTextOptions, WithTextPluginKey } from '@plait/common';
 import { NodeShapeGenerator } from './generators/node-shape.generator';
 import { getImageForeignRectangle } from './utils';
 import { ImageData } from './interfaces';
@@ -76,11 +76,11 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
                 const rect = getTopicRectangleByNode(this.board, this.node);
                 return rect;
             },
-            onChange: (textManageRef: TextManageRef) => {
-                const width = textManageRef.width;
-                const height = textManageRef.height;
-                if (textManageRef.newText) {
-                    MindTransforms.setTopic(this.board, this.element, textManageRef.newText as MindElement, width, height);
+            onChange: (data: TextManageChangeData) => {
+                const width = data.width;
+                const height = data.height;
+                if (data.newText) {
+                    MindTransforms.setTopic(this.board, this.element, data.newText as MindElement, width, height);
                 } else {
                     MindTransforms.setTopicSize(this.board, this.element, width, height);
                 }

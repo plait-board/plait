@@ -17,7 +17,7 @@ import {
 import { findNewChildNodePath } from './path';
 import { PlaitMindBoard } from '../plugins/with-mind.board';
 import { getFontSizeBySlateElement } from './space/node-space';
-import { buildText, getLineHeightByFontSize, measureElement, ParagraphElement } from '@plait/common';
+import { buildText, measureElement, ParagraphElement } from '@plait/common';
 
 export const buildClipboardData = (board: PlaitBoard, selectedElements: MindElement[], startPoint: Point) => {
     let result: MindElement[] = [];

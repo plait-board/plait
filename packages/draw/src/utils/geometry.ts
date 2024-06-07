@@ -18,10 +18,12 @@ import {
     ActiveGenerator,
     Alignment,
     CustomText,
+    DEFAULT_FONT_FAMILY,
     PlaitCommonElementRef,
     RESIZE_HANDLE_DIAMETER,
     buildText,
-    getFirstTextManage
+    getFirstTextManage,
+    measureElement
 } from '@plait/common';
 import { Options } from 'roughjs/bin/core';
 import { getEngine } from '../engines';
@@ -33,6 +35,7 @@ import { getMemorizedLatestByPointer } from './memorize';
 import { PlaitDrawShapeText, getTextManage } from '../generators/text.generator';
 import { createUMLClassOrInterfaceGeometryElement } from './uml';
 import { createMultipleTextGeometryElement, isMultipleTextGeometry, isMultipleTextShape } from './multi-text-geometry';
+import { DEFAULT_FONT_SIZE } from '@plait/text-plugins';
 
 export type GeometryStyleOptions = Pick<PlaitGeometry, 'fill' | 'strokeColor' | 'strokeWidth'>;
 
@@ -286,9 +289,8 @@ export const getFlowchartDefaultFill = (theme: ThemeColorMode) => {
 };
 
 export const getTextShapeProperty = (board: PlaitBoard, text: string | Element = DefaultTextProperty.text, fontSize?: number | string) => {
-    // TODO DEFAULT_FONT_SIZE, getTextSize
-    fontSize = fontSize ? Number(fontSize) : 14;
-    const textSize = { width: 20, height: 20 };
+    fontSize = fontSize ? Number(fontSize) : DEFAULT_FONT_SIZE;
+    const textSize = measureElement(buildText(text), { fontSize, fontFamily: DEFAULT_FONT_FAMILY });
     return {
         width: textSize.width + ShapeDefaultSpace.rectangleAndText * 2,
         height: textSize.height

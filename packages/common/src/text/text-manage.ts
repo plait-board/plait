@@ -14,13 +14,14 @@ import {
     updateForeignObjectWidth
 } from '@plait/core';
 import { fromEvent, timer } from 'rxjs';
-import { Editor, Element, NodeEntry, Range, Text, Node, Transforms } from 'slate';
-import { TextProps } from '../core/text-props';
+import { Editor, Element, NodeEntry, Range, Text, Node, Transforms, Operation } from 'slate';
+import { TextChangeData, TextProps } from '../core/text-props';
 import { PlaitTextBoard } from './with-text';
 import { measureElement } from './text-measure';
 
-export interface TextManageRef {
+export interface TextManageChangeData {
     newText?: Element;
+    operations?: Operation[];
     width: number;
     height: number;
 }
@@ -42,7 +43,7 @@ export class TextManage {
         private board: PlaitBoard,
         private options: {
             getRectangle: () => RectangleClient;
-            onChange?: (textChangeRef: TextManageRef) => void;
+            onChange?: (data: TextManageChangeData) => void;
             getRenderRectangle?: () => RectangleClient;
             getMaxWidth?: () => number;
         }
@@ -58,13 +59,15 @@ export class TextManage {
         this.foreignObject = createForeignObject(_rectangle.x, _rectangle.y, _rectangle.width, _rectangle.height);
         this.g.append(this.foreignObject);
         this.g.classList.add('text');
-        const props = {
+        const props: TextProps = {
             board: this.board,
             text,
-            onChange: (data: { newText: Element }) => {
-                const { width, height } = this.getSize();
-                this.options.onChange && this.options.onChange({ ...data, width, height });
-                MERGING.set(this.board, true);
+            onChange: (data: TextChangeData) => {
+                if (data.operations.some(op => !Operation.isSelectionOperation(op))) {
+                    const { width, height } = this.getSize();
+                    this.options.onChange && this.options.onChange({ ...data, width, height });
+                    MERGING.set(this.board, true);
+                }
             },
             afterInit: (editor: Editor) => {
                 this.editor = editor;

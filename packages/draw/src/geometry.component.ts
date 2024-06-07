@@ -10,7 +10,7 @@ import {
 import { PlaitCommonGeometry, PlaitGeometry, PlaitMultipleTextGeometry } from './interfaces/geometry';
 import { GeometryShapeGenerator } from './generators/geometry-shape.generator';
 import { DrawTransforms } from './transforms';
-import { ActiveGenerator, CommonElementFlavour, TextManageRef, canResize } from '@plait/common';
+import { ActiveGenerator, CommonElementFlavour, TextManageChangeData, canResize } from '@plait/common';
 import { LineAutoCompleteGenerator } from './generators/line-auto-complete.generator';
 import { getTextRectangle, isGeometryIncludeText, isMultipleTextGeometry, memorizeLatestText } from './utils';
 import { PlaitDrawShapeText, TextGenerator } from './generators/text.generator';
@@ -123,24 +123,23 @@ export class GeometryComponent extends CommonElementFlavour<PlaitCommonGeometry,
     }
 
     initializeTextManage() {
-        const onTextValueChangeHandle = (element: PlaitCommonGeometry, textManageRef: TextManageRef, text: PlaitDrawShapeText) => {
-            const height = textManageRef.height / this.board.viewport.zoom;
-            const width = textManageRef.width / this.board.viewport.zoom;
-            if (textManageRef.newText) {
+        const onTextChange = (element: PlaitCommonGeometry, textManageChangeData: TextManageChangeData, text: PlaitDrawShapeText) => {
+            const height = textManageChangeData.height / this.board.viewport.zoom;
+            const width = textManageChangeData.width / this.board.viewport.zoom;
+            if (textManageChangeData.newText) {
                 if (isMultipleTextGeometry(element)) {
                     DrawTransforms.setDrawShapeText(this.board, element, {
                         key: text.key,
-                        text: textManageRef.newText,
+                        text: textManageChangeData.newText,
                         textHeight: height
                     });
                 } else {
-                    DrawTransforms.setText(this.board, element as PlaitGeometry, textManageRef.newText, width, height);
+                    DrawTransforms.setText(this.board, element as PlaitGeometry, textManageChangeData.newText, width, height);
                 }
             } else {
                 DrawTransforms.setTextSize(this.board, element as PlaitGeometry, width, height);
             }
-            // TODO
-            // textManageRef.operations && memorizeLatestText(element, textManageRef.operations);
+            textManageChangeData.operations && memorizeLatestText(element, textManageChangeData.operations);
         };
 
         if (isMultipleTextGeometry(this.element)) {
@@ -149,26 +148,21 @@ export class GeometryComponent extends CommonElementFlavour<PlaitCommonGeometry,
                 this.element as PlaitMultipleTextGeometry,
                 this.element.texts!,
                 {
-                    onValueChangeHandle: onTextValueChangeHandle
+                    onChange: onTextChange
                 }
             );
         } else {
-            this.textGenerator = new SingleTextGenerator(
-                this.board,
-                this.element as PlaitGeometry,
-                this.element.text,
-                {
-                    onValueChangeHandle: onTextValueChangeHandle,
-                    getMaxWidth: () => {
-                        let width = getTextRectangle(this.element).width;
-                        const getRectangle = getEngine(this.element.shape).getTextRectangle;
-                        if (getRectangle) {
-                            width = getRectangle(this.element as PlaitGeometry).width;
-                        }
-                        return (this.element as PlaitText)?.autoSize ? GeometryThreshold.defaultTextMaxWidth : width;
+            this.textGenerator = new SingleTextGenerator(this.board, this.element as PlaitGeometry, this.element.text, {
+                onChange: onTextChange,
+                getMaxWidth: () => {
+                    let width = getTextRectangle(this.element).width;
+                    const getRectangle = getEngine(this.element.shape).getTextRectangle;
+                    if (getRectangle) {
+                        width = getRectangle(this.element as PlaitGeometry).width;
                     }
+                    return (this.element as PlaitText)?.autoSize ? GeometryThreshold.defaultTextMaxWidth : width;
                 }
-            );
+            });
         }
         this.textGenerator.initialize();
     }

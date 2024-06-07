@@ -1,4 +1,4 @@
-import { ELEMENT_TO_TEXT_MANAGES, ParagraphElement, TextManage, TextManageRef, WithTextOptions, WithTextPluginKey } from '@plait/common';
+import { ELEMENT_TO_TEXT_MANAGES, ParagraphElement, TextManage, TextManageChangeData, WithTextOptions, WithTextPluginKey } from '@plait/common';
 import { PlaitBoard, PlaitElement, PlaitOptionsBoard, RectangleClient } from '@plait/core';
 import { getEngine } from '../engines';
 import { DrawShapes, EngineExtraData, PlaitGeometry } from '../interfaces';
@@ -12,7 +12,7 @@ export interface PlaitDrawShapeText extends EngineExtraData {
 }
 
 export interface TextGeneratorOptions<T> {
-    onValueChangeHandle: (element: T, textChangeRef: TextManageRef, text: PlaitDrawShapeText) => void;
+    onChange: (element: T, textChangeRef: TextManageChangeData, text: PlaitDrawShapeText) => void;
     getRenderRectangle?: (element: T, text: PlaitDrawShapeText) => RectangleClient;
     getMaxWidth?: () => number;
 }
@@ -117,8 +117,8 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
             getRectangle: () => {
                 return this.getRectangle(text);
             },
-            onChange: (textManageRef: TextManageRef) => {
-                return this.onValueChangeHandle(textManageRef, text);
+            onChange: (data: TextManageChangeData) => {
+                return this.options.onChange(this.element, data, text);;
             },
             getMaxWidth: () => {
                 return this.getMaxWidth(text);
@@ -136,10 +136,6 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
             return getRectangle(this.element, text);
         }
         return getTextRectangle(this.element);
-    }
-
-    onValueChangeHandle(textManageRef: TextManageRef, text: PlaitDrawShapeText) {
-        return this.options.onValueChangeHandle(this.element, textManageRef, text);
     }
 
     getMaxWidth(text: PlaitDrawShapeText) {
