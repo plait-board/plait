@@ -84,10 +84,7 @@ export const withGeometryCreateByDrag = (board: PlaitBoard) => {
                             return getTextRectangle(temporaryElement!);
                         }
                     });
-
-                    // TODO
                     textManage.draw(temporaryElement!.text);
-
                     fakeCreateTextRef = {
                         g: createG(),
                         textManage

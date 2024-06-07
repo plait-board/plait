@@ -9,6 +9,7 @@ import { Element } from 'slate';
 import { getStrokeWidthByElement } from '../node-style/shape';
 import { getDefaultMindElementFontSize } from '../mind';
 import { DEFAULT_FONT_SIZE, MarkTypes, PlaitMarkEditor } from '@plait/text-plugins';
+import { getFirstTextEditor } from '@plait/common';
 
 const NodeDefaultSpace = {
     horizontal: {
@@ -94,12 +95,11 @@ export const NodeSpace = {
         }
     },
     getNodeTopicMinWidth(board: PlaitMindBoard, element: MindElement) {
-        // TODO
         const defaultFontSize = getDefaultMindElementFontSize(board, element);
-        // const editor = getFirstTextEditor(element);
-        // const marks = PlaitMarkEditor.getMarks(editor);
-        // const fontSize = (marks[MarkTypes.fontSize] as number) || defaultFontSize;
-        return defaultFontSize;
+        const editor = getFirstTextEditor(element);
+        const marks = PlaitMarkEditor.getMarks(editor);
+        const fontSize = (marks[MarkTypes.fontSize] as number) || defaultFontSize;
+        return fontSize;
     },
     getTextLeftSpace(board: PlaitMindBoard, element: MindElement) {
         const nodeAndText = getHorizontalSpaceBetweenNodeAndText(board, element);
