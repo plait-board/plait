@@ -56,7 +56,7 @@ export class ImageComponent extends CommonElementFlavour<PlaitImage, PlaitBoard>
             });
         } else {
             const hasSameSelected = value.selected === previous.selected;
-            const hasSameHandleState = this.imageGenerator.activeGenerator.options.hasResizeHandle() === this.imageGenerator.activeGenerator.hasResizeHandle;
+            const hasSameHandleState = this.activeGenerator && this.imageGenerator.activeGenerator.options.hasResizeHandle() === this.imageGenerator.activeGenerator.hasResizeHandle;
             if (!hasSameSelected || !hasSameHandleState) {
                 this.imageGenerator.setFocus(this.element, this.selected);
                 this.lineAutoCompleteGenerator.processDrawing(this.element, PlaitBoard.getElementActiveHost(this.board), {
