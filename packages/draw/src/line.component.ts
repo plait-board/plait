@@ -3,7 +3,7 @@ import { LineText, PlaitGeometry, PlaitLine } from './interfaces';
 import { LineShapeGenerator } from './generators/line.generator';
 import { LineActiveGenerator } from './generators/line-active.generator';
 import { DrawTransforms } from './transforms';
-import { GeometryThreshold } from './constants';
+import { GeometryThreshold, MIN_TEXT_WIDTH } from './constants';
 import { CommonElementFlavour, TextManage, TextManageChangeData } from '@plait/common';
 import { getLinePoints, getLineTextRectangle } from './utils/line/line-basic';
 import { memorizeLatestText } from './utils/memorize';
@@ -127,14 +127,13 @@ export class LineComponent extends CommonElementFlavour<PlaitLine, PlaitBoard> i
                 return getLineTextRectangle(this.board, this.element, index);
             },
             onChange: (textManageChangeData: TextManageChangeData) => {
-                const height = textManageChangeData.height / this.board.viewport.zoom;
-                const width = textManageChangeData.width / this.board.viewport.zoom;
                 const texts = [...this.element.texts];
+                const newWidth = textManageChangeData.width < MIN_TEXT_WIDTH ? MIN_TEXT_WIDTH : textManageChangeData.width;
                 texts.splice(index, 1, {
                     text: textManageChangeData.newText ? textManageChangeData.newText : this.element.texts[index].text,
                     position: this.element.texts[index].position,
-                    width,
-                    height
+                    width: newWidth,
+                    height: textManageChangeData.height
                 });
                 DrawTransforms.setLineTexts(this.board, this.element, texts);
                 textManageChangeData.operations && memorizeLatestText(this.element, textManageChangeData.operations);
