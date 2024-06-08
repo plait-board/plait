@@ -11,21 +11,23 @@ const normalizePoints = (board: PlaitBoard, element: PlaitGeometry, width: numbe
     const defaultSpace = ShapeDefaultSpace.rectangleAndText;
 
     if (autoSize) {
+        const minWidth = 5;
+        const newWidth = width < minWidth ? minWidth : width;
         const editor = getFirstTextEditor(element);
         if (AlignEditor.isActive(editor, Alignment.right)) {
             points = [
-                [points[1][0] - (width + defaultSpace * 2), points[0][1]],
+                [points[1][0] - (newWidth + defaultSpace * 2), points[0][1]],
                 [points[1][0], points[0][1] + textHeight]
             ];
         } else if (AlignEditor.isActive(editor, Alignment.center)) {
             const oldWidth = Math.abs(points[0][0] - points[1][0]);
-            const offset = (width - oldWidth) / 2;
+            const offset = (newWidth - oldWidth) / 2;
             points = [
                 [points[0][0] - offset - defaultSpace, points[0][1]],
                 [points[1][0] + offset + defaultSpace, points[0][1] + textHeight]
             ];
         } else {
-            points = [points[0], [points[0][0] + width + defaultSpace * 2, points[0][1] + textHeight]];
+            points = [points[0], [points[0][0] + newWidth + defaultSpace * 2, points[0][1] + textHeight]];
         }
         if (hasValidAngle(element)) {
             points = resetPointsAfterResize(
