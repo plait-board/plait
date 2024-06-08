@@ -65,7 +65,6 @@ export class TextGenerator<T extends PlaitElement = PlaitGeometry> {
         const textPlugins = ((this.board as PlaitOptionsBoard).getPluginOptions<WithTextPluginOptions>(WithTextPluginKey) || {})
             .textPlugins;
         this.textManages = this.texts.map(text => {
-            // TODO textPlugins
             const textManage = this.createTextManage(text, textPlugins);
             setTextManage(getTextKey(this.element, text), textManage);
             return textManage;
