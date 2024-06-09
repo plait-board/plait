@@ -27,7 +27,6 @@ import {
 import { NodeShapeGenerator } from './generators/node-shape.generator';
 import { getImageForeignRectangle } from './utils';
 import { ImageData } from './interfaces';
-import { AngularBoard } from '@plait/angular';
 
 export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMindBoard>
     implements OnContextChanged<MindElement, PlaitMindBoard> {
@@ -65,7 +64,7 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
 
     initializeGenerator() {
         this.nodeShapeGenerator = new NodeShapeGenerator(this.board);
-        this.nodeEmojisGenerator = new NodeEmojisGenerator(this.board, AngularBoard.getViewContainerRef(this.board));
+        this.nodeEmojisGenerator = new NodeEmojisGenerator(this.board);
         this.activeGenerator = new NodeActiveGenerator(this.board);
         this.nodePlusGenerator = new NodePlusGenerator(this.board);
         this.collapseGenerator = new CollapseGenerator(this.board);

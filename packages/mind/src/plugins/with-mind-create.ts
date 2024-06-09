@@ -12,12 +12,10 @@ import { PlaitMindBoard } from './with-mind.board';
 import { MindPointerType } from '../interfaces/pointer';
 import { getRectangleByElement, getTopicRectangleByElement } from '../utils';
 import { drawRoundRectangleByElement } from '../utils/draw/node-shape';
-import { NgZone } from '@angular/core';
 import { createEmptyMind } from '../utils/node/create-node';
 import { MindElement } from '../interfaces';
 import { BoardCreationMode, TextManage, isDndMode, isDrawingMode, setCreationMode } from '@plait/common';
 import { MindTransforms } from '../transforms';
-import { AngularBoard } from '@plait/angular';
 
 const DefaultHotkey = 'm';
 
@@ -68,11 +66,7 @@ export const withCreateMind = (board: PlaitBoard) => {
                                 return topicRectangle;
                             }
                         });
-                        AngularBoard.getComponent(board)
-                            .viewContainerRef.injector.get(NgZone)
-                            .run(() => {
-                                textManage.draw(emptyMind!.data.topic);
-                            });
+                        textManage.draw(emptyMind!.data.topic);
                         fakeCreateNodeRef = {
                             g: createG(),
                             nodeG,
