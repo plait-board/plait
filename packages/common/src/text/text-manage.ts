@@ -1,5 +1,4 @@
 import {
-    ComponentRef,
     IS_TEXT_EDITABLE,
     MERGING,
     PlaitBoard,
@@ -15,10 +14,9 @@ import {
 } from '@plait/core';
 import { fromEvent, timer } from 'rxjs';
 import { Editor, Element, NodeEntry, Range, Text, Node, Transforms, Operation } from 'slate';
-import { TextChangeData, TextProps } from '../core/text-props';
-import { PlaitTextBoard } from './with-text';
+import { PlaitTextBoard, TextPlugin } from './with-text';
 import { measureElement } from './text-measure';
-import { TextPlugin } from './types';
+import { TextChangeData, TextComponentRef, TextProps } from './text-component';
 
 export interface TextManageChangeData {
     newText?: Element;
@@ -36,7 +34,7 @@ export class TextManage {
 
     foreignObject!: SVGForeignObjectElement;
 
-    componentRef!: ComponentRef<TextProps>;
+    textComponentRef!: TextComponentRef;
 
     exitCallback?: (() => void) | null;
 
@@ -87,7 +85,7 @@ export class TextManage {
                 this.exitCallback && this.exitCallback();
             }
         };
-        this.componentRef = ((this.board as unknown) as PlaitTextBoard).renderText(this.foreignObject, props);
+        this.textComponentRef = ((this.board as unknown) as PlaitTextBoard).renderText(this.foreignObject, props);
     }
 
     updateRectangleWidth(width: number) {
@@ -107,7 +105,7 @@ export class TextManage {
         const props = {
             text: newText
         };
-        this.componentRef.update(props);
+        this.textComponentRef.update(props);
     }
 
     edit(callback?: () => void) {
@@ -116,7 +114,7 @@ export class TextManage {
         const props: Partial<TextProps> = {
             readonly: false
         };
-        this.componentRef.update(props);
+        this.textComponentRef.update(props);
         Transforms.select(this.editor, [0]);
         const mousedown$ = fromEvent<MouseEvent>(document, 'mousedown').subscribe((event: MouseEvent) => {
             const point = toViewBoxPoint(this.board, toHostPoint(this.board, event.x, event.y));
@@ -151,7 +149,7 @@ export class TextManage {
             const props = {
                 readonly: true
             };
-            this.componentRef.update(props);
+            this.textComponentRef.update(props);
             this.exitCallback = null;
             this.isEditing = false;
         };
@@ -180,7 +178,7 @@ export class TextManage {
 
     destroy() {
         this.g?.remove();
-        this.componentRef?.destroy();
+        this.textComponentRef?.destroy();
     }
 }
 

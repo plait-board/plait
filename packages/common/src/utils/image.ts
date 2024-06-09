@@ -1,14 +1,10 @@
 import { ComponentType, PlaitBoard, PlaitElement } from '@plait/core';
-import { ImageBaseComponent } from '../core/image-base.component';
+import { ImageBaseComponent } from '../image/image-base.component';
 
 export interface CommonImageItem {
     url: string;
     width: number;
     height: number;
-}
-
-export interface WithCommonPluginOptions {
-    imageComponentType?: ComponentType<ImageBaseComponent> | any;
 }
 
 export const selectImage = (

@@ -17,8 +17,7 @@ import {
     QueryList,
     SimpleChanges,
     ViewChild,
-    ViewContainerRef,
-    inject
+    ViewContainerRef
 } from '@angular/core';
 import rough from 'roughjs/bin/rough';
 import { RoughSVG } from 'roughjs/bin/svg';
@@ -76,11 +75,11 @@ import {
     withSelection,
     withViewport
 } from '@plait/core';
-import { AngularBoardChangeEvent } from '../interfaces/board';
 import { PlaitIslandBaseComponent, hasOnBoardChange } from '../island/island-base.component';
 import { BOARD_TO_COMPONENT } from '../utils/weak-maps';
 import { withAngular } from '../plugins/with-angular';
-import { withText } from '@plait/common';
+import { PlaitImageBoard, withImage, withText } from '@plait/common';
+import { OnChangeData } from '../plugins/angular-board';
 
 const ElementLowerHostClass = 'element-lower-host';
 const ElementHostClass = 'element-host';
@@ -125,7 +124,7 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
 
     @Input() plaitTheme?: PlaitTheme;
 
-    @Output() plaitChange: EventEmitter<AngularBoardChangeEvent> = new EventEmitter();
+    @Output() onChange: EventEmitter<OnChangeData> = new EventEmitter();
 
     @Output() plaitBoardInitialized: EventEmitter<PlaitBoard> = new EventEmitter();
 
@@ -227,7 +226,7 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
         });
         BOARD_TO_AFTER_CHANGE.set(this.board, () => {
             this.ngZone.run(() => {
-                const changeEvent: AngularBoardChangeEvent = {
+                const data: OnChangeData = {
                     children: this.board.children,
                     operations: this.board.operations,
                     viewport: this.board.viewport,
@@ -235,7 +234,7 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
                     theme: this.board.theme
                 };
                 this.updateIslands();
-                this.plaitChange.emit(changeEvent);
+                this.onChange.emit(data);
             });
         });
         const context = new PlaitBoardContext();
@@ -279,7 +278,11 @@ export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnC
                     withHistory(
                         withSelection(
                             withMoving(
-                                withBoard(withViewport(withOptions(withAngular(withText(createBoard(this.plaitValue, this.plaitOptions))))))
+                                withBoard(
+                                    withViewport(
+                                        withOptions(withAngular(withImage(withText(createBoard(this.plaitValue, this.plaitOptions)))))
+                                    )
+                                )
                             )
                         )
                     )

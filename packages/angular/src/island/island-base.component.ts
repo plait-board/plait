@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Directive, Input, OnDestroy, OnInit } from '@angular/core';
 import { PlaitBoard } from '@plait/core';
 import { Subscription } from 'rxjs';
-import { AngularBoard } from '../interfaces/board';
+import { AngularBoard } from '../plugins/angular-board';
 
 @Directive({
     host: {
@@ -38,7 +38,7 @@ export abstract class PlaitIslandPopoverBaseComponent implements OnInit, OnDestr
     initialize(board: PlaitBoard) {
         this.board = board;
         const boardComponent = AngularBoard.getComponent(board);
-        this.subscription = boardComponent.plaitChange.subscribe(() => {
+        this.subscription = boardComponent.onChange.subscribe(() => {
             if (hasOnBoardChange(this)) {
                 this.onBoardChange();
             }

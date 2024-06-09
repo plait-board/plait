@@ -8,7 +8,7 @@ import { NgClass, NgFor } from '@angular/common';
 import { mockBasicEdges, mockMarkEdges, mockIconEdges, mockShapeEdges } from './flow-edge-data';
 import { mockBasicNodes, mockCustomNodes, mockCustomHandles, mockUndeletableNodes } from './flow-node-data';
 import { mockFlowData } from './flow-data';
-import { AngularBoardChangeEvent, PlaitBoardComponent } from '@plait/angular';
+import { OnChangeData, PlaitBoardComponent } from '@plait/angular';
 
 const LOCAL_DATA_KEY = 'plait-board-flow-change-data';
 
@@ -88,7 +88,7 @@ export class BasicFlowComponent implements OnInit {
         this.value = mockFlowData;
     }
 
-    change(event: AngularBoardChangeEvent) {
+    change(event: OnChangeData) {
         this.setLocalData(JSON.stringify(event));
     }
 

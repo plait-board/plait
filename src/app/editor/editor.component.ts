@@ -18,7 +18,8 @@ import {
     Transforms,
     duplicateElements,
     setFragment,
-    WritableClipboardOperationType
+    WritableClipboardOperationType,
+    PlaitPlugin
 } from '@plait/core';
 import { mockDrawData, mockTableData, mockMindData, mockRotateData, mockGroupData, mockSwimlaneData } from './mock-data';
 import { withMind, PlaitMindBoard, PlaitMind } from '@plait/mind';
@@ -36,7 +37,7 @@ import { AppMenuComponent } from '../components/menu/menu.component';
 import { NgIf } from '@angular/common';
 import { mockTurningPointData } from './mock-turning-point-data';
 import { withGroup } from '@plait/common';
-import { AngularBoardChangeEvent, PlaitBoardComponent } from '@plait/angular';
+import { OnChangeData, PlaitBoardComponent } from '@plait/angular';
 
 const LOCAL_STORAGE_KEY = 'plait-board-data';
 
@@ -55,7 +56,7 @@ const LOCAL_STORAGE_KEY = 'plait-board-data';
     ]
 })
 export class BasicEditorComponent implements OnInit {
-    plugins = [withCommonPlugin, withMind, withMindExtend, withDraw, withGroup];
+    plugins: PlaitPlugin[] = [withCommonPlugin, withMind, withMindExtend, withDraw, withGroup];
 
     value: (PlaitElement | PlaitGeometry | PlaitMind)[] = [];
 
@@ -150,7 +151,7 @@ export class BasicEditorComponent implements OnInit {
         });
     }
 
-    change(event: AngularBoardChangeEvent) {
+    change(event: OnChangeData) {
         this.setLocalData(JSON.stringify(event));
         this.selectedElements = getSelectedElements(this.board);
         this.showRemoveGroup = canRemoveGroup(this.board);

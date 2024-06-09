@@ -30,7 +30,6 @@ import { distanceBetweenPointAndRectangle } from '../utils/math';
 import { ClipboardData, WritableClipboardContext, WritableClipboardOperationType } from '../utils';
 import { ElementFlavour } from '../core/element/element-flavour';
 import { PlaitBoardContext } from '../context';
-import { ComponentRef, ComponentContext } from '../core/component';
 
 export interface PlaitBoard {
     viewport: Viewport;
@@ -70,7 +69,6 @@ export interface PlaitBoard {
     getRelatedFragment: (data: PlaitElement[], originData?: PlaitElement[]) => PlaitElement[];
     dblClick: (event: MouseEvent) => void;
     drawElement: (context: PlaitPluginElementContext) => ComponentType<ElementFlavour>;
-    renderComponent: <T extends Object>(context: ComponentContext<T>) => ComponentRef<T>;
     isRectangleHit: (element: PlaitElement, range: Selection) => boolean;
     // When the element has no fill color, it is considered a hit only if it hits the border.
     isHit: (element: PlaitElement, point: Point) => boolean;

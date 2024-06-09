@@ -1,6 +1,6 @@
 import { Node } from 'slate';
 import { CustomText, ParagraphElement } from './types';
-import { getLineHeightByFontSize } from './utils';
+import { getLineHeightByFontSize } from '../utils/text';
 
 export function measureElement(
     element: ParagraphElement,

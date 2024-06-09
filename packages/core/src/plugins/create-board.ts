@@ -11,7 +11,6 @@ import { ThemeColorMode } from '../interfaces/theme';
 import { CoreTransforms } from '../transforms/element';
 import { ClipboardData, WritableClipboardContext, WritableClipboardOperationType, drawEntireActiveRectangleG } from '../utils';
 import { Point, RectangleClient } from '../interfaces';
-import { ComponentContext } from '../core/component';
 
 export function createBoard(children: PlaitElement[], options?: PlaitBoardOptions): PlaitBoard {
     const board: PlaitBoard = {
@@ -111,9 +110,6 @@ export function createBoard(children: PlaitElement[], options?: PlaitBoardOption
         getRelatedFragment: (data: PlaitElement[], originData?: PlaitElement[]) => data,
         drawElement: (context: PlaitPluginElementContext) => {
             throw new Error(`can not resolve plugin element component type: ${context.element.type}`);
-        },
-        renderComponent: <T>(context: ComponentContext<T>) => {
-            throw new Error(`You need to provide a renderComponent method based on your framework.`);
         },
         isWithinSelection: element => false,
         isRectangleHit: element => false,

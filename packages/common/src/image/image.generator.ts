@@ -1,10 +1,7 @@
 import {
     ACTIVE_STROKE_WIDTH,
-    ComponentContext,
-    ComponentRef,
     PlaitBoard,
     PlaitElement,
-    PlaitOptionsBoard,
     RectangleClient,
     createForeignObject,
     createG,
@@ -13,11 +10,11 @@ import {
     setAngleForG,
     updateForeignObject
 } from '@plait/core';
-import { Generator, GeneratorExtraData, GeneratorOptions } from './generator';
-import { CommonImageItem, WithCommonPluginOptions, canResize, getElementOfFocusedImage } from '../utils';
-import { WithCommonPluginKey } from '../constants';
-import { ActiveGenerator } from './active.generator';
-import { ImageProps } from '../core/image-props';
+import { Generator, GeneratorExtraData, GeneratorOptions } from '../generators/generator';
+import { CommonImageItem, canResize, getElementOfFocusedImage } from '../utils';
+import { ActiveGenerator } from '../generators/active.generator';
+import { ImageComponentRef, ImageProps } from './image-component';
+import { PlaitImageBoard } from './with-image';
 
 export interface ImageGeneratorOptions<T> {
     getRectangle: (element: T) => RectangleClient;
@@ -33,7 +30,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
 
     foreignObject!: SVGForeignObjectElement;
 
-    componentRef!: ComponentRef<ImageProps>;
+    imageComponentRef!: ImageComponentRef;
 
     activeGenerator!: ActiveGenerator;
 
@@ -55,24 +52,15 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
         const foreignRectangle = this.options.getRectangle(element);
         this.foreignObject = createForeignObject(foreignRectangle.x, foreignRectangle.y, foreignRectangle.width, foreignRectangle.height);
         g.append(this.foreignObject);
-        const componentType = (this.board as PlaitOptionsBoard).getPluginOptions<WithCommonPluginOptions>(WithCommonPluginKey)
-            .imageComponentType;
-        if (!componentType) {
-            throw new Error('Not implement ImageBaseComponent error.');
-        }
-        const context: ComponentContext<ImageProps> = {
-            props: {
-                board: this.board,
-                imageItem: this.options.getImageItem(element),
-                element,
-                getRectangle: () => {
-                    return this.options.getRectangle(element);
-                }
-            },
-            foreignObject: this.foreignObject,
-            componentType
+        const props: ImageProps = {
+            board: this.board,
+            imageItem: this.options.getImageItem(element),
+            element,
+            getRectangle: () => {
+                return this.options.getRectangle(element);
+            }
         };
-        this.componentRef = this.board.renderComponent(context);
+        this.imageComponentRef = ((this.board as unknown) as PlaitImageBoard).renderImage(this.foreignObject, props);
 
         this.activeGenerator = new ActiveGenerator(this.board, {
             getStrokeWidth: () => {
@@ -105,7 +93,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
 
     updateImage(nodeG: SVGGElement, previous: T, current: T) {
         this.element = current;
-        if (previous !== current && this.componentRef) {
+        if (previous !== current && this.imageComponentRef) {
             const props = {
                 imageItem: this.options.getImageItem(current),
                 element: current,
@@ -113,7 +101,7 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
                     return this.options.getRectangle(current);
                 }
             };
-            this.componentRef.update(props);
+            this.imageComponentRef.update(props);
         }
         const currentForeignObject = this.options.getRectangle(current);
         updateForeignObject(
@@ -137,11 +125,12 @@ export class ImageGenerator<T extends PlaitElement = PlaitElement> extends Gener
         const props: Partial<ImageProps> = {
             isFocus
         };
-        this.componentRef.update(props);
+        this.imageComponentRef.update(props);
     }
 
     destroy(): void {
         super.destroy();
-        this.componentRef?.destroy();
+        this.imageComponentRef?.destroy();
+        this.activeGenerator?.destroy();
     }
 }

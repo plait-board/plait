@@ -121,11 +121,7 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
         });
         this.drawEmojis();
         this.drawExtend();
-        this.imageGenerator.processDrawing(
-            this.element as MindElement<ImageData>,
-            this.getElementG(),
-            AngularBoard.getViewContainerRef(this.board)
-        );
+        this.imageGenerator.processDrawing(this.element as MindElement<ImageData>, this.getElementG());
         if (PlaitMind.isMind(this.context.parent)) {
             this.getElementG().classList.add('branch');
         }
@@ -149,7 +145,7 @@ export class MindNodeComponent extends CommonElementFlavour<MindElement, PlaitMi
             this.drawEmojis();
             this.drawExtend();
             if (!MindElement.hasImage(previous.element) && MindElement.hasImage(this.element)) {
-                this.imageGenerator.processDrawing(this.element, this.getElementG(), AngularBoard.getViewContainerRef(this.board));
+                this.imageGenerator.processDrawing(this.element, this.getElementG());
             }
             if (MindElement.hasImage(previous.element) && MindElement.hasImage(this.element)) {
                 this.imageGenerator.updateImage(
