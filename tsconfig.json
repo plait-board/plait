@@ -19,8 +19,8 @@
       "@plait/angular-board": [
         "dist/angular-board"
       ],
-      "@plait/text": [
-        "dist/text"
+      "@plait/angular-text": [
+        "dist/angular-text"
       ],
       "@plait/draw": [
         "dist/draw"

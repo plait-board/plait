@@ -1,4 +1,4 @@
-# text
+# angular-text
 
 ## 0.60.0
 

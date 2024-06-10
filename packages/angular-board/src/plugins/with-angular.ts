@@ -1,7 +1,7 @@
 import { ComponentType, PlaitBoard } from '@plait/core';
 import { AngularBoard } from './angular-board';
 import { PlaitTextBoard, TextComponentRef, TextProps } from '@plait/common';
-import { PlaitRichtextComponent } from '@plait/text';
+import { PlaitRichtextComponent } from '@plait/angular-text';
 import { AngularEditor } from 'slate-angular';
 
 export const withAngular = (board: PlaitBoard & PlaitTextBoard) => {
