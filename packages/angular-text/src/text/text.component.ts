@@ -29,13 +29,13 @@ import { withPasteLink } from '../plugins/link/with-link-insert';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'plait-richtext',
-    templateUrl: './richtext.component.html',
+    selector: 'plait-angular-text',
+    templateUrl: './text.component.html',
     standalone: true,
     imports: [SlateEditable, FormsModule, CommonModule]
 })
-export class PlaitRichtextComponent implements OnInit, AfterViewInit, OnChanges {
-    @HostBinding('class') hostClass = 'plait-richtext-container';
+export class PlaitTextComponent implements OnInit, AfterViewInit, OnChanges {
+    @HostBinding('class') hostClass = 'plait-text-container';
 
     children: Element[] = [];
 

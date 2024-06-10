@@ -11,12 +11,5 @@
     "dependencies": {
         "tslib": "^2.3.0"
     },
-    "exports": {
-        "./styles/styles": {
-            "sass": "./styles/styles.scss"
-        },
-        "./styles/*": {
-            "sass": "./styles/*"
-        }
-    }
+    "exports": {}
 }

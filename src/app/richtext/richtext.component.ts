@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { Editor } from 'slate';
-import { PlaitRichtextComponent } from '../../../packages/angular-text/src/richtext/richtext.component';
+import { PlaitTextComponent } from '../../../packages/angular-text/src/text/text.component';
 
 @Component({
     selector: 'app-basic-richtext',
     templateUrl: './richtext.component.html',
     standalone: true,
-    imports: [PlaitRichtextComponent]
+    imports: [PlaitTextComponent]
 })
 export class BasicRichtextComponent {
     value = {

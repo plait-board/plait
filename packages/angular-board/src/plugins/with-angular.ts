@@ -1,7 +1,7 @@
 import { ComponentType, PlaitBoard } from '@plait/core';
 import { AngularBoard } from './angular-board';
 import { PlaitTextBoard, TextComponentRef, TextProps } from '@plait/common';
-import { PlaitRichtextComponent } from '@plait/angular-text';
+import { PlaitTextComponent } from '@plait/angular-text';
 import { AngularEditor } from 'slate-angular';
 
 export const withAngular = (board: PlaitBoard & PlaitTextBoard) => {
@@ -40,7 +40,7 @@ export const withAngular = (board: PlaitBoard & PlaitTextBoard) => {
     };
 
     newBoard.renderText = (container: Element | DocumentFragment, props: TextProps) => {
-        const { ref, componentRef } = newBoard.renderComponent(PlaitRichtextComponent, container, props);
+        const { ref, componentRef } = newBoard.renderComponent(PlaitTextComponent, container, props);
         const { update } = ref;
         ref.update = props => {
             const beforeReadonly = componentRef.instance.readonly;
