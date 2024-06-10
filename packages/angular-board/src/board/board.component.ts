@@ -100,7 +100,6 @@ const ElementActiveHostClass = 'element-active-host';
         <ng-content></ng-content>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [PlaitBoardContext],
     standalone: true
 })
 export class PlaitBoardComponent implements BoardComponentInterface, OnInit, OnChanges, AfterViewInit, AfterContentInit, OnDestroy {
