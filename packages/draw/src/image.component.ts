@@ -49,7 +49,6 @@ export class ImageComponent extends CommonElementFlavour<PlaitImage, PlaitBoard>
     ) {
         if (value.element !== previous.element) {
             this.imageGenerator.updateImage(this.getElementG(), previous.element, value.element);
-            // this.imageGenerator.componentRef.instance.isFocus = this.selected;
             this.imageGenerator.setFocus(this.element, this.selected);
             this.lineAutoCompleteGenerator.processDrawing(this.element, PlaitBoard.getElementActiveHost(this.board), {
                 selected: this.selected

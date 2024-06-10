@@ -16,8 +16,6 @@ export const withLabelIcon = <T extends PlaitBoard = PlaitBoard>(board: T) => {
     return newBoard;
 };
 
-export type EmojiComponentRef = RenderComponentRef<LabelIconProps>;
-
 export interface LabelIconProps {
     board: PlaitBoard;
     iconItem: LabelIconItem;

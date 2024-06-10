@@ -29,7 +29,7 @@ import { withPasteLink } from '../plugins/link/with-link-insert';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'plait-angular-text',
+    selector: 'plait-text',
     templateUrl: './text.component.html',
     standalone: true,
     imports: [SlateEditable, FormsModule, CommonModule]
@@ -55,7 +55,7 @@ export class PlaitTextComponent implements OnInit, AfterViewInit, OnChanges {
     onChange!: (data: TextChangeData) => void;
 
     @Input()
-    afterInit!: (editor: Editor) => void;
+    afterInit?: (editor: Editor) => void;
 
     @Input()
     onComposition!: (event: CompositionEvent) => void;
@@ -85,7 +85,7 @@ export class PlaitTextComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     ngAfterViewInit(): void {
-        this.afterInit(this.editor);
+        this.afterInit && this.afterInit(this.editor);
     }
 
     renderElement = (element: Element) => {
