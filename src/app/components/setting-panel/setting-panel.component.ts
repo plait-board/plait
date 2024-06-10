@@ -48,7 +48,7 @@ import {
 } from '@plait/draw';
 import { MindLayoutType } from '@plait/layouts';
 import { FontSizes, LinkEditor, MarkTypes, PlaitMarkEditor, TextTransforms } from '@plait/text-plugins';
-import { OnBoardChange, PlaitIslandBaseComponent } from '@plait/angular';
+import { OnBoardChange, PlaitIslandBaseComponent } from '@plait/angular-board';
 
 @Component({
     selector: 'app-setting-panel',

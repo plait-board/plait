@@ -3,7 +3,7 @@ import { FlowElement, FlowNode, FlowPluginOptions, FlowPluginKey, PlaitFlowLabel
 import { CustomFlowNodeComponent } from '../custom-node.component';
 import { IconComponent } from '../icon.component';
 import { WorkflowType } from '../flow-data';
-import { AngularBoard } from '@plait/angular';
+import { AngularBoard } from '@plait/angular-board';
 
 export const withDraw: PlaitPlugin = (board: PlaitBoard) => {
     const newBoard = board as PlaitBoard & PlaitFlowLabelIconBoard & AngularBoard;

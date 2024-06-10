@@ -37,7 +37,7 @@ import { AppMenuComponent } from '../components/menu/menu.component';
 import { NgIf } from '@angular/common';
 import { mockTurningPointData } from './mock-turning-point-data';
 import { withGroup } from '@plait/common';
-import { OnChangeData, PlaitBoardComponent } from '@plait/angular';
+import { OnChangeData, PlaitBoardComponent } from '@plait/angular-board';
 
 const LOCAL_STORAGE_KEY = 'plait-board-data';
 

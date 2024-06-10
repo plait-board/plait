@@ -1,6 +1,6 @@
 import { EmojiProps, PlaitMindBoard, PlaitMindEmojiBoard, WithMindOptions, WithMindPluginKey } from '@plait/mind';
 import { PlaitBoard, PlaitOptionsBoard } from '@plait/core';
-import { AngularBoard } from '@plait/angular';
+import { AngularBoard } from '@plait/angular-board';
 import { MindEmojiComponent } from '../editor/emoji/emoji.component';
 
 export const withMindExtend = (board: PlaitBoard) => {

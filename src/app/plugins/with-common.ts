@@ -1,6 +1,6 @@
 import { PlaitBoard } from '@plait/core';
 import { ImageProps, PlaitImageBoard } from '@plait/common';
-import { AngularBoard } from '@plait/angular';
+import { AngularBoard } from '@plait/angular-board';
 import { PlaitImageComponent } from '../editor/image/image.component';
 
 export const withCommonPlugin = (board: PlaitBoard) => {
