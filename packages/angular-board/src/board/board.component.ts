@@ -78,7 +78,7 @@ import {
 import { PlaitIslandBaseComponent, hasOnBoardChange } from '../island/island-base.component';
 import { BOARD_TO_COMPONENT } from '../utils/weak-maps';
 import { withAngular } from '../plugins/with-angular';
-import { PlaitImageBoard, withImage, withText } from '@plait/common';
+import { withImage, withText } from '@plait/common';
 import { OnChangeData } from '../plugins/angular-board';
 
 const ElementLowerHostClass = 'element-lower-host';

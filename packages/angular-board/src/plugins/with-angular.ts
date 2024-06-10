@@ -3,6 +3,8 @@ import { AngularBoard } from './angular-board';
 import { PlaitTextBoard, TextComponentRef, TextProps } from '@plait/common';
 import { PlaitTextComponent } from '@plait/angular-text';
 import { AngularEditor } from 'slate-angular';
+import { BOARD_TO_COMPONENT } from '../utils/weak-maps';
+import { BoardComponentInterface } from '../board/board.component.interface';
 
 export const withAngular = (board: PlaitBoard & PlaitTextBoard) => {
     const newBoard = board as PlaitBoard & PlaitTextBoard & AngularBoard;
@@ -12,8 +14,8 @@ export const withAngular = (board: PlaitBoard & PlaitTextBoard) => {
         container: Element | DocumentFragment,
         props: T
     ) => {
-        const viewContainerRef = AngularBoard.getViewContainerRef(board);
-        const componentRef = viewContainerRef.createComponent<K>(type);
+        const boardComponent = BOARD_TO_COMPONENT.get(board) as BoardComponentInterface;
+        const componentRef = boardComponent.viewContainerRef.createComponent<K>(type);
         for (const key in props) {
             const value = props[key as keyof T];
             (componentRef.instance as any)[key as keyof TextProps] = value as any;

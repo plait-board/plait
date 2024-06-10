@@ -1,4 +1,3 @@
-import { AngularBoard } from '@plait/angular-board';
 import { TextManage } from '@plait/common';
 import { PlaitBoard, Point, drawCircle, normalizePoint } from '@plait/core';
 import { FlowNode, FlowNodeComponent, NodeActiveGenerator, NodeGenerator } from '@plait/flow';
