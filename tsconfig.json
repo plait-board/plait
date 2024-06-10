@@ -16,8 +16,8 @@
       "@plait/core": [
         "dist/core"
       ],
-      "@plait/angular": [
-        "dist/angular"
+      "@plait/angular-board": [
+        "dist/angular-board"
       ],
       "@plait/text": [
         "dist/text"

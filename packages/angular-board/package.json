@@ -1,5 +1,5 @@
 {
-    "name": "@plait/angular",
+    "name": "@plait/angular-board",
     "version": "0.57.0",
     "peerDependencies": {
         "@angular/common": "^17.2.4",
