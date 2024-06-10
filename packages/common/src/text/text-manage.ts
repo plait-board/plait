@@ -16,7 +16,7 @@ import { fromEvent, timer } from 'rxjs';
 import { Editor, Element, NodeEntry, Range, Text, Node, Transforms, Operation } from 'slate';
 import { PlaitTextBoard, TextPlugin } from './with-text';
 import { measureElement } from './text-measure';
-import { TextChangeData, TextComponentRef, TextProps } from './text-component';
+import { TextChangeData, TextComponentRef, TextProps } from './with-text';
 
 export interface TextManageChangeData {
     newText?: Element;

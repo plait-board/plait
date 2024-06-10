@@ -13,8 +13,7 @@ import {
 import { Generator, GeneratorExtraData, GeneratorOptions } from '../generators/generator';
 import { CommonImageItem, canResize, getElementOfFocusedImage } from '../utils';
 import { ActiveGenerator } from '../generators/active.generator';
-import { ImageComponentRef, ImageProps } from './image-component';
-import { PlaitImageBoard } from './with-image';
+import { PlaitImageBoard, ImageComponentRef, ImageProps } from './with-image';
 
 export interface ImageGeneratorOptions<T> {
     getRectangle: (element: T) => RectangleClient;

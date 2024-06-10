@@ -60,7 +60,6 @@ export function measureElement(
             height += maxLineHeight * lineWrapNumber;
         }
     });
-    console.log(`with: ${width}, height: ${height}`, options);
     return { width, height };
 }
 

@@ -20,6 +20,7 @@ import { withHandleBlink } from './with-handle-blink';
 import { FlowPluginOptions, FlowPluginKey } from '../interfaces/flow';
 import { withHovering } from './with-hovering';
 import { TEXT_DEFAULT_HEIGHT } from '@plait/text-plugins';
+import { withLabelIcon } from './with-label-icon';
 
 export const withFlow: PlaitPlugin = (board: PlaitBoard) => {
     const { drawElement, isRectangleHit, isHit, isMovable, getRectangle } = board;
@@ -96,5 +97,5 @@ export const withFlow: PlaitPlugin = (board: PlaitBoard) => {
         edgeLabelOptions: { height: TEXT_DEFAULT_HEIGHT }
     });
 
-    return withHandleBlink(withFlowEdgeDnd(withEdgeCreate(withHovering(board))));
+    return withLabelIcon(withHandleBlink(withFlowEdgeDnd(withEdgeCreate(withHovering(board)))));
 };

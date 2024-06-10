@@ -3,8 +3,7 @@ import { PlaitBoard, createForeignObject, createG } from '@plait/core';
 import { getEmojiFontSize } from '../utils/space/emoji';
 import { getEmojiForeignRectangle } from '../utils/position/emoji';
 import { PlaitMindBoard } from '../plugins/with-mind.board';
-import { EmojiComponentRef, EmojiProps } from '../emoji/emoji-component';
-import { PlaitMindEmojiBoard } from '../emoji/with-emoji';
+import { EmojiComponentRef, EmojiProps, PlaitMindEmojiBoard } from '../emoji/with-emoji';
 
 class EmojiGenerator {
     emojiComponentRef: EmojiComponentRef | null = null;

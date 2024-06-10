@@ -1,6 +1,6 @@
 import { PlaitBoard, WithPluginOptions } from '@plait/core';
-import { TextComponentRef, TextProps } from './text-component';
-import { Editor } from 'slate';
+import { Editor, Operation, Element as SlateElement } from 'slate';
+import { RenderComponentRef } from '../core/render-component';
 
 export interface PlaitTextBoard {
     renderText: (container: Element | DocumentFragment, props: TextProps) => TextComponentRef;
@@ -14,6 +14,21 @@ export const withText = <T extends PlaitBoard = PlaitBoard>(board: T) => {
     };
     return newBoard;
 };
+
+export type TextComponentRef = RenderComponentRef<TextProps>;
+
+export interface TextProps {
+    board: PlaitBoard;
+    text: SlateElement;
+    textPlugins?: TextPlugin[];
+    readonly?: boolean;
+    onChange?: (data: TextChangeData) => void;
+    afterInit?: (data: Editor) => void;
+    onComposition?: (data: CompositionEvent) => void;
+    onExitEdit?: () => void;
+}
+
+export type TextChangeData = { newText: SlateElement; operations: Operation[] };
 
 export interface WithTextPluginOptions extends WithPluginOptions {
     textPlugins?: TextPlugin[];

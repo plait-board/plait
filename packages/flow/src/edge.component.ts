@@ -2,22 +2,19 @@ import { PlaitPluginElementContext, getElementById } from '@plait/core';
 import { PlaitBoard, OnContextChanged } from '@plait/core';
 import { EdgeStableState, FlowEdge } from './interfaces/edge';
 import { FlowBaseData } from './interfaces/element';
-import { PlaitFlowBoard } from './interfaces';
 import { EdgeLabelSpace, renderEdge } from './utils';
 import { FlowNode } from './interfaces/node';
 import { EdgeGenerator } from './generators/edge-generator';
 import { CommonElementFlavour, TextManage } from '@plait/common';
 import { EdgeElementRef } from './core/edge-ref';
 import { EdgeLabelGenerator } from './generators/edge-label-generator';
-import { AngularBoard } from '@plait/angular';
 
 interface BoundedElements {
     source?: FlowNode;
     target?: FlowNode;
 }
 
-export class FlowEdgeComponent<T extends FlowBaseData = FlowBaseData>
-    extends CommonElementFlavour<FlowEdge<T>, PlaitFlowBoard, EdgeElementRef>
+export class FlowEdgeComponent<T extends FlowBaseData = FlowBaseData> extends CommonElementFlavour<FlowEdge<T>, PlaitBoard, EdgeElementRef>
     implements OnContextChanged<FlowEdge, PlaitBoard> {
     edgeGenerator!: EdgeGenerator;
 
@@ -37,8 +34,8 @@ export class FlowEdgeComponent<T extends FlowBaseData = FlowBaseData>
             },
             textPlugins: []
         });
-        this.edgeGenerator = new EdgeGenerator(this.board, AngularBoard.getViewContainerRef(this.board));
-        this.edgeLabelGenerator = new EdgeLabelGenerator(this.board, AngularBoard.getViewContainerRef(this.board), textManage);
+        this.edgeGenerator = new EdgeGenerator(this.board);
+        this.edgeLabelGenerator = new EdgeLabelGenerator(this.board, textManage);
         this.getRef().addGenerator<EdgeGenerator>(EdgeGenerator.key, this.edgeGenerator);
         this.getRef().addGenerator<EdgeLabelGenerator>(EdgeLabelGenerator.key, this.edgeLabelGenerator);
     }
